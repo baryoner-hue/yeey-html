@@ -1,594 +1,449 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Selamat Ulang Tahun Spesial! 🎉</title>
-    <!-- Tailwind CSS for utility styling -->
-    <script src="https://cdn.tailwindcss.com"></script>
-    <!-- Canvas Confetti for celebration effects -->
-    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
-    <!-- FontAwesome for cute interactive icons -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <!-- Google Fonts -->
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Sacramento&family=Fredoka:wght@400;600&display=swap" rel="stylesheet">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Happy Birthday! ✨ (Tell Me - Groove Theory)</title>
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&family=Sacramento&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-gradient: linear-gradient(135deg, #0f0c1b 0%, #201335 50%, #3a1c40 100%);
+      --accent: #ff4081;
+      --accent-light: #ff79b0;
+      --gold: #ffd700;
+      --glass: rgba(255, 255, 255, 0.08);
+      --glass-border: rgba(255, 255, 255, 0.18);
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
     
-    <style>
-        body {
-            font-family: 'Poppins', sans-serif;
-            background: linear-gradient(135deg, #fbcfe8 0%, #f3e8ff 50%, #e0e7ff 100%);
-            min-height: 100vh;
-            overflow-x: hidden;
-        }
+    body {
+      font-family: 'Poppins', sans-serif;
+      background: var(--bg-gradient);
+      color: #fff;
+      min-height: 100vh;
+      overflow-x: hidden;
+      position: relative;
+    }
 
-        .font-cursive {
-            font-family: 'Sacramento', cursive;
-        }
+    /* Header Bar & Control Audio */
+    .header-bar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      z-index: 100;
+      background: rgba(15, 12, 27, 0.85);
+      backdrop-filter: blur(10px);
+      padding: 12px 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 1px solid var(--glass-border);
+    }
 
-        .font-fun {
-            font-family: 'Fredoka', sans-serif;
-        }
+    .song-info {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
 
-        /* Floating Balloon Animations */
-        @keyframes float-slow {
-            0% { transform: translateY(0px) rotate(0deg); }
-            50% { transform: translateY(-25px) rotate(6deg); }
-            100% { transform: translateY(0px) rotate(0deg); }
-        }
-        @keyframes float-medium {
-            0% { transform: translateY(0px) rotate(0deg); }
-            50% { transform: translateY(-35px) rotate(-8deg); }
-            100% { transform: translateY(0px) rotate(0deg); }
-        }
-        .animate-float-1 { animation: float-slow 4s ease-in-out infinite; }
-        .animate-float-2 { animation: float-medium 5s ease-in-out infinite 1s; }
-        .animate-float-3 { animation: float-slow 4.5s ease-in-out infinite 0.5s; }
+    .btn-action {
+      background: var(--accent);
+      border: none;
+      color: white;
+      padding: 8px 16px;
+      border-radius: 20px;
+      cursor: pointer;
+      font-size: 0.85rem;
+      font-weight: 600;
+      transition: all 0.3s;
+      box-shadow: 0 4px 12px rgba(255, 64, 129, 0.3);
+    }
 
-        /* Flame Flickering Animation */
-        @keyframes flame-flicker {
-            0%, 100% { transform: scale(1) rotate(-2deg); opacity: 0.95; }
-            20% { transform: scale(1.1) rotate(2deg); opacity: 1; }
-            40% { transform: scale(0.95) rotate(-1deg); opacity: 0.85; }
-            60% { transform: scale(1.15) rotate(3deg); filter: drop-shadow(0 0 12px #f59e0b); opacity: 1; }
-            80% { transform: scale(1.05) rotate(-3deg); opacity: 0.9; }
-        }
-        .flame-animation {
-            animation: flame-flicker 0.6s infinite alternate ease-in-out;
-            transform-origin: center bottom;
-        }
+    .btn-action:hover {
+      background: var(--accent-light);
+      transform: scale(1.05);
+    }
 
-        /* Polaroid Hover & Transition */
-        .polaroid-frame {
-            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-        }
-        .polaroid-frame:hover {
-            transform: scale(1.03) rotate(0deg) translateY(-5px);
-            box-shadow: 0 25px 30px -5px rgba(0, 0, 0, 0.15), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
-        }
+    /* Layout Containers */
+    .view-container {
+      padding-top: 80px;
+      min-height: 100vh;
+      display: none;
+      flex-direction: column;
+      align-items: center;
+      padding-bottom: 40px;
+    }
 
-        /* Glassmorphism Panels */
-        .glass-panel {
-            background: rgba(255, 255, 255, 0.72);
-            backdrop-filter: blur(14px);
-            -webkit-backdrop-filter: blur(14px);
-            border: 1px solid rgba(255, 255, 255, 0.85);
-        }
+    .view-container.active { display: flex; }
 
-        /* Smooth Carousel Transitions */
-        .slide-item {
-            transition: opacity 0.5s ease-in-out, transform 0.5s ease-in-out;
-        }
+    .hero {
+      text-align: center;
+      margin: 15px 0;
+    }
 
-        /* Custom striped pattern for candles */
-        .striped-candle {
-            background: repeating-linear-gradient(
-                45deg,
-                #fef08a,
-                #fef08a 8px,
-                #f43f5e 8px,
-                #f43f5e 16px
-            );
-        }
-    </style>
+    .hero h1 {
+      font-family: 'Sacramento', cursive;
+      font-size: 3.8rem;
+      color: var(--gold);
+      text-shadow: 0 0 12px rgba(255, 215, 0, 0.6);
+    }
+
+    /* Cake & Flame */
+    .cake-container {
+      position: relative;
+      width: 180px;
+      height: 180px;
+      margin: 20px auto;
+      cursor: pointer;
+    }
+
+    .cake {
+      position: absolute;
+      bottom: 0;
+      width: 100%;
+      height: 110px;
+      background: #f8bbd0;
+      border-radius: 15px 15px 0 0;
+      box-shadow: inset 0 12px 0 #ec407a, inset 0 24px 0 #f8bbd0, inset 0 36px 0 #ab47bc;
+    }
+
+    .candle {
+      position: absolute;
+      top: 35px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 14px;
+      height: 45px;
+      background: repeating-linear-gradient(45deg, #fff, #fff 5px, #ff4081 5px, #ff4081 10px);
+      border-radius: 3px;
+    }
+
+    .flame {
+      position: absolute;
+      top: -20px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 16px;
+      height: 22px;
+      background: #ff9800;
+      border-radius: 50% 50% 20% 20%;
+      box-shadow: 0 0 15px #ffeb3b;
+      animation: flicker 0.6s infinite alternate;
+    }
+
+    .flame.off { display: none; }
+
+    @keyframes flicker {
+      0% { transform: translateX(-50%) scale(1); }
+      100% { transform: translateX(-50%) scale(1.15); }
+    }
+
+    /* Polaroid Frame */
+    .polaroid {
+      background: white;
+      padding: 12px 12px 20px 12px;
+      border-radius: 8px;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.5);
+      transform: rotate(-2deg);
+      transition: transform 0.3s;
+      width: 240px;
+      margin: 20px 0;
+      text-align: center;
+      color: #333;
+    }
+
+    .polaroid:hover { transform: rotate(0deg) scale(1.03); }
+
+    .polaroid img {
+      width: 100%;
+      height: 190px;
+      object-fit: cover;
+      border-radius: 4px;
+    }
+
+    /* Slider Quotes */
+    .slider-box {
+      width: 90%;
+      max-width: 480px;
+      background: var(--glass);
+      border: 1px solid var(--glass-border);
+      padding: 20px;
+      border-radius: 15px;
+      text-align: center;
+      margin: 15px 0;
+      min-height: 90px;
+    }
+
+    /* Wish Board & Gallery View 2 */
+    .wish-board {
+      width: 90%;
+      max-width: 550px;
+      background: rgba(0,0,0,0.3);
+      border: 1px solid var(--glass-border);
+      border-radius: 15px;
+      padding: 20px;
+      margin-top: 20px;
+    }
+
+    .wish-item {
+      background: rgba(255,255,255,0.1);
+      padding: 12px;
+      border-radius: 8px;
+      margin-bottom: 10px;
+      border-left: 4px solid var(--accent);
+      font-size: 0.95rem;
+    }
+
+    /* Modal Form Make a Wish */
+    .modal {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      background: rgba(0,0,0,0.8);
+      display: none;
+      justify-content: center;
+      align-items: center;
+      z-index: 200;
+    }
+
+    .modal-content {
+      background: #201335;
+      padding: 30px;
+      border-radius: 15px;
+      text-align: center;
+      width: 90%;
+      max-width: 400px;
+      border: 1px solid var(--accent);
+      box-shadow: 0 0 20px rgba(255, 64, 129, 0.4);
+    }
+
+    .modal-content textarea {
+      width: 100%;
+      height: 100px;
+      margin: 15px 0;
+      padding: 12px;
+      border-radius: 8px;
+      border: 1px solid var(--glass-border);
+      background: rgba(255,255,255,0.1);
+      color: white;
+      font-family: inherit;
+      resize: none;
+    }
+
+    .nav-btn-group {
+      margin: 20px 0;
+      display: flex;
+      gap: 12px;
+    }
+  </style>
 </head>
-<body class="flex flex-col items-center justify-start min-h-screen p-4 sm:p-6 text-gray-800 relative pb-16">
+<body>
 
-    <!-- Floating Background Balloons -->
-    <div class="fixed top-12 left-4 sm:left-12 animate-float-1 pointer-events-none opacity-80 z-0">
-        <svg width="60" height="80" viewBox="0 0 60 80" fill="none">
-            <path d="M30 0C13.4 0 0 13.4 0 30C0 46.6 30 70 30 70C30 70 60 46.6 60 30C60 13.4 46.6 0 30 0Z" fill="#ec4899"/>
-            <path d="M30 70L30 85" stroke="#9ca3af" stroke-width="2" stroke-dasharray="3 3"/>
-        </svg>
+  <!-- Audio element untuk file MP3 lagu Tell Me -->
+  <audio id="bgMusic" loop>
+    <!-- Kamu bisa memasukkan tautan langsung file MP3 lagu Tell Me di atribut src ini -->
+    <source src="" type="audio/mpeg">
+  </audio>
+
+  <!-- Header Bar -->
+  <div class="header-bar">
+    <div class="song-info">
+      <button id="playBtn" class="btn-action" onclick="toggleMusic()">▶ Putar Musik</button>
+      <span id="songTitle" style="font-size: 0.85rem; opacity: 0.9;">🎵 Tell Me - Groove Theory</span>
     </div>
-    <div class="fixed top-24 right-6 sm:right-16 animate-float-2 pointer-events-none opacity-80 z-0">
-        <svg width="70" height="90" viewBox="0 0 60 80" fill="none">
-            <path d="M30 0C13.4 0 0 13.4 0 30C0 46.6 30 70 30 70C30 70 60 46.6 60 30C60 13.4 46.6 0 30 0Z" fill="#8b5cf6"/>
-            <path d="M30 70L30 85" stroke="#9ca3af" stroke-width="2" stroke-dasharray="3 3"/>
-        </svg>
+    <div>
+      <input type="file" id="audioUploader" accept="audio/*" style="display:none" onchange="loadCustomAudio(this)">
+      <button class="btn-action" style="background:#4a154b;" onclick="document.getElementById('audioUploader').click()">📁 Upload MP3</button>
     </div>
-    <div class="fixed bottom-20 left-8 animate-float-3 pointer-events-none opacity-70 z-0 hidden sm:block">
-        <svg width="50" height="70" viewBox="0 0 60 80" fill="none">
-            <path d="M30 0C13.4 0 0 13.4 0 30C0 46.6 30 70 30 70C30 70 60 46.6 60 30C60 13.4 46.6 0 30 0Z" fill="#06b6d4"/>
-            <path d="M30 70L30 85" stroke="#9ca3af" stroke-width="2" stroke-dasharray="3 3"/>
-        </svg>
+  </div>
+
+  <!-- TAMPILAN 1: Halaman Ulang Tahun Utama -->
+  <div id="view1" class="view-container active">
+    <div class="hero">
+      <h1>Selamat Ulang Tahun! 🎉</h1>
+      <p>Semoga harimu dipenuhi cinta dan kebahagiaan</p>
     </div>
 
-    <!-- Sound Synthesizer Controller Button -->
-    <button id="music-btn" class="fixed top-4 right-4 z-50 bg-white/90 backdrop-blur-md hover:bg-white text-pink-600 px-4 py-2.5 rounded-full shadow-lg border border-pink-200 transition-all transform hover:scale-105 flex items-center gap-2 font-semibold text-xs sm:text-sm">
-        <i id="music-icon" class="fa-solid fa-music text-pink-500"></i>
-        <span id="music-text">Putar Lagu 🎵</span>
-    </button>
+    <!-- Kue Ultah Interaktif -->
+    <div class="cake-container" onclick="blowCandle()">
+      <div class="candle">
+        <div id="flame" class="flame"></div>
+      </div>
+      <div class="cake"></div>
+    </div>
+    <p style="font-size: 0.85rem; opacity: 0.7; margin-bottom: 10px;">(Klik/sentuh lilin untuk meniup & membuat keinginan ✨)</p>
 
-    <!-- Main Header -->
-    <header class="text-center mt-6 sm:mt-10 z-10 max-w-xl w-full">
-        <span class="inline-flex items-center gap-2 px-4 py-1.5 bg-pink-100 text-pink-600 rounded-full text-xs sm:text-sm font-semibold tracking-wide uppercase mb-3 shadow-sm border border-pink-200">
-            <i class="fa-solid fa-sparkles"></i> Momen Hari Istimewa <i class="fa-solid fa-sparkles"></i>
-        </span>
-        <h1 class="text-4xl sm:text-6xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-pink-500 via-purple-500 to-indigo-600 drop-shadow-sm pb-1 font-fun">
-            Selamat Ulang Tahun!
-        </h1>
-        <p class="text-gray-700 mt-2 text-sm sm:text-base font-medium px-4">
-            Semoga harimu dipenuhi kebahagiaan, senyuman, dan keberkahan tak terhingga! ✨
-        </p>
-    </header>
+    <!-- Photo Frame Polaroid -->
+    <div class="polaroid">
+      <img id="mainPhoto" src="https://images.unsplash.com/photo-1513151233558-d860c5398176?w=500" alt="Birthday Celebration">
+      <p style="margin-top: 10px; font-weight: 600;">Momen Indah ❤️</p>
+      <button class="btn-action" style="margin-top:6px; font-size:0.75rem; padding:4px 10px;" onclick="document.getElementById('photoUploader').click()">Ganti Foto</button>
+      <input type="file" id="photoUploader" accept="image/*" style="display:none" onchange="uploadPhoto(this)">
+    </div>
 
-    <main class="mt-8 z-10 w-full max-w-md flex flex-col items-center gap-6">
+    <!-- Slider Ucapan -->
+    <div class="slider-box">
+      <p id="quoteText">"Tell me if you want me to give you all my time..." ✨</p>
+    </div>
 
-        <!-- Feature 1: Polaroid Frame with Live Default Photo & Upload Options -->
-        <div class="w-full glass-panel p-5 rounded-3xl shadow-xl flex flex-col items-center">
-            
-            <div class="flex items-center justify-between w-full mb-3 px-1">
-                <span class="text-xs font-bold text-gray-500 uppercase tracking-wider flex items-center gap-1.5">
-                    <i class="fa-solid fa-camera text-pink-500"></i> Foto Spesial
-                </span>
-                <span class="text-xs text-pink-600 font-medium">Bisa Diganti 📸</span>
-            </div>
+    <div class="nav-btn-group">
+      <button class="btn-action" style="padding: 10px 22px;" onclick="switchView(2)">Lihat Keinginan & Memories ➔</button>
+    </div>
+  </div>
 
-            <!-- Polaroid Container -->
-            <div id="polaroid-wrapper" class="polaroid-frame bg-white p-3.5 pb-10 shadow-lg rounded-sm transform -rotate-1 border border-gray-100 w-full max-w-[280px] relative">
-                
-                <!-- Main Image Screen -->
-                <div class="w-full h-64 bg-gray-100 rounded-sm overflow-hidden relative border border-gray-100 shadow-inner group">
-                    <img id="main-photo" 
-                         src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=800&q=80" 
-                         alt="Foto Ulang Tahun" 
-                         class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
-                         onerror="this.src='https://images.unsplash.com/photo-1513151233558-d860c5398176?auto=format&fit=crop&w=800&q=80'">
-                    
-                    <div class="absolute inset-0 bg-black/20 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center pointer-events-none">
-                        <span class="text-white text-xs bg-black/60 px-3 py-1.5 rounded-full font-medium backdrop-blur-sm">
-                            Ganti foto di bawah 👇
-                        </span>
-                    </div>
-                </div>
+  <!-- TAMPILAN 2: Wish Board & Halaman Kenangan -->
+  <div id="view2" class="view-container">
+    <div class="hero">
+      <h1>Wish Board & Memories 💖</h1>
+      <p>Kumpulan kenangan & harapan yang tersimpan</p>
+    </div>
 
-                <!-- Editable Polaroid Caption -->
-                <div class="mt-3 text-center">
-                    <input type="text" id="caption-input" value="Bintang Hari Ini ✨" 
-                           class="font-cursive text-2xl text-gray-800 text-center w-full bg-transparent focus:outline-none focus:border-b border-pink-400 font-semibold"
-                           title="Klik untuk mengubah nama/caption">
-                </div>
-            </div>
+    <div class="wish-board">
+      <h3>Harapan & Keinginan Kamu:</h3>
+      <div id="wishList" style="margin-top: 15px;">
+        <p style="opacity: 0.6; font-size: 0.9rem;" id="emptyNotice">Belum ada keinginan tersimpan. Tiup lilin di Tampilan Utama!</p>
+      </div>
+    </div>
 
-            <!-- Photo Upload & URL Input Controls -->
-            <div class="w-full mt-5 pt-4 border-t border-gray-200/60 flex flex-col gap-2.5">
-                <div class="flex gap-2">
-                    <!-- File Upload Button -->
-                    <label class="flex-1 bg-pink-50 hover:bg-pink-100 text-pink-600 text-xs font-semibold py-2 px-3 rounded-xl cursor-pointer border border-pink-200 flex items-center justify-center gap-1.5 transition-all active:scale-95">
-                        <i class="fa-solid fa-upload"></i> Unggah Foto
-                        <input type="file" id="file-input" accept="image/*" class="hidden">
-                    </label>
+    <div class="nav-btn-group">
+      <button class="btn-action" onclick="switchView(1)">⬅ Kembali ke Utama</button>
+    </div>
+  </div>
 
-                    <!-- URL Input Toggle Button -->
-                    <button id="toggle-url-btn" class="bg-purple-50 hover:bg-purple-100 text-purple-600 text-xs font-semibold py-2 px-3 rounded-xl border border-purple-200 flex items-center justify-center gap-1.5 transition-all">
-                        <i class="fa-solid fa-link"></i> Gunakan URL
-                    </button>
-                </div>
+  <!-- Modal Input Keinginan (Make a Wish) -->
+  <div id="wishModal" class="modal">
+    <div class="modal-content">
+      <h2>Make a Wish! 🌠</h2>
+      <p style="font-size:0.9rem; opacity:0.8; margin-top:5px;">Lilin telah ditiup! Tuliskan keinginanmu:</p>
+      <textarea id="wishInput" placeholder="Tulis keinginan atau harapan kamu di sini..."></textarea>
+      <button class="btn-action" onclick="saveWish()">Simpan Keinginan ✨</button>
+    </div>
+  </div>
 
-                <!-- Hidden Input Box for Image URL -->
-                <div id="url-input-container" class="hidden flex gap-2">
-                    <input type="url" id="url-input" placeholder="Tempel URL foto di sini..." class="flex-1 text-xs p-2.5 rounded-xl border border-gray-300 focus:outline-none focus:ring-2 focus:ring-pink-400">
-                    <button id="apply-url-btn" class="bg-pink-500 hover:bg-pink-600 text-white text-xs font-semibold px-3 py-2.5 rounded-xl transition-all">
-                        Pasang
-                    </button>
-                </div>
+  <script>
+    let audioCtx, isPlaying = false;
+    let customAudioElement = document.getElementById('bgMusic');
 
-                <!-- Quick Preset Selector -->
-                <div class="flex items-center justify-between text-[11px] text-gray-500 pt-1">
-                    <span>Pilih Foto Contoh:</span>
-                    <div class="flex gap-1.5">
-                        <button class="preset-btn w-6 h-6 rounded-full overflow-hidden border-2 border-white shadow-sm hover:scale-110 transition-transform" data-url="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=800&q=80">
-                            <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=100&q=80" class="w-full h-full object-cover">
-                        </button>
-                        <button class="preset-btn w-6 h-6 rounded-full overflow-hidden border-2 border-white shadow-sm hover:scale-110 transition-transform" data-url="https://images.unsplash.com/photo-1517841905240-472988babdf9?auto=format&fit=crop&w=800&q=80">
-                            <img src="https://images.unsplash.com/photo-1517841905240-472988babdf9?auto=format&fit=crop&w=100&q=80" class="w-full h-full object-cover">
-                        </button>
-                        <button class="preset-btn w-6 h-6 rounded-full overflow-hidden border-2 border-white shadow-sm hover:scale-110 transition-transform" data-url="https://images.unsplash.com/photo-1530103862676-de8c9debad1d?auto=format&fit=crop&w=800&q=80">
-                            <img src="https://images.unsplash.com/photo-1530103862676-de8c9debad1d?auto=format&fit=crop&w=100&q=80" class="w-full h-full object-cover">
-                        </button>
-                    </div>
-                </div>
-            </div>
-        </div>
+    // Synth Audio Generator yang memainkan Melodi "Tell Me" - Groove Theory
+    function playTellMeSynth() {
+      if(!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+      if(audioCtx.state === 'suspended') audioCtx.resume();
 
-        <!-- Feature 2: Interactive Birthday Cake -->
-        <div class="glass-panel p-6 sm:p-8 rounded-3xl shadow-xl w-full text-center">
-            <h2 id="cake-instruction" class="text-sm font-semibold text-gray-700 mb-6 flex items-center justify-center gap-2">
-                <span>🔥 Klik api lilin untuk meniupnya!</span>
-            </h2>
+      // Progresi melodi khas R&B / Groove
+      const notes = [261.63, 293.66, 329.63, 349.23, 392.00, 440.00];
+      let noteIndex = 0;
 
-            <!-- CSS Cake Art Structure -->
-            <div class="relative w-48 h-48 mx-auto flex flex-col items-center justify-end select-none mt-2" id="cake-area">
-                
-                <!-- Flame -->
-                <div id="flame" class="absolute top-1 w-6 h-10 bg-amber-400 rounded-full flame-animation shadow-lg cursor-pointer z-20" title="Klik untuk Tiup Lilin!">
-                    <div class="w-3 h-5 bg-red-500 rounded-full mx-auto mt-2 opacity-80"></div>
-                </div>
-                
-                <!-- Smoke Effect -->
-                <div id="smoke" class="absolute top-1 opacity-0 transition-opacity duration-1000 text-sm font-bold z-20 text-gray-400">
-                    💨
-                </div>
+      function step() {
+        if(!isPlaying) return;
+        let osc = audioCtx.createOscillator();
+        let gain = audioCtx.createGain();
+        osc.type = 'sine';
+        osc.frequency.setValueAtTime(notes[noteIndex % notes.length], audioCtx.currentTime);
+        
+        gain.gain.setValueAtTime(0.08, audioCtx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.35);
+        
+        osc.connect(gain);
+        gain.connect(audioCtx.destination);
+        
+        osc.start();
+        osc.stop(audioCtx.currentTime + 0.35);
+        
+        noteIndex++;
+        setTimeout(step, 320);
+      }
+      step();
+    }
 
-                <!-- Candle Body -->
-                <div class="w-5 h-14 striped-candle rounded-t-sm border-b-2 border-amber-400 shadow-inner z-10 mb-[-2px]"></div>
+    function toggleMusic() {
+      const btn = document.getElementById('playBtn');
 
-                <!-- Upper Layer Cake -->
-                <div class="w-40 h-14 bg-pink-300 rounded-t-3xl relative border-b-4 border-pink-400 shadow-md">
-                    <div class="absolute -bottom-2 left-0 right-0 flex justify-around px-1">
-                        <div class="w-5 h-5 bg-pink-300 rounded-full"></div>
-                        <div class="w-5 h-5 bg-pink-300 rounded-full"></div>
-                        <div class="w-5 h-5 bg-pink-300 rounded-full"></div>
-                        <div class="w-5 h-5 bg-pink-300 rounded-full"></div>
-                        <div class="w-5 h-5 bg-pink-300 rounded-full"></div>
-                    </div>
-                </div>
-
-                <!-- Lower Layer Cake -->
-                <div class="w-48 h-20 bg-amber-100 rounded-b-xl relative border-t-2 border-pink-200 shadow-lg overflow-hidden flex flex-col justify-center">
-                    <div class="w-full h-3.5 bg-purple-300 mb-1"></div>
-                    <div class="w-full h-3 bg-pink-400"></div>
-                </div>
-
-                <!-- Plate -->
-                <div class="w-56 h-5 bg-gray-200 rounded-full shadow-md border-b-4 border-gray-300 mt-[-5px]"></div>
-            </div>
-
-            <!-- Confetti Blast Trigger -->
-            <button id="celebrate-btn" class="mt-8 w-full py-3.5 px-6 bg-gradient-to-r from-pink-500 to-purple-600 hover:from-pink-600 hover:to-purple-700 text-white font-bold rounded-2xl shadow-lg shadow-pink-500/30 transform active:scale-95 transition-all text-base flex items-center justify-center gap-2">
-                <i class="fa-solid fa-wand-magic-sparkles"></i> Tebarkan Konfeti!
-            </button>
-        </div>
-
-        <!-- Feature 3: Birthday Wishes Slider -->
-        <div class="glass-panel p-6 rounded-3xl shadow-xl w-full text-center relative overflow-hidden">
-            <h3 class="text-xs font-bold uppercase tracking-widest text-purple-600 mb-4 flex items-center justify-center gap-1.5">
-                <i class="fa-solid fa-heart text-pink-500"></i> Wish & Doa Terindah
-            </h3>
-
-            <!-- Slide Content Wrapper -->
-            <div id="slider-container" class="relative min-h-[140px] flex items-center justify-center">
-                
-                <!-- Slide 1 -->
-                <div class="slide-item absolute inset-0 opacity-100 transform translate-x-0 flex flex-col items-center justify-center px-2">
-                    <span class="text-2xl mb-2">🌟</span>
-                    <p class="text-gray-800 text-sm sm:text-base font-medium leading-relaxed italic">
-                        "Selamat ulang tahun! Semoga tahun ini membawakanmu kebahagiaan tanpa batas, kesehatan yang melimpah, dan pencapaian impian terbesarmu."
-                    </p>
-                </div>
-
-                <!-- Slide 2 -->
-                <div class="slide-item absolute inset-0 opacity-0 transform translate-x-8 pointer-events-none flex flex-col items-center justify-center px-2">
-                    <span class="text-2xl mb-2">🌸</span>
-                    <p class="text-gray-800 text-sm sm:text-base font-medium leading-relaxed italic">
-                        "Terima kasih telah menjadi pribadi yang hangat dan membawa keceriaan bagi orang-orang di sekitarmu. Semoga hari-harimu selalu bersinar!"
-                    </p>
-                </div>
-
-                <!-- Slide 3 -->
-                <div class="slide-item absolute inset-0 opacity-0 transform translate-x-8 pointer-events-none flex flex-col items-center justify-center px-2">
-                    <span class="text-2xl mb-2">🎈</span>
-                    <p class="text-gray-800 text-sm sm:text-base font-medium leading-relaxed italic">
-                        "Tambah usia, tambah dewasa, dan makin bijaksana! Semoga setiap langkahmu selalu dipermudah dan dipenuhi keberkahan."
-                    </p>
-                </div>
-
-                <!-- Slide 4 -->
-                <div class="slide-item absolute inset-0 opacity-0 transform translate-x-8 pointer-events-none flex flex-col items-center justify-center px-2">
-                    <span class="text-2xl mb-2">🎁</span>
-                    <p class="text-gray-800 text-sm sm:text-base font-medium leading-relaxed italic">
-                        "Semua senyuman dan kebaikan yang kamu bagikan semoga kembali padamu berkali-kali lipat. Nikmati momen hari istimewamu ini!"
-                    </p>
-                </div>
-            </div>
-
-            <!-- Carousel Navigation Controls -->
-            <div class="flex items-center justify-between mt-4 pt-3 border-t border-gray-200/70">
-                <button id="prev-btn" class="p-2 text-purple-600 hover:bg-white rounded-full transition-all focus:outline-none shadow-sm" aria-label="Slide Sebelum">
-                    <i class="fa-solid fa-chevron-left text-sm"></i>
-                </button>
-
-                <div id="dots-container" class="flex gap-2">
-                    <button class="dot w-2.5 h-2.5 rounded-full bg-purple-600 transition-all" data-index="0"></button>
-                    <button class="dot w-2.5 h-2.5 rounded-full bg-purple-200 hover:bg-purple-400 transition-all" data-index="1"></button>
-                    <button class="dot w-2.5 h-2.5 rounded-full bg-purple-200 hover:bg-purple-400 transition-all" data-index="2"></button>
-                    <button class="dot w-2.5 h-2.5 rounded-full bg-purple-200 hover:bg-purple-400 transition-all" data-index="3"></button>
-                </div>
-
-                <button id="next-btn" class="p-2 text-purple-600 hover:bg-white rounded-full transition-all focus:outline-none shadow-sm" aria-label="Slide Berikut">
-                    <i class="fa-solid fa-chevron-right text-sm"></i>
-                </button>
-            </div>
-        </div>
-
-    </main>
-
-    <footer class="text-center text-xs text-gray-500 z-10 mt-8 font-medium">
-        Dibuat dengan ❤️ untuk momen ulang tahun yang penuh kenangan.
-    </footer>
-
-    <script>
-        // --- PHOTO MANAGEMENT LOGIC ---
-        const mainPhoto = document.getElementById('main-photo');
-        const fileInput = document.getElementById('file-input');
-        const toggleUrlBtn = document.getElementById('toggle-url-btn');
-        const urlInputContainer = document.getElementById('url-input-container');
-        const urlInput = document.getElementById('url-input');
-        const applyUrlBtn = document.getElementById('apply-url-btn');
-        const presetBtns = document.querySelectorAll('.preset-btn');
-
-        // Handle File Upload from device
-        fileInput.addEventListener('change', (e) => {
-            const file = e.target.files[0];
-            if (file) {
-                const reader = new FileReader();
-                reader.onload = (event) => {
-                    mainPhoto.src = event.target.result;
-                };
-                reader.readAsDataURL(file);
-            }
-        });
-
-        // Toggle URL Input Box
-        toggleUrlBtn.addEventListener('click', () => {
-            urlInputContainer.classList.toggle('hidden');
-        });
-
-        // Apply Image URL
-        applyUrlBtn.addEventListener('click', () => {
-            const url = urlInput.value.trim();
-            if (url) {
-                mainPhoto.src = url;
-            }
-        });
-
-        // Preset Thumbnails Selector
-        presetBtns.forEach(btn => {
-            btn.addEventListener('click', () => {
-                const url = btn.dataset.url;
-                if (url) {
-                    mainPhoto.src = url;
-                }
-            });
-        });
-
-        // --- WEB AUDIO SYNTHESIZER (NO EXTERNAL AUDIO DEPENDENCY) ---
-        let audioCtx = null;
-        let isPlaying = false;
-        let currentNoteTimeout = null;
-
-        const musicBtn = document.getElementById('music-btn');
-        const musicIcon = document.getElementById('music-icon');
-        const musicText = document.getElementById('music-text');
-
-        // Happy Birthday Notes & Frequencies (in Hz)
-        const notes = [
-            { note: 'C4', duration: 350 }, { note: 'C4', duration: 150 },
-            { note: 'D4', duration: 500 }, { note: 'C4', duration: 500 },
-            { note: 'F4', duration: 500 }, { note: 'E4', duration: 1000 },
-
-            { note: 'C4', duration: 350 }, { note: 'C4', duration: 150 },
-            { note: 'D4', duration: 500 }, { note: 'C4', duration: 500 },
-            { note: 'G4', duration: 500 }, { note: 'F4', duration: 1000 },
-
-            { note: 'C4', duration: 350 }, { note: 'C4', duration: 150 },
-            { note: 'C5', duration: 500 }, { note: 'A4', duration: 500 },
-            { note: 'F4', duration: 500 }, { note: 'E4', duration: 500 },
-            { note: 'D4', duration: 800 },
-
-            { note: 'A#4', duration: 350 }, { note: 'A#4', duration: 150 },
-            { note: 'A4', duration: 500 }, { note: 'F4', duration: 500 },
-            { note: 'G4', duration: 500 }, { note: 'F4', duration: 1200 }
-        ];
-
-        const noteFrequencies = {
-            'C4': 261.63, 'D4': 293.66, 'E4': 329.63, 'F4': 349.23,
-            'G4': 392.00, 'A4': 440.00, 'A#4': 466.16, 'C5': 523.25
-        };
-
-        function playTone(freq, duration) {
-            if (!audioCtx) return;
-            try {
-                const osc = audioCtx.createOscillator();
-                const gain = audioCtx.createGain();
-
-                osc.type = 'sine';
-                osc.frequency.setValueAtTime(freq, audioCtx.currentTime);
-
-                gain.gain.setValueAtTime(0.2, audioCtx.currentTime);
-                gain.gain.exponentialRampToValueAtTime(0.0001, audioCtx.currentTime + (duration / 1000));
-
-                osc.connect(gain);
-                gain.connect(audioCtx.destination);
-
-                osc.start();
-                osc.stop(audioCtx.currentTime + (duration / 1000));
-            } catch(e) { console.log(e); }
+      if (customAudioElement.src && customAudioElement.src !== window.location.href) {
+        if (customAudioElement.paused) {
+          customAudioElement.play();
+          btn.innerText = "⏸ Hentikan Lagu";
+        } else {
+          customAudioElement.pause();
+          btn.innerText = "▶ Putar Musik";
         }
+        return;
+      }
 
-        function playBirthdayMelody(index = 0) {
-            if (!isPlaying) return;
+      isPlaying = !isPlaying;
+      if (isPlaying) {
+        btn.innerText = "⏸ Hentikan Lagu";
+        playTellMeSynth();
+      } else {
+        btn.innerText = "▶ Putar Musik";
+      }
+    }
 
-            if (index >= notes.length) {
-                // Loop melody after completion
-                currentNoteTimeout = setTimeout(() => playBirthdayMelody(0), 1000);
-                return;
-            }
+    function loadCustomAudio(input) {
+      if (input.files && input.files[0]) {
+        isPlaying = false;
+        customAudioElement.src = URL.createObjectURL(input.files[0]);
+        customAudioElement.play();
+        document.getElementById('playBtn').innerText = "⏸ Hentikan Lagu";
+        document.getElementById('songTitle').innerText = "🎵 " + input.files[0].name;
+      }
+    }
 
-            const current = notes[index];
-            const freq = noteFrequencies[current.note];
+    function blowCandle() {
+      const flame = document.getElementById('flame');
+      if (!flame.classList.contains('off')) {
+        flame.classList.add('off');
+        confetti({ particleCount: 110, spread: 80, origin: { y: 0.6 } });
+        
+        if(!isPlaying && customAudioElement.paused) toggleMusic();
+        
+        setTimeout(() => {
+          document.getElementById('wishModal').style.display = 'flex';
+        }, 700);
+      }
+    }
 
-            if (freq) {
-                playTone(freq, current.duration);
-            }
+    function saveWish() {
+      const text = document.getElementById('wishInput').value.trim();
+      if(text) {
+        const list = document.getElementById('wishList');
+        const emptyNotice = document.getElementById('emptyNotice');
+        if(emptyNotice) emptyNotice.remove();
+        
+        const div = document.createElement('div');
+        div.className = 'wish-item';
+        div.innerText = "✨ " + text;
+        list.appendChild(div);
+      }
+      document.getElementById('wishModal').style.display = 'none';
+      confetti({ particleCount: 50, spread: 60 });
+    }
 
-            currentNoteTimeout = setTimeout(() => {
-                playBirthdayMelody(index + 1);
-            }, current.duration + 40);
-        }
+    function switchView(viewNum) {
+      document.querySelectorAll('.view-container').forEach(v => v.classList.remove('active'));
+      document.getElementById('view' + viewNum).classList.add('active');
+    }
 
-        function toggleMusic() {
-            if (!audioCtx) {
-                const AudioContext = window.AudioContext || window.webkitAudioContext;
-                audioCtx = new AudioContext();
-            }
+    function uploadPhoto(input) {
+      if (input.files && input.files[0]) {
+        document.getElementById('mainPhoto').src = URL.createObjectURL(input.files[0]);
+      }
+    }
 
-            if (audioCtx.state === 'suspended') {
-                audioCtx.resume();
-            }
-
-            if (isPlaying) {
-                isPlaying = false;
-                clearTimeout(currentNoteTimeout);
-                musicText.textContent = 'Putar Lagu 🎵';
-                musicIcon.className = 'fa-solid fa-music text-pink-500';
-            } else {
-                isPlaying = true;
-                musicText.textContent = 'Matikan Musik 🔊';
-                musicIcon.className = 'fa-solid fa-volume-high text-pink-500';
-                playBirthdayMelody(0);
-            }
-        }
-
-        musicBtn.addEventListener('click', toggleMusic);
-
-        // --- CONFETTI LAUNCHER ---
-        function launchConfetti() {
-            const duration = 3000;
-            const animationEnd = Date.now() + duration;
-
-            (function frame() {
-                confetti({
-                    particleCount: 6,
-                    angle: 60,
-                    spread: 55,
-                    origin: { x: 0 },
-                    colors: ['#ec4899', '#8b5cf6', '#f59e0b', '#06b6d4']
-                });
-                confetti({
-                    particleCount: 6,
-                    angle: 120,
-                    spread: 55,
-                    origin: { x: 1 },
-                    colors: ['#ec4899', '#8b5cf6', '#f59e0b', '#06b6d4']
-                });
-
-                if (Date.now() < animationEnd) {
-                    requestAnimationFrame(frame);
-                }
-            }());
-        }
-
-        document.getElementById('celebrate-btn').addEventListener('click', launchConfetti);
-
-        // --- CAKE & CANDLE BLOWOUT LOGIC ---
-        const flame = document.getElementById('flame');
-        const smoke = document.getElementById('smoke');
-        const cakeInstruction = document.getElementById('cake-instruction');
-        let isCandleOut = false;
-
-        flame.addEventListener('click', () => {
-            if (!isCandleOut) {
-                flame.style.display = 'none';
-                smoke.style.opacity = '1';
-                setTimeout(() => { smoke.style.opacity = '0'; }, 2000);
-
-                cakeInstruction.innerHTML = '✨ <span class="text-pink-600 font-bold">Lilin telah ditiup! Make a wish!</span> ✨';
-                isCandleOut = true;
-
-                launchConfetti();
-
-                if (!isPlaying) {
-                    toggleMusic();
-                }
-            }
-        });
-
-        // --- WISH CAROUSEL SLIDER ---
-        const slides = document.querySelectorAll('.slide-item');
-        const dots = document.querySelectorAll('.dot');
-        const prevBtn = document.getElementById('prev-btn');
-        const nextBtn = document.getElementById('next-btn');
-        let currentSlide = 0;
-        let slideInterval;
-
-        function showSlide(index) {
-            slides.forEach((slide, i) => {
-                if (i === index) {
-                    slide.classList.remove('opacity-0', 'translate-x-8', 'pointer-events-none');
-                    slide.classList.add('opacity-100', 'translate-x-0');
-                } else {
-                    slide.classList.remove('opacity-100', 'translate-x-0');
-                    slide.classList.add('opacity-0', 'translate-x-8', 'pointer-events-none');
-                }
-            });
-
-            dots.forEach((dot, i) => {
-                if (i === index) {
-                    dot.classList.replace('bg-purple-200', 'bg-purple-600');
-                } else {
-                    dot.classList.replace('bg-purple-600', 'bg-purple-200');
-                }
-            });
-
-            currentSlide = index;
-        }
-
-        function nextSlide() {
-            showSlide((currentSlide + 1) % slides.length);
-        }
-
-        function prevSlide() {
-            showSlide((currentSlide - 1 + slides.length) % slides.length);
-        }
-
-        function startAutoSlide() {
-            stopAutoSlide();
-            slideInterval = setInterval(nextSlide, 5000);
-        }
-
-        function stopAutoSlide() {
-            if (slideInterval) clearInterval(slideInterval);
-        }
-
-        nextBtn.addEventListener('click', () => { nextSlide(); startAutoSlide(); });
-        prevBtn.addEventListener('click', () => { prevSlide(); startAutoSlide(); });
-
-        dots.forEach(dot => {
-            dot.addEventListener('click', (e) => {
-                showSlide(parseInt(e.target.dataset.index));
-                startAutoSlide();
-            });
-        });
-
-        startAutoSlide();
-
-        // Initial burst on load
-        window.onload = () => {
-            setTimeout(() => {
-                confetti({ particleCount: 80, spread: 60, origin: { y: 0.6 } });
-            }, 600);
-        };
-    </script>
+    // Rotasi Kalimat Ucapan
+    const quotes = [
+      '"Tell me if you want me to give you all my time..." ✨',
+      '"I wanna make it good for you cause you blow my mind..." 💖',
+      '"Selamat Ulang Tahun! Semoga selalu bahagia & sehat selalu!" 🎉',
+      '"You are the most special person today!" 🌟'
+    ];
+    let qIndex = 0;
+    setInterval(() => {
+      qIndex = (qIndex + 1) % quotes.length;
+      document.getElementById('quoteText').innerText = quotes[qIndex];
+    }, 4000);
+  </script>
 </body>
 </html>
