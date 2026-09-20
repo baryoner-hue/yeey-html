@@ -24,7 +24,6 @@
       color: #fff;
       min-height: 100vh;
       overflow-x: hidden;
-      position: relative;
     }
 
     /* Header Bar */
@@ -67,45 +66,31 @@
       transform: scale(1.05);
     }
 
-    /* Slider Container & Animations */
-    .slider-wrapper {
-      position: relative;
-      width: 100%;
+    /* Slider Container Utama */
+    .slider-viewport {
+      width: 100vw;
       min-height: 100vh;
       overflow: hidden;
+      position: relative;
     }
 
-    .view-container {
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
+    .slider-track {
+      display: flex;
+      width: 200vw; /* Pembungkus 2 Halaman */
+      min-height: 100vh;
+      transition: transform 0.6s cubic-bezier(0.77, 0, 0.175, 1);
+    }
+
+    /* Setiap Halaman Memiliki Lebar 100vw */
+    .view-page {
+      width: 100vw;
       min-height: 100vh;
       padding-top: 90px;
       padding-bottom: 40px;
       display: flex;
       flex-direction: column;
       align-items: center;
-      transition: transform 0.6s cubic-bezier(0.77, 0, 0.175, 1), opacity 0.6s ease;
-      opacity: 0;
-      pointer-events: none;
-    }
-
-    /* Animasi Slide Ke Samping */
-    .view-container.active {
-      transform: translateX(0);
-      opacity: 1;
-      pointer-events: auto;
-    }
-
-    .view-container.slide-left {
-      transform: translateX(-100%);
-      opacity: 0;
-    }
-
-    .view-container.slide-right {
-      transform: translateX(100%);
-      opacity: 0;
+      box-sizing: border-box;
     }
 
     .hero {
@@ -205,10 +190,10 @@
       min-height: 80px;
     }
 
-    /* Layout Wish Board Untuk Desktop */
+    /* Layout Wish Board Desktop & HP */
     .wish-board {
       width: 90%;
-      max-width: 750px; /* Diperlebar agar pas di desktop */
+      max-width: 750px;
       background: rgba(255, 255, 255, 0.05);
       border: 1px solid var(--glass-border);
       border-radius: 20px;
@@ -284,62 +269,64 @@
     </div>
   </div>
 
-  <!-- Wrapper Pembungkus Transisi Slide -->
-  <div class="slider-wrapper">
+  <!-- Viewport Slider Pembungkus Utama -->
+  <div class="slider-viewport">
+    <div id="sliderTrack" class="slider-track">
 
-    <!-- TAMPILAN 1 -->
-    <div id="view1" class="view-container active">
-      <div class="hero">
-        <h1>Selamat Ulang Tahun! 🎉</h1>
-        <p>Semoga harimu dipenuhi cinta dan kebahagiaan</p>
-      </div>
-
-      <!-- Kue Ultah Interaktif -->
-      <div class="cake-container" onclick="blowCandle()">
-        <div class="candle">
-          <div id="flame" class="flame"></div>
+      <!-- HALAMAN 1 -->
+      <div class="view-page">
+        <div class="hero">
+          <h1>Selamat Ulang Tahun! 🎉</h1>
+          <p>Semoga harimu dipenuhi cinta dan kebahagiaan</p>
         </div>
-        <div class="cake"></div>
-      </div>
-      <p style="font-size: 0.85rem; opacity: 0.7; margin-bottom: 10px;">(Klik lilin untuk meniup & membuat keinginan ✨)</p>
 
-      <!-- Frame Photo Polaroid -->
-      <div class="polaroid">
-        <img id="mainPhoto" src="https://images.unsplash.com/photo-1513151233558-d860c5398176?w=500" alt="Birthday">
-        <p style="margin-top: 8px; font-weight: 600;">Momen Indah ❤️</p>
-        <button class="btn-action" style="margin-top:5px; font-size:0.75rem; padding:4px 10px;" onclick="document.getElementById('photoUploader').click()">Ganti Foto</button>
-        <input type="file" id="photoUploader" accept="image/*" style="display:none" onchange="uploadPhoto(this)">
-      </div>
+        <!-- Kue Ultah Interaktif -->
+        <div class="cake-container" onclick="blowCandle()">
+          <div class="candle">
+            <div id="flame" class="flame"></div>
+          </div>
+          <div class="cake"></div>
+        </div>
+        <p style="font-size: 0.85rem; opacity: 0.7; margin-bottom: 10px;">(Klik lilin untuk meniup & membuat keinginan ✨)</p>
 
-      <!-- Slider Ucapan -->
-      <div class="slider-box">
-        <p id="quoteText">"Tell me if you want me to give you all my time..." ✨</p>
-      </div>
+        <!-- Frame Photo Polaroid -->
+        <div class="polaroid">
+          <img id="mainPhoto" src="https://images.unsplash.com/photo-1513151233558-d860c5398176?w=500" alt="Birthday">
+          <p style="margin-top: 8px; font-weight: 600;">Momen Indah ❤️</p>
+          <button class="btn-action" style="margin-top:5px; font-size:0.75rem; padding:4px 10px;" onclick="document.getElementById('photoUploader').click()">Ganti Foto</button>
+          <input type="file" id="photoUploader" accept="image/*" style="display:none" onchange="uploadPhoto(this)">
+        </div>
 
-      <div class="nav-btn-group">
-        <button class="btn-action" style="padding: 12px 24px;" onclick="goToView(2)">Lihat Keinginan & Memories ➔</button>
-      </div>
-    </div>
+        <!-- Slider Ucapan -->
+        <div class="slider-box">
+          <p id="quoteText">"Tell me if you want me to give you all my time..." ✨</p>
+        </div>
 
-    <!-- TAMPILAN 2 (Dengan Animasi Slide & Tampilan Desktop Proporsional) -->
-    <div id="view2" class="view-container slide-right">
-      <div class="hero">
-        <h1>Wish Board & Memories 💖</h1>
-        <p>Kumpulan kenangan & harapan yang tersimpan</p>
-      </div>
-
-      <div class="wish-board">
-        <h3>Harapan & Keinginan Kamu:</h3>
-        <div id="wishList" style="margin-top: 15px;">
-          <p style="opacity: 0.6; font-size: 0.9rem;" id="emptyNotice">Belum ada keinginan tersimpan. Tiup lilin di Tampilan Utama!</p>
+        <div class="nav-btn-group">
+          <button class="btn-action" style="padding: 12px 24px;" onclick="goToPage(2)">Lihat Keinginan & Memories ➔</button>
         </div>
       </div>
 
-      <div class="nav-btn-group">
-        <button class="btn-action" style="padding: 12px 24px;" onclick="goToView(1)">⬅ Kembali ke Utama</button>
-      </div>
-    </div>
+      <!-- HALAMAN 2 -->
+      <div class="view-page">
+        <div class="hero">
+          <h1>Wish Board & Memories 💖</h1>
+          <p>Kumpulan kenangan & harapan yang tersimpan</p>
+        </div>
 
+        <div class="wish-board">
+          <h3>Harapan & Keinginan Kamu:</h3>
+          <div id="wishList" style="margin-top: 15px;">
+            <p style="opacity: 0.6; font-size: 0.9rem;" id="emptyNotice">Belum ada keinginan tersimpan. Tiup lilin di Tampilan Utama!</p>
+          </div>
+        </div>
+
+        <div class="nav-btn-group">
+          <button class="btn-action" style="padding: 12px 24px;" onclick="goToPage(1)">⬅ Kembali ke Utama</button>
+        </div>
+      </div>
+
+    </div>
   </div>
 
   <!-- Modal Input Make a Wish -->
@@ -356,17 +343,13 @@
     let audioCtx, isPlaying = false;
     let customAudioElement = document.getElementById('bgMusic');
 
-    // Fungsi Navigasi Slide antar Halaman
-    function goToView(page) {
-      const v1 = document.getElementById('view1');
-      const v2 = document.getElementById('view2');
-
-      if (page === 2) {
-        v1.className = 'view-container slide-left';
-        v2.className = 'view-container active';
+    // MENGGESER SLIDER PERPINDAHAN HALAMAN
+    function goToPage(pageNumber) {
+      const track = document.getElementById('sliderTrack');
+      if (pageNumber === 2) {
+        track.style.transform = 'translateX(-100vw)';
       } else {
-        v2.className = 'view-container slide-right';
-        v1.className = 'view-container active';
+        track.style.transform = 'translateX(0)';
       }
     }
 
