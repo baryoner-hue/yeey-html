@@ -1,737 +1,485 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Selamat Ulang Tahun Spesial! 🎉</title>
-    <!-- Tailwind CSS for utility styling -->
-    <script src="https://cdn.tailwindcss.com"></script>
-    <!-- Canvas Confetti for celebrations -->
-    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
-    <!-- FontAwesome Icons -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <!-- Google Fonts -->
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Sacramento&family=Fredoka:wght@400;600&family=Caveat:wght@600&display=swap" rel="stylesheet">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Happy Birthday! ✨ (Tell Me - Groove Theory)</title>
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&family=Sacramento&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-gradient: linear-gradient(135deg, #0f0c1b 0%, #201335 50%, #3a1c40 100%);
+      --accent: #ff4081;
+      --accent-light: #ff79b0;
+      --gold: #ffd700;
+      --glass: rgba(255, 255, 255, 0.08);
+      --glass-border: rgba(255, 255, 255, 0.18);
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
     
-    <style>
-        body {
-            font-family: 'Poppins', sans-serif;
-            background: linear-gradient(135deg, #0f172a 0%, #31103f 40%, #1e1b4b 75%, #020617 100%);
-            min-height: 100vh;
-            color: #f8fafc;
-            overflow-x: hidden;
-        }
+    body {
+      font-family: 'Poppins', sans-serif;
+      background: var(--bg-gradient);
+      color: #fff;
+      min-height: 100vh;
+      overflow-x: hidden;
+      position: relative;
+    }
 
-        .font-cursive {
-            font-family: 'Sacramento', cursive;
-        }
+    /* Header Bar */
+    .header-bar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      z-index: 100;
+      background: rgba(15, 12, 27, 0.85);
+      backdrop-filter: blur(10px);
+      padding: 12px 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 1px solid var(--glass-border);
+    }
 
-        .font-handwriting {
-            font-family: 'Caveat', cursive;
-        }
+    .song-info {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
 
-        .font-fun {
-            font-family: 'Fredoka', sans-serif;
-        }
+    .btn-action {
+      background: var(--accent);
+      border: none;
+      color: white;
+      padding: 8px 18px;
+      border-radius: 20px;
+      cursor: pointer;
+      font-size: 0.85rem;
+      font-weight: 600;
+      transition: all 0.3s;
+      box-shadow: 0 4px 12px rgba(255, 64, 129, 0.3);
+    }
 
-        /* Glassmorphism Styling */
-        .glass-panel {
-            background: rgba(255, 255, 255, 0.08);
-            backdrop-filter: blur(16px);
-            -webkit-backdrop-filter: blur(16px);
-            border: 1px solid rgba(255, 255, 255, 0.15);
-            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
-        }
+    .btn-action:hover {
+      background: var(--accent-light);
+      transform: scale(1.05);
+    }
 
-        .glass-card {
-            background: rgba(255, 255, 255, 0.05);
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 255, 255, 0.12);
-        }
+    /* Slider Container & Animations */
+    .slider-wrapper {
+      position: relative;
+      width: 100%;
+      min-height: 100vh;
+      overflow: hidden;
+    }
 
-        /* Neon Glow Effects */
-        .neon-text-pink {
-            text-shadow: 0 0 10px rgba(244, 114, 182, 0.6), 0 0 20px rgba(244, 114, 182, 0.4);
-        }
-        .neon-glow-purple {
-            box-shadow: 0 0 25px rgba(168, 85, 247, 0.35);
-        }
+    .view-container {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      min-height: 100vh;
+      padding-top: 90px;
+      padding-bottom: 40px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      transition: transform 0.6s cubic-bezier(0.77, 0, 0.175, 1), opacity 0.6s ease;
+      opacity: 0;
+      pointer-events: none;
+    }
 
-        /* Floating Balloon Animations */
-        @keyframes float-slow {
-            0% { transform: translateY(0px) rotate(0deg); }
-            50% { transform: translateY(-20px) rotate(5deg); }
-            100% { transform: translateY(0px) rotate(0deg); }
-        }
-        .animate-float-1 { animation: float-slow 4s ease-in-out infinite; }
-        .animate-float-2 { animation: float-slow 5s ease-in-out infinite 1s; }
+    /* Animasi Slide Ke Samping */
+    .view-container.active {
+      transform: translateX(0);
+      opacity: 1;
+      pointer-events: auto;
+    }
 
-        /* Flame Flickering Animation */
-        @keyframes flame-flicker {
-            0%, 100% { transform: scale(1) rotate(-2deg); opacity: 0.95; }
-            20% { transform: scale(1.1) rotate(2deg); opacity: 1; filter: drop-shadow(0 0 10px #f59e0b); }
-            40% { transform: scale(0.95) rotate(-1deg); opacity: 0.85; }
-            60% { transform: scale(1.15) rotate(3deg); filter: drop-shadow(0 0 16px #f97316); opacity: 1; }
-            80% { transform: scale(1.05) rotate(-3deg); opacity: 0.9; }
-        }
-        .flame-animation {
-            animation: flame-flicker 0.6s infinite alternate ease-in-out;
-            transform-origin: center bottom;
-        }
+    .view-container.slide-left {
+      transform: translateX(-100%);
+      opacity: 0;
+    }
 
-        /* Polaroid Hover Effect */
-        .polaroid-frame {
-            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            background: #ffffff;
-            color: #1e293b;
-        }
-        .polaroid-frame:hover {
-            transform: scale(1.03) rotate(0deg) translateY(-5px);
-            box-shadow: 0 20px 25px -5px rgba(244, 114, 182, 0.3);
-        }
+    .view-container.slide-right {
+      transform: translateX(100%);
+      opacity: 0;
+    }
 
-        /* 3D Flip Card */
-        .perspective-1000 {
-            perspective: 1000px;
-        }
-        .transform-style-3d {
-            transform-style: preserve-3d;
-            transition: transform 0.8s cubic-bezier(0.4, 0, 0.2, 1);
-        }
-        .flip-card-active {
-            transform: rotateY(180deg);
-        }
-        .backface-hidden {
-            backface-visibility: hidden;
-            -webkit-backface-visibility: hidden;
-        }
-        .rotate-y-180 {
-            transform: rotateY(180deg);
-        }
+    .hero {
+      text-align: center;
+      margin: 15px 0;
+    }
 
-        /* Candle Stripe */
-        .striped-candle {
-            background: repeating-linear-gradient(
-                45deg,
-                #fef08a,
-                #fef08a 8px,
-                #ec4899 8px,
-                #ec4899 16px
-            );
-        }
+    .hero h1 {
+      font-family: 'Sacramento', cursive;
+      font-size: 3.8rem;
+      color: var(--gold);
+      text-shadow: 0 0 12px rgba(255, 215, 0, 0.6);
+    }
 
-        /* Custom Scrollbar for Wish Board */
-        .custom-scrollbar::-webkit-scrollbar {
-            width: 6px;
-        }
-        .custom-scrollbar::-webkit-scrollbar-track {
-            background: rgba(255, 255, 255, 0.05);
-            border-radius: 10px;
-        }
-        .custom-scrollbar::-webkit-scrollbar-thumb {
-            background: rgba(244, 114, 182, 0.4);
-            border-radius: 10px;
-        }
-        .custom-scrollbar::-webkit-scrollbar-thumb:hover {
-            background: rgba(244, 114, 182, 0.7);
-        }
-    </style>
+    /* Kue Ultah */
+    .cake-container {
+      position: relative;
+      width: 180px;
+      height: 180px;
+      margin: 15px auto;
+      cursor: pointer;
+    }
+
+    .cake {
+      position: absolute;
+      bottom: 0;
+      width: 100%;
+      height: 110px;
+      background: #f8bbd0;
+      border-radius: 15px 15px 0 0;
+      box-shadow: inset 0 12px 0 #ec407a, inset 0 24px 0 #f8bbd0, inset 0 36px 0 #ab47bc;
+    }
+
+    .candle {
+      position: absolute;
+      top: 35px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 14px;
+      height: 45px;
+      background: repeating-linear-gradient(45deg, #fff, #fff 5px, #ff4081 5px, #ff4081 10px);
+      border-radius: 3px;
+    }
+
+    .flame {
+      position: absolute;
+      top: -20px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 16px;
+      height: 22px;
+      background: #ff9800;
+      border-radius: 50% 50% 20% 20%;
+      box-shadow: 0 0 15px #ffeb3b;
+      animation: flicker 0.6s infinite alternate;
+    }
+
+    .flame.off { display: none; }
+
+    @keyframes flicker {
+      0% { transform: translateX(-50%) scale(1); }
+      100% { transform: translateX(-50%) scale(1.15); }
+    }
+
+    /* Frame Polaroid */
+    .polaroid {
+      background: white;
+      padding: 12px 12px 20px 12px;
+      border-radius: 8px;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.5);
+      transform: rotate(-2deg);
+      transition: transform 0.3s;
+      width: 240px;
+      margin: 15px 0;
+      text-align: center;
+      color: #333;
+    }
+
+    .polaroid:hover { transform: rotate(0deg) scale(1.03); }
+
+    .polaroid img {
+      width: 100%;
+      height: 190px;
+      object-fit: cover;
+      border-radius: 4px;
+    }
+
+    .slider-box {
+      width: 90%;
+      max-width: 500px;
+      background: var(--glass);
+      border: 1px solid var(--glass-border);
+      padding: 20px;
+      border-radius: 15px;
+      text-align: center;
+      margin: 15px 0;
+      min-height: 80px;
+    }
+
+    /* Layout Wish Board Untuk Desktop */
+    .wish-board {
+      width: 90%;
+      max-width: 750px; /* Diperlebar agar pas di desktop */
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid var(--glass-border);
+      border-radius: 20px;
+      padding: 30px;
+      margin-top: 20px;
+      backdrop-filter: blur(10px);
+      box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+    }
+
+    .wish-item {
+      background: rgba(255,255,255,0.1);
+      padding: 14px;
+      border-radius: 10px;
+      margin-bottom: 12px;
+      border-left: 4px solid var(--accent);
+      font-size: 0.95rem;
+    }
+
+    /* Modal Form Make a Wish */
+    .modal {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      background: rgba(0,0,0,0.8);
+      display: none;
+      justify-content: center;
+      align-items: center;
+      z-index: 200;
+    }
+
+    .modal-content {
+      background: #201335;
+      padding: 30px;
+      border-radius: 15px;
+      text-align: center;
+      width: 90%;
+      max-width: 400px;
+      border: 1px solid var(--accent);
+    }
+
+    .modal-content textarea {
+      width: 100%;
+      height: 100px;
+      margin: 15px 0;
+      padding: 12px;
+      border-radius: 8px;
+      border: 1px solid var(--glass-border);
+      background: rgba(255,255,255,0.1);
+      color: white;
+      font-family: inherit;
+      resize: none;
+    }
+
+    .nav-btn-group { margin: 20px 0; }
+  </style>
 </head>
-<body class="flex flex-col items-center justify-start min-h-screen p-4 sm:p-6 relative pb-20 overflow-x-hidden">
+<body>
 
-    <!-- Floating Background Lights/Balloons -->
-    <div class="fixed top-12 left-6 animate-float-1 pointer-events-none opacity-40 z-0">
-        <div class="w-20 h-20 rounded-full bg-pink-500 blur-2xl"></div>
+  <!-- Audio Element -->
+  <audio id="bgMusic" loop>
+    <source src="" type="audio/mpeg">
+  </audio>
+
+  <!-- Header Bar -->
+  <div class="header-bar">
+    <div class="song-info">
+      <button id="playBtn" class="btn-action" onclick="toggleMusic()">▶ Putar Musik</button>
+      <span id="songTitle" style="font-size: 0.85rem; opacity: 0.9;">🎵 Tell Me - Groove Theory</span>
     </div>
-    <div class="fixed top-1/3 right-8 animate-float-2 pointer-events-none opacity-40 z-0">
-        <div class="w-32 h-32 rounded-full bg-purple-600 blur-3xl"></div>
+    <div>
+      <input type="file" id="audioUploader" accept="audio/*" style="display:none" onchange="loadCustomAudio(this)">
+      <button class="btn-action" style="background:#4a154b;" onclick="document.getElementById('audioUploader').click()">📁 Upload MP3</button>
     </div>
-    <div class="fixed bottom-10 left-10 animate-float-1 pointer-events-none opacity-30 z-0">
-        <div class="w-28 h-28 rounded-full bg-indigo-500 blur-2xl"></div>
-    </div>
+  </div>
 
-    <!-- Music Control Header -->
-    <div class="fixed top-4 right-4 z-50 flex items-center gap-2">
-        <button id="music-btn" class="bg-slate-900/80 backdrop-blur-md hover:bg-slate-800 text-pink-300 px-4 py-2.5 rounded-full shadow-lg border border-pink-500/30 transition-all transform hover:scale-105 flex items-center gap-2 font-semibold text-xs sm:text-sm">
-            <i id="music-icon" class="fa-solid fa-music text-pink-400"></i>
-            <span id="music-text">Putar "About You" 🎵</span>
-        </button>
-    </div>
+  <!-- Wrapper Pembungkus Transisi Slide -->
+  <div class="slider-wrapper">
 
-    <!-- Page Navigation Tabs -->
-    <nav class="fixed bottom-4 z-50 bg-slate-900/90 backdrop-blur-xl border border-white/20 px-3 py-1.5 rounded-full shadow-2xl flex items-center gap-2">
-        <button id="nav-page1" class="px-5 py-2 rounded-full text-xs sm:text-sm font-semibold transition-all bg-gradient-to-r from-pink-500 to-purple-600 text-white shadow-md flex items-center gap-1.5">
-            <i class="fa-solid fa-cake-candles"></i> Utama
-        </button>
-        <button id="nav-page2" class="px-5 py-2 rounded-full text-xs sm:text-sm font-semibold transition-all text-gray-300 hover:text-white hover:bg-white/10 flex items-center gap-1.5">
-            <i class="fa-solid fa-heart"></i> Kenangan & Wish <span id="wish-badge" class="bg-pink-500 text-white text-[10px] px-1.5 py-0.5 rounded-full font-bold hidden">0</span>
-        </button>
-    </nav>
+    <!-- TAMPILAN 1 -->
+    <div id="view1" class="view-container active">
+      <div class="hero">
+        <h1>Selamat Ulang Tahun! 🎉</h1>
+        <p>Semoga harimu dipenuhi cinta dan kebahagiaan</p>
+      </div>
 
-    <!-- VIEW 1: Main Birthday Page -->
-    <div id="view-page1" class="w-full max-w-md flex flex-col items-center gap-6 z-10 transition-all duration-500 opacity-100">
-
-        <!-- Title Header -->
-        <header class="text-center mt-6 sm:mt-8 w-full">
-            <span class="inline-flex items-center gap-2 px-4 py-1.5 bg-pink-500/10 text-pink-300 rounded-full text-xs font-semibold tracking-wide uppercase mb-3 border border-pink-500/30">
-                <i class="fa-solid fa-sparkles text-pink-400"></i> About You - Special Edition <i class="fa-solid fa-sparkles text-pink-400"></i>
-            </span>
-            <h1 class="text-4xl sm:text-5xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-pink-400 via-purple-300 to-indigo-300 neon-text-pink font-fun">
-                Happy Birthday!
-            </h1>
-            <p class="text-slate-300 mt-2 text-xs sm:text-sm font-light px-4 leading-relaxed">
-                "Do you think I have forgotten about you?" ✨<br>Semoga hari ulang tahunmu seindah melodi favoritmu!
-            </p>
-        </header>
-
-        <!-- Feature: Polaroid Frame with Live Upload -->
-        <div class="w-full glass-panel p-5 rounded-3xl shadow-xl flex flex-col items-center">
-            <div class="flex items-center justify-between w-full mb-3 px-1">
-                <span class="text-xs font-bold text-pink-300 uppercase tracking-wider flex items-center gap-1.5">
-                    <i class="fa-solid fa-camera text-pink-400"></i> Foto Utama
-                </span>
-                <span class="text-[11px] text-purple-300">Bisa Diganti 📸</span>
-            </div>
-
-            <!-- Polaroid Photo Frame -->
-            <div class="polaroid-frame p-3.5 pb-8 shadow-2xl rounded-sm transform -rotate-1 border border-slate-200 w-full max-w-[270px] relative">
-                <div class="w-full h-64 bg-slate-100 rounded-sm overflow-hidden relative border border-slate-200 group">
-                    <img id="main-photo" 
-                         src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=800&q=80" 
-                         alt="Foto Ulang Tahun" 
-                         class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
-                         onerror="this.src='https://images.unsplash.com/photo-1513151233558-d860c5398176?auto=format&fit=crop&w=800&q=80'">
-                </div>
-                <div class="mt-3 text-center">
-                    <input type="text" id="caption-input" value="Bintang Hari Ini ✨" 
-                           class="font-cursive text-2xl text-slate-800 text-center w-full bg-transparent focus:outline-none focus:border-b border-pink-400 font-semibold"
-                           title="Klik untuk mengubah nama/caption">
-                </div>
-            </div>
-
-            <!-- Photo Upload Options -->
-            <div class="w-full mt-4 pt-3 border-t border-white/10 flex flex-col gap-2">
-                <div class="flex gap-2">
-                    <label class="flex-1 bg-pink-500/20 hover:bg-pink-500/30 text-pink-300 text-xs font-semibold py-2 px-3 rounded-xl cursor-pointer border border-pink-500/30 flex items-center justify-center gap-1.5 transition-all">
-                        <i class="fa-solid fa-upload"></i> Unggah Foto
-                        <input type="file" id="file-input" accept="image/*" class="hidden">
-                    </label>
-                    <button id="toggle-url-btn" class="bg-purple-500/20 hover:bg-purple-500/30 text-purple-300 text-xs font-semibold py-2 px-3 rounded-xl border border-purple-500/30 flex items-center justify-center gap-1.5 transition-all">
-                        <i class="fa-solid fa-link"></i> Link URL
-                    </button>
-                </div>
-                <div id="url-input-container" class="hidden flex gap-2">
-                    <input type="url" id="url-input" placeholder="Tempel URL foto di sini..." class="flex-1 text-xs p-2.5 rounded-xl bg-slate-900/60 border border-white/20 text-white focus:outline-none focus:border-pink-400">
-                    <button id="apply-url-btn" class="bg-pink-500 hover:bg-pink-600 text-white text-xs font-semibold px-3 py-2.5 rounded-xl transition-all">
-                        Pasang
-                    </button>
-                </div>
-            </div>
+      <!-- Kue Ultah Interaktif -->
+      <div class="cake-container" onclick="blowCandle()">
+        <div class="candle">
+          <div id="flame" class="flame"></div>
         </div>
+        <div class="cake"></div>
+      </div>
+      <p style="font-size: 0.85rem; opacity: 0.7; margin-bottom: 10px;">(Klik lilin untuk meniup & membuat keinginan ✨)</p>
 
-        <!-- Feature: Interactive Birthday Cake with Clickable Candle -->
-        <div class="glass-panel p-6 sm:p-8 rounded-3xl shadow-xl w-full text-center relative">
-            <h2 id="cake-instruction" class="text-xs sm:text-sm font-semibold text-pink-300 mb-6 flex items-center justify-center gap-2">
-                <span>🔥 Klik/Sentuh api lilin untuk Meniupnya!</span>
-            </h2>
+      <!-- Frame Photo Polaroid -->
+      <div class="polaroid">
+        <img id="mainPhoto" src="https://images.unsplash.com/photo-1513151233558-d860c5398176?w=500" alt="Birthday">
+        <p style="margin-top: 8px; font-weight: 600;">Momen Indah ❤️</p>
+        <button class="btn-action" style="margin-top:5px; font-size:0.75rem; padding:4px 10px;" onclick="document.getElementById('photoUploader').click()">Ganti Foto</button>
+        <input type="file" id="photoUploader" accept="image/*" style="display:none" onchange="uploadPhoto(this)">
+      </div>
 
-            <!-- Cake Art Structure -->
-            <div class="relative w-48 h-44 mx-auto flex flex-col items-center justify-end select-none" id="cake-area">
-                <!-- Candle Flame -->
-                <div id="flame" class="absolute top-0 w-6 h-10 bg-amber-400 rounded-full flame-animation shadow-lg cursor-pointer z-20" title="Klik untuk Tiup Lilin!">
-                    <div class="w-3 h-5 bg-red-500 rounded-full mx-auto mt-2 opacity-80"></div>
-                </div>
-                
-                <!-- Candle Smoke -->
-                <div id="smoke" class="absolute top-0 opacity-0 transition-opacity duration-1000 text-sm font-bold z-20 text-slate-400">
-                    💨
-                </div>
+      <!-- Slider Ucapan -->
+      <div class="slider-box">
+        <p id="quoteText">"Tell me if you want me to give you all my time..." ✨</p>
+      </div>
 
-                <!-- Candle Stick -->
-                <div class="w-5 h-12 striped-candle rounded-t-sm border-b-2 border-amber-400 shadow-inner z-10 mb-[-2px]"></div>
-
-                <!-- Upper Layer Cake -->
-                <div class="w-40 h-12 bg-pink-400/90 rounded-t-2xl relative border-b-4 border-pink-500/80 shadow-md">
-                    <div class="absolute -bottom-2 left-0 right-0 flex justify-around px-1">
-                        <div class="w-5 h-5 bg-pink-400/90 rounded-full"></div>
-                        <div class="w-5 h-5 bg-pink-400/90 rounded-full"></div>
-                        <div class="w-5 h-5 bg-pink-400/90 rounded-full"></div>
-                        <div class="w-5 h-5 bg-pink-400/90 rounded-full"></div>
-                        <div class="w-5 h-5 bg-pink-400/90 rounded-full"></div>
-                    </div>
-                </div>
-
-                <!-- Lower Layer Cake -->
-                <div class="w-48 h-18 bg-purple-900/80 rounded-b-xl relative border-t-2 border-pink-300 shadow-lg overflow-hidden flex flex-col justify-center">
-                    <div class="w-full h-3 bg-pink-500/60 mb-1"></div>
-                    <div class="w-full h-3 bg-purple-500/60"></div>
-                </div>
-
-                <!-- Plate -->
-                <div class="w-56 h-4 bg-slate-400/50 rounded-full shadow-md border-b-2 border-slate-500 mt-[-4px]"></div>
-            </div>
-
-            <!-- Confetti Launch Button -->
-            <button id="celebrate-btn" class="mt-8 w-full py-3 px-6 bg-gradient-to-r from-pink-500 via-purple-600 to-indigo-600 hover:opacity-95 text-white font-bold rounded-2xl shadow-lg shadow-pink-500/25 transform active:scale-95 transition-all text-xs sm:text-sm flex items-center justify-center gap-2">
-                <i class="fa-solid fa-wand-magic-sparkles"></i> Tebarkan Konfeti Pesta!
-            </button>
-        </div>
-
-        <!-- Feature: Wish Quotes Carousel Slider -->
-        <div class="glass-panel p-6 rounded-3xl shadow-xl w-full text-center relative overflow-hidden">
-            <h3 class="text-xs font-bold uppercase tracking-widest text-purple-300 mb-4 flex items-center justify-center gap-1.5">
-                <i class="fa-solid fa-heart text-pink-400"></i> Wish & Doa Spesial
-            </h3>
-
-            <div id="slider-container" class="relative min-h-[120px] flex items-center justify-center">
-                <!-- Slide 1 -->
-                <div class="slide-item absolute inset-0 opacity-100 transform translate-x-0 flex flex-col items-center justify-center px-2 transition-all duration-500">
-                    <span class="text-xl mb-1">✨</span>
-                    <p class="text-slate-200 text-xs sm:text-sm font-medium leading-relaxed italic">
-                        "Selamat ulang tahun! Semoga tahun ini membawakanmu kebahagiaan tanpa batas, kesehatan melimpah, dan segala hal indah yang kamu impikan."
-                    </p>
-                </div>
-                <!-- Slide 2 -->
-                <div class="slide-item absolute inset-0 opacity-0 transform translate-x-8 pointer-events-none flex flex-col items-center justify-center px-2 transition-all duration-500">
-                    <span class="text-xl mb-1">🌸</span>
-                    <p class="text-slate-200 text-xs sm:text-sm font-medium leading-relaxed italic">
-                        "Terima kasih telah menjadi alasan banyak senyuman tercipta. Seperti melodi 'About You', kehadiranmu selalu hangat dan tak tergantikan."
-                    </p>
-                </div>
-                <!-- Slide 3 -->
-                <div class="slide-item absolute inset-0 opacity-0 transform translate-x-8 pointer-events-none flex flex-col items-center justify-center px-2 transition-all duration-500">
-                    <span class="text-xl mb-1">🎁</span>
-                    <p class="text-slate-200 text-xs sm:text-sm font-medium leading-relaxed italic">
-                        "Semoga langkahmu ke depan senantiasa dipermudah, dikelilingi cinta, serta dijauhkan dari segala keresahan."
-                    </p>
-                </div>
-            </div>
-
-            <!-- Carousel Navigation -->
-            <div class="flex items-center justify-between mt-4 pt-3 border-t border-white/10">
-                <button id="prev-btn" class="p-1.5 text-pink-300 hover:text-white transition-all">
-                    <i class="fa-solid fa-chevron-left text-xs"></i>
-                </button>
-                <div id="dots-container" class="flex gap-2">
-                    <button class="dot w-2 h-2 rounded-full bg-pink-400 transition-all" data-index="0"></button>
-                    <button class="dot w-2 h-2 rounded-full bg-white/30 hover:bg-white/60 transition-all" data-index="1"></button>
-                    <button class="dot w-2 h-2 rounded-full bg-white/30 hover:bg-white/60 transition-all" data-index="2"></button>
-                </div>
-                <button id="next-btn" class="p-1.5 text-pink-300 hover:text-white transition-all">
-                    <i class="fa-solid fa-chevron-right text-xs"></i>
-                </button>
-            </div>
-        </div>
-
+      <div class="nav-btn-group">
+        <button class="btn-action" style="padding: 12px 24px;" onclick="goToView(2)">Lihat Keinginan & Memories ➔</button>
+      </div>
     </div>
 
-    <!-- VIEW 2: Memories, Letter & Wish Board -->
-    <div id="view-page2" class="w-full max-w-md flex flex-col items-center gap-6 z-10 transition-all duration-500 opacity-0 hidden">
+    <!-- TAMPILAN 2 (Dengan Animasi Slide & Tampilan Desktop Proporsional) -->
+    <div id="view2" class="view-container slide-right">
+      <div class="hero">
+        <h1>Wish Board & Memories 💖</h1>
+        <p>Kumpulan kenangan & harapan yang tersimpan</p>
+      </div>
+
+      <div class="wish-board">
+        <h3>Harapan & Keinginan Kamu:</h3>
+        <div id="wishList" style="margin-top: 15px;">
+          <p style="opacity: 0.6; font-size: 0.9rem;" id="emptyNotice">Belum ada keinginan tersimpan. Tiup lilin di Tampilan Utama!</p>
+        </div>
+      </div>
+
+      <div class="nav-btn-group">
+        <button class="btn-action" style="padding: 12px 24px;" onclick="goToView(1)">⬅ Kembali ke Utama</button>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Modal Input Make a Wish -->
+  <div id="wishModal" class="modal">
+    <div class="modal-content">
+      <h2>Make a Wish! 🌠</h2>
+      <p style="font-size:0.9rem; opacity:0.8; margin-top:5px;">Lilin telah ditiup! Tuliskan keinginanmu:</p>
+      <textarea id="wishInput" placeholder="Tulis keinginan atau harapan kamu di sini..."></textarea>
+      <button class="btn-action" onclick="saveWish()">Simpan Keinginan ✨</button>
+    </div>
+  </div>
+
+  <script>
+    let audioCtx, isPlaying = false;
+    let customAudioElement = document.getElementById('bgMusic');
+
+    // Fungsi Navigasi Slide antar Halaman
+    function goToView(page) {
+      const v1 = document.getElementById('view1');
+      const v2 = document.getElementById('view2');
+
+      if (page === 2) {
+        v1.className = 'view-container slide-left';
+        v2.className = 'view-container active';
+      } else {
+        v2.className = 'view-container slide-right';
+        v1.className = 'view-container active';
+      }
+    }
+
+    // Melodi Synth Tell Me - Groove Theory
+    function playTellMeSynth() {
+      if(!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+      if(audioCtx.state === 'suspended') audioCtx.resume();
+
+      const notes = [261.63, 293.66, 329.63, 349.23, 392.00, 440.00];
+      let noteIndex = 0;
+
+      function step() {
+        if(!isPlaying) return;
+        let osc = audioCtx.createOscillator();
+        let gain = audioCtx.createGain();
+        osc.type = 'sine';
+        osc.frequency.setValueAtTime(notes[noteIndex % notes.length], audioCtx.currentTime);
         
-        <header class="text-center mt-6 sm:mt-8 w-full">
-            <span class="inline-flex items-center gap-2 px-4 py-1.5 bg-purple-500/10 text-purple-300 rounded-full text-xs font-semibold tracking-wide uppercase mb-3 border border-purple-500/30">
-                <i class="fa-solid fa-box-archive text-purple-400"></i> Ruang Kenangan & Harapan
-            </span>
-            <h2 class="text-3xl sm:text-4xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-pink-300 via-purple-300 to-indigo-300 font-fun">
-                Papan Keinginan & Galeri
-            </h2>
-        </header>
+        gain.gain.setValueAtTime(0.08, audioCtx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.35);
+        
+        osc.connect(gain);
+        gain.connect(audioCtx.destination);
+        
+        osc.start();
+        osc.stop(audioCtx.currentTime + 0.35);
+        
+        noteIndex++;
+        setTimeout(step, 320);
+      }
+      step();
+    }
 
-        <!-- Feature: Interactive Wish Board (Displays user wishes typed from Modal) -->
-        <div class="w-full glass-panel p-5 rounded-3xl shadow-xl flex flex-col">
-            <div class="flex items-center justify-between mb-4 pb-2 border-b border-white/10">
-                <h3 class="text-xs font-bold uppercase tracking-wider text-pink-300 flex items-center gap-2">
-                    <i class="fa-solid fa-star text-amber-400"></i> Keinginan Yang Ditiupkan
-                </h3>
-                <button id="add-wish-manual-btn" class="text-[11px] bg-pink-500/20 hover:bg-pink-500/30 text-pink-300 border border-pink-500/30 px-2.5 py-1 rounded-lg transition-all flex items-center gap-1">
-                    <i class="fa-solid fa-plus"></i> Tambah Wish
-                </button>
-            </div>
+    function toggleMusic() {
+      const btn = document.getElementById('playBtn');
 
-            <!-- Wishes Container list -->
-            <div id="wishes-list" class="flex flex-col gap-3 max-h-60 overflow-y-auto pr-1 custom-scrollbar">
-                <!-- Default empty state or wishes will appear here -->
-                <div id="empty-wish-msg" class="text-center py-6 text-slate-400 text-xs italic">
-                    Belum ada keinginan yang ditulis.<br>Tiup lilin di Halaman Utama untuk menulis keinginan pertama! ✨
-                </div>
-            </div>
-        </div>
-
-        <!-- Feature: 3D Flip Love/Birthday Letter -->
-        <div class="w-full glass-panel p-5 rounded-3xl shadow-xl flex flex-col items-center">
-            <h3 class="text-xs font-bold uppercase tracking-wider text-purple-300 mb-4 flex items-center gap-2 w-full text-left">
-                <i class="fa-solid fa-envelope text-purple-400"></i> Surat Spesial (Klik Untuk Buka)
-            </h3>
-
-            <div class="w-full h-64 perspective-1000 cursor-pointer" id="flip-card-container">
-                <div id="flip-card" class="w-full h-full relative transform-style-3d rounded-2xl shadow-xl">
-                    <!-- Card Front -->
-                    <div class="absolute inset-0 backface-hidden bg-gradient-to-br from-pink-500 to-purple-700 rounded-2xl p-6 flex flex-col items-center justify-center border border-white/20 text-center">
-                        <i class="fa-solid fa-envelope-open-text text-4xl text-white/90 mb-3 animate-bounce"></i>
-                        <h4 class="font-bold text-lg text-white font-fun">Surat Rahasia Ulang Tahun</h4>
-                        <p class="text-xs text-pink-100 mt-2 font-light">Sentuh/klik kartu ini untuk membuka isi pesan ucapan...</p>
-                    </div>
-
-                    <!-- Card Back -->
-                    <div class="absolute inset-0 backface-hidden rotate-y-180 bg-slate-900/95 border border-pink-400/30 rounded-2xl p-5 flex flex-col justify-between text-slate-200 overflow-y-auto custom-scrollbar">
-                        <div>
-                            <span class="text-xs font-bold text-pink-400 uppercase tracking-wide">Untukmu yang Teristimewa 💌</span>
-                            <p class="text-xs leading-relaxed mt-2 text-slate-300 font-light italic">
-                                "Di hari lahirmu ini, aku berharap kamu selalu menemukan kebahagiaan kecil di setiap langkahmu. Jangan pernah ragu untuk mengejar mimpimu. Kamu luar biasa, bermakna, dan layak mendapatkan semua hal terbaik di dunia ini."
-                            </p>
-                        </div>
-                        <div class="text-right pt-2 border-t border-white/10">
-                            <span class="font-cursive text-xl text-pink-300">Dengan Doa Terbaik ✨</span>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Feature: Photo Memory Grid -->
-        <div class="w-full glass-panel p-5 rounded-3xl shadow-xl">
-            <h3 class="text-xs font-bold uppercase tracking-wider text-indigo-300 mb-4 flex items-center gap-2">
-                <i class="fa-solid fa-images text-indigo-400"></i> Galeri Kenangan
-            </h3>
-
-            <div class="grid grid-cols-2 gap-3" id="memory-grid">
-                <div class="aspect-square rounded-2xl overflow-hidden border border-white/10 bg-slate-800">
-                    <img src="https://images.unsplash.com/photo-1513151233558-d860c5398176?auto=format&fit=crop&w=400&q=80" class="w-full h-full object-cover hover:scale-110 transition-transform duration-500">
-                </div>
-                <div class="aspect-square rounded-2xl overflow-hidden border border-white/10 bg-slate-800">
-                    <img src="https://images.unsplash.com/photo-1530103862676-de8c9debad1d?auto=format&fit=crop&w=400&q=80" class="w-full h-full object-cover hover:scale-110 transition-transform duration-500">
-                </div>
-                <div class="aspect-square rounded-2xl overflow-hidden border border-white/10 bg-slate-800">
-                    <img src="https://images.unsplash.com/photo-1464349095431-e9a21285b5f3?auto=format&fit=crop&w=400&q=80" class="w-full h-full object-cover hover:scale-110 transition-transform duration-500">
-                </div>
-                <div class="aspect-square rounded-2xl overflow-hidden border border-white/10 bg-slate-800">
-                    <img src="https://images.unsplash.com/photo-1517841905240-472988babdf9?auto=format&fit=crop&w=400&q=80" class="w-full h-full object-cover hover:scale-110 transition-transform duration-500">
-                </div>
-            </div>
-        </div>
-
-    </div>
-
-    <!-- MODAL: Make a Wish Dialog (Triggers after candle is blown) -->
-    <div id="wish-modal" class="fixed inset-0 bg-slate-950/80 backdrop-blur-md z-50 flex items-center justify-center p-4 opacity-0 pointer-events-none transition-opacity duration-300">
-        <div class="glass-panel border border-pink-500/40 bg-slate-900/90 rounded-3xl p-6 sm:p-7 max-w-sm w-full shadow-2xl transform scale-90 transition-transform duration-300 text-center relative" id="modal-content">
-            
-            <div class="w-14 h-14 bg-gradient-to-tr from-pink-500 to-amber-400 rounded-full flex items-center justify-center mx-auto mb-4 shadow-lg shadow-pink-500/30 animate-bounce">
-                <i class="fa-solid fa-wand-magic-sparkles text-2xl text-white"></i>
-            </div>
-
-            <h3 class="text-xl font-bold text-white font-fun mb-1">Make a Wish! 🌠</h3>
-            <p class="text-xs text-slate-300 mb-4 leading-relaxed">
-                Api lilin telah ditiup! Tuliskan harapan, keinginan, atau doamu di bawah ini:
-            </p>
-
-            <textarea id="wish-input" rows="3" placeholder="Tulis harapanmu di sini... (contoh: Semoga di usia baru ini selalu bahagia dan lancar karir!)" 
-                      class="w-full text-xs p-3.5 rounded-2xl bg-slate-950/70 border border-pink-500/30 text-white focus:outline-none focus:border-pink-400 resize-none font-medium mb-4 placeholder-slate-500"></textarea>
-
-            <div class="flex gap-2">
-                <button id="cancel-wish-btn" class="flex-1 py-2.5 px-4 bg-slate-800 hover:bg-slate-700 text-slate-300 text-xs font-semibold rounded-xl border border-white/10 transition-all">
-                    Batal
-                </button>
-                <button id="save-wish-btn" class="flex-1 py-2.5 px-4 bg-gradient-to-r from-pink-500 to-purple-600 hover:opacity-90 text-white text-xs font-bold rounded-xl shadow-lg shadow-pink-500/30 transition-all flex items-center justify-center gap-1.5">
-                    <i class="fa-solid fa-paper-plane"></i> Simpan Wish
-                </button>
-            </div>
-        </div>
-    </div>
-
-    <!-- Footer -->
-    <footer class="text-center text-[11px] text-slate-400 z-10 mt-8 font-medium">
-        Made with ❤️ for an unforgettable birthday moment.
-    </footer>
-
-    <script>
-        const navPage1 = document.getElementById('nav-page1');
-        const navPage2 = document.getElementById('nav-page2');
-        const viewPage1 = document.getElementById('view-page1');
-        const viewPage2 = document.getElementById('view-page2');
-
-        function switchView(pageNumber) {
-            if (pageNumber === 1) {
-                viewPage2.classList.add('opacity-0');
-                setTimeout(() => {
-                    viewPage2.classList.add('hidden');
-                    viewPage1.classList.remove('hidden');
-                    setTimeout(() => viewPage1.classList.remove('opacity-0'), 50);
-                }, 300);
-
-                navPage1.className = "px-5 py-2 rounded-full text-xs sm:text-sm font-semibold transition-all bg-gradient-to-r from-pink-500 to-purple-600 text-white shadow-md flex items-center gap-1.5";
-                navPage2.className = "px-5 py-2 rounded-full text-xs sm:text-sm font-semibold transition-all text-gray-300 hover:text-white hover:bg-white/10 flex items-center gap-1.5";
-            } else {
-                viewPage1.classList.add('opacity-0');
-                setTimeout(() => {
-                    viewPage1.classList.add('hidden');
-                    viewPage2.classList.remove('hidden');
-                    setTimeout(() => viewPage2.classList.remove('opacity-0'), 50);
-                }, 300);
-
-                navPage2.className = "px-5 py-2 rounded-full text-xs sm:text-sm font-semibold transition-all bg-gradient-to-r from-pink-500 to-purple-600 text-white shadow-md flex items-center gap-1.5";
-                navPage1.className = "px-5 py-2 rounded-full text-xs sm:text-sm font-semibold transition-all text-gray-300 hover:text-white hover:bg-white/10 flex items-center gap-1.5";
-            }
+      if (customAudioElement.src && customAudioElement.src !== window.location.href) {
+        if (customAudioElement.paused) {
+          customAudioElement.play();
+          btn.innerText = "⏸ Hentikan Lagu";
+        } else {
+          customAudioElement.pause();
+          btn.innerText = "▶ Putar Musik";
         }
+        return;
+      }
 
-        navPage1.addEventListener('click', () => switchView(1));
-        navPage2.addEventListener('click', () => switchView(2));
+      isPlaying = !isPlaying;
+      if (isPlaying) {
+        btn.innerText = "⏸ Hentikan Lagu";
+        playTellMeSynth();
+      } else {
+        btn.innerText = "▶ Putar Musik";
+      }
+    }
 
-        const mainPhoto = document.getElementById('main-photo');
-        const fileInput = document.getElementById('file-input');
-        const toggleUrlBtn = document.getElementById('toggle-url-btn');
-        const urlInputContainer = document.getElementById('url-input-container');
-        const urlInput = document.getElementById('url-input');
-        const applyUrlBtn = document.getElementById('apply-url-btn');
+    function loadCustomAudio(input) {
+      if (input.files && input.files[0]) {
+        isPlaying = false;
+        customAudioElement.src = URL.createObjectURL(input.files[0]);
+        customAudioElement.play();
+        document.getElementById('playBtn').innerText = "⏸ Hentikan Lagu";
+        document.getElementById('songTitle').innerText = "🎵 " + input.files[0].name;
+      }
+    }
 
-        fileInput.addEventListener('change', (e) => {
-            const file = e.target.files[0];
-            if (file) {
-                const reader = new FileReader();
-                reader.onload = (event) => { mainPhoto.src = event.target.result; };
-                reader.readAsDataURL(file);
-            }
-        });
+    function blowCandle() {
+      const flame = document.getElementById('flame');
+      if (!flame.classList.contains('off')) {
+        flame.classList.add('off');
+        confetti({ particleCount: 110, spread: 80, origin: { y: 0.6 } });
+        
+        if(!isPlaying && customAudioElement.paused) toggleMusic();
+        
+        setTimeout(() => {
+          document.getElementById('wishModal').style.display = 'flex';
+        }, 700);
+      }
+    }
 
-        toggleUrlBtn.addEventListener('click', () => {
-            urlInputContainer.classList.toggle('hidden');
-        });
+    function saveWish() {
+      const text = document.getElementById('wishInput').value.trim();
+      if(text) {
+        const list = document.getElementById('wishList');
+        const emptyNotice = document.getElementById('emptyNotice');
+        if(emptyNotice) emptyNotice.remove();
+        
+        const div = document.createElement('div');
+        div.className = 'wish-item';
+        div.innerText = "✨ " + text;
+        list.appendChild(div);
+      }
+      document.getElementById('wishModal').style.display = 'none';
+      confetti({ particleCount: 50, spread: 60 });
+    }
 
-        applyUrlBtn.addEventListener('click', () => {
-            const url = urlInput.value.trim();
-            if (url) mainPhoto.src = url;
-        });
+    function uploadPhoto(input) {
+      if (input.files && input.files[0]) {
+        document.getElementById('mainPhoto').src = URL.createObjectURL(input.files[0]);
+      }
+    }
 
-        let audioCtx = null;
-        let isPlaying = false;
-        let melodyTimeout = null;
-
-        const musicBtn = document.getElementById('music-btn');
-        const musicIcon = document.getElementById('music-icon');
-        const musicText = document.getElementById('music-text');
-
-        // Shoegaze/Dream-pop synth melody sequence inspired by "About You"
-        const aboutYouMelody = [
-            { note: 'D4', dur: 600 }, { note: 'F#4', dur: 600 }, { note: 'A4', dur: 800 },
-            { note: 'B4', dur: 600 }, { note: 'A4', dur: 600 }, { note: 'F#4', dur: 800 },
-            { note: 'G4', dur: 600 }, { note: 'F#4', dur: 600 }, { note: 'E4', dur: 1000 }
-        ];
-
-        const frequencies = {
-            'D4': 293.66, 'E4': 329.63, 'F#4': 369.99, 'G4': 392.00, 'A4': 440.00, 'B4': 493.88
-        };
-
-        function playSynthTone(freq, duration) {
-            if (!audioCtx) return;
-            try {
-                const osc = audioCtx.createOscillator();
-                const gain = audioCtx.createGain();
-
-                osc.type = 'triangle'; // Dreamy tone
-                osc.frequency.setValueAtTime(freq, audioCtx.currentTime);
-
-                gain.gain.setValueAtTime(0.15, audioCtx.currentTime);
-                gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + (duration / 1000));
-
-                osc.connect(gain);
-                gain.connect(audioCtx.destination);
-
-                osc.start();
-                osc.stop(audioCtx.currentTime + (duration / 1000));
-            } catch (e) { console.log(e); }
-        }
-
-        function runMelodyLoop(index = 0) {
-            if (!isPlaying) return;
-            if (index >= aboutYouMelody.length) {
-                melodyTimeout = setTimeout(() => runMelodyLoop(0), 1200);
-                return;
-            }
-
-            const current = aboutYouMelody[index];
-            if (frequencies[current.note]) {
-                playSynthTone(frequencies[current.note], current.dur);
-            }
-
-            melodyTimeout = setTimeout(() => {
-                runMelodyLoop(index + 1);
-            }, current.dur + 50);
-        }
-
-        function toggleMusic() {
-            if (!audioCtx) {
-                const AudioCtx = window.AudioContext || window.webkitAudioContext;
-                audioCtx = new AudioCtx();
-            }
-            if (audioCtx.state === 'suspended') {
-                audioCtx.resume();
-            }
-
-            if (isPlaying) {
-                isPlaying = false;
-                clearTimeout(melodyTimeout);
-                musicText.textContent = 'Putar "About You" 🎵';
-                musicIcon.className = 'fa-solid fa-music text-pink-400';
-            } else {
-                isPlaying = true;
-                musicText.textContent = 'Matikan Musik 🔊';
-                musicIcon.className = 'fa-solid fa-volume-high text-pink-400';
-                runMelodyLoop(0);
-            }
-        }
-
-        musicBtn.addEventListener('click', toggleMusic);
-
-        function triggerConfetti() {
-            const end = Date.now() + (3 * 1000);
-            (function frame() {
-                confetti({
-                    particleCount: 5,
-                    angle: 60,
-                    spread: 55,
-                    origin: { x: 0 },
-                    colors: ['#f472b6', '#a855f7', '#6366f1', '#fbbf24']
-                });
-                confetti({
-                    particleCount: 5,
-                    angle: 120,
-                    spread: 55,
-                    origin: { x: 1 },
-                    colors: ['#f472b6', '#a855f7', '#6366f1', '#fbbf24']
-                });
-                if (Date.now() < end) requestAnimationFrame(frame);
-            }());
-        }
-
-        document.getElementById('celebrate-btn').addEventListener('click', triggerConfetti);
-
-        const flame = document.getElementById('flame');
-        const smoke = document.getElementById('smoke');
-        const cakeInstruction = document.getElementById('cake-instruction');
-        const wishModal = document.getElementById('wish-modal');
-        const modalContent = document.getElementById('modal-content');
-        const wishInput = document.getElementById('wish-input');
-        const saveWishBtn = document.getElementById('save-wish-btn');
-        const cancelWishBtn = document.getElementById('cancel-wish-btn');
-        const wishesList = document.getElementById('wishes-list');
-        const emptyWishMsg = document.getElementById('empty-wish-msg');
-        const wishBadge = document.getElementById('wish-badge');
-        const addWishManualBtn = document.getElementById('add-wish-manual-btn');
-
-        let isCandleOut = false;
-        let savedWishes = [];
-
-        function openWishModal() {
-            wishModal.classList.remove('opacity-0', 'pointer-events-none');
-            modalContent.classList.remove('scale-90');
-            modalContent.classList.add('scale-100');
-            wishInput.value = '';
-            setTimeout(() => wishInput.focus(), 200);
-        }
-
-        function closeWishModal() {
-            wishModal.classList.add('opacity-0', 'pointer-events-none');
-            modalContent.classList.remove('scale-100');
-            modalContent.classList.add('scale-90');
-        }
-
-        flame.addEventListener('click', () => {
-            if (!isCandleOut) {
-                flame.style.display = 'none';
-                smoke.style.opacity = '1';
-                setTimeout(() => { smoke.style.opacity = '0'; }, 1800);
-
-                cakeInstruction.innerHTML = '✨ <span class="text-pink-400 font-bold">Lilin telah ditiup! Tuliskan harapanmu...</span> ✨';
-                isCandleOut = true;
-
-                triggerConfetti();
-                if (!isPlaying) toggleMusic();
-
-                // Open Wish Modal immediately after blowing candle
-                setTimeout(openWishModal, 700);
-            }
-        });
-
-        addWishManualBtn.addEventListener('click', openWishModal);
-        cancelWishBtn.addEventListener('click', closeWishModal);
-
-        saveWishBtn.addEventListener('click', () => {
-            const wishText = wishInput.value.trim();
-            if (wishText) {
-                savedWishes.push(wishText);
-                renderWishes();
-                closeWishModal();
-
-                // Auto switch tab or prompt user
-                triggerConfetti();
-            }
-        });
-
-        function renderWishes() {
-            if (savedWishes.length > 0) {
-                if (emptyWishMsg) emptyWishMsg.style.display = 'none';
-                wishBadge.textContent = savedWishes.length;
-                wishBadge.classList.remove('hidden');
-
-                wishesList.innerHTML = savedWishes.map((w, idx) => `
-                    <div class="glass-card p-3 rounded-2xl border border-pink-500/20 text-xs text-slate-200 relative group animate-fade-in">
-                        <div class="flex items-start gap-2">
-                            <span class="text-amber-400 text-sm">✨</span>
-                            <p class="flex-1 font-medium leading-relaxed">${w}</p>
-                        </div>
-                        <span class="text-[10px] text-pink-300/60 block text-right mt-1 font-mono">Wish #${idx + 1}</span>
-                    </div>
-                `).join('');
-            }
-        }
-
-        const flipCardContainer = document.getElementById('flip-card-container');
-        const flipCard = document.getElementById('flip-card');
-
-        flipCardContainer.addEventListener('click', () => {
-            flipCard.classList.toggle('flip-card-active');
-        });
-
-        const slides = document.querySelectorAll('.slide-item');
-        const dots = document.querySelectorAll('.dot');
-        const prevBtn = document.getElementById('prev-btn');
-        const nextBtn = document.getElementById('next-btn');
-        let currentSlide = 0;
-
-        function showSlide(index) {
-            slides.forEach((slide, i) => {
-                if (i === index) {
-                    slide.classList.remove('opacity-0', 'translate-x-8', 'pointer-events-none');
-                    slide.classList.add('opacity-100', 'translate-x-0');
-                } else {
-                    slide.classList.remove('opacity-100', 'translate-x-0');
-                    slide.classList.add('opacity-0', 'translate-x-8', 'pointer-events-none');
-                }
-            });
-
-            dots.forEach((dot, i) => {
-                if (i === index) {
-                    dot.classList.replace('bg-white/30', 'bg-pink-400');
-                } else {
-                    dot.classList.replace('bg-pink-400', 'bg-white/30');
-                }
-            });
-            currentSlide = index;
-        }
-
-        nextBtn.addEventListener('click', () => showSlide((currentSlide + 1) % slides.length));
-        prevBtn.addEventListener('click', () => showSlide((currentSlide - 1 + slides.length) % slides.length));
-
-        dots.forEach(dot => {
-            dot.addEventListener('click', (e) => showSlide(parseInt(e.target.dataset.index)));
-        });
-
-        // Initial burst on page load
-        window.onload = () => {
-            setTimeout(() => {
-                confetti({ particleCount: 70, spread: 60, origin: { y: 0.6 } });
-            }, 500);
-        };
-    </script>
+    const quotes = [
+      '"Tell me if you want me to give you all my time..." ✨',
+      '"I wanna make it good for you cause you blow my mind..." 💖',
+      '"Selamat Ulang Tahun! Semoga selalu bahagia & sehat selalu!" 🎉',
+      '"You are the most special person today!" 🌟'
+    ];
+    let qIndex = 0;
+    setInterval(() => {
+      qIndex = (qIndex + 1) % quotes.length;
+      document.getElementById('quoteText').innerText = quotes[qIndex];
+    }, 4000);
+  </script>
 </body>
 </html>
