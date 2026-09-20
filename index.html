@@ -76,12 +76,12 @@
 
     .slider-track {
       display: flex;
-      width: 200vw; /* Pembungkus 2 Halaman */
+      width: 200vw;
       min-height: 100vh;
       transition: transform 0.6s cubic-bezier(0.77, 0, 0.175, 1);
     }
 
-    /* Setiap Halaman Memiliki Lebar 100vw */
+    /* Lebar Halaman 100vw */
     .view-page {
       width: 100vw;
       min-height: 100vh;
@@ -105,7 +105,7 @@
       text-shadow: 0 0 12px rgba(255, 215, 0, 0.6);
     }
 
-    /* Kue Ultah */
+    /* Kue Ultah Interaktif */
     .cake-container {
       position: relative;
       width: 180px;
@@ -190,7 +190,7 @@
       min-height: 80px;
     }
 
-    /* Layout Wish Board Desktop & HP */
+    /* Wish Board Desain Desktop & Mobile */
     .wish-board {
       width: 90%;
       max-width: 750px;
@@ -252,7 +252,7 @@
 </head>
 <body>
 
-  <!-- Audio Element -->
+  <!-- Element Audio -->
   <audio id="bgMusic" loop>
     <source src="" type="audio/mpeg">
   </audio>
@@ -269,18 +269,18 @@
     </div>
   </div>
 
-  <!-- Viewport Slider Pembungkus Utama -->
+  <!-- Viewport Slider Wrapper -->
   <div class="slider-viewport">
     <div id="sliderTrack" class="slider-track">
 
-      <!-- HALAMAN 1 -->
+      <!-- TAMPILAN 1 -->
       <div class="view-page">
         <div class="hero">
           <h1>Selamat Ulang Tahun! 🎉</h1>
           <p>Semoga harimu dipenuhi cinta dan kebahagiaan</p>
         </div>
 
-        <!-- Kue Ultah Interaktif -->
+        <!-- Kue Ultah -->
         <div class="cake-container" onclick="blowCandle()">
           <div class="candle">
             <div id="flame" class="flame"></div>
@@ -289,7 +289,7 @@
         </div>
         <p style="font-size: 0.85rem; opacity: 0.7; margin-bottom: 10px;">(Klik lilin untuk meniup & membuat keinginan ✨)</p>
 
-        <!-- Frame Photo Polaroid -->
+        <!-- Frame Foto Polaroid -->
         <div class="polaroid">
           <img id="mainPhoto" src="https://images.unsplash.com/photo-1513151233558-d860c5398176?w=500" alt="Birthday">
           <p style="margin-top: 8px; font-weight: 600;">Momen Indah ❤️</p>
@@ -307,7 +307,7 @@
         </div>
       </div>
 
-      <!-- HALAMAN 2 -->
+      <!-- TAMPILAN 2 -->
       <div class="view-page">
         <div class="hero">
           <h1>Wish Board & Memories 💖</h1>
@@ -343,7 +343,7 @@
     let audioCtx, isPlaying = false;
     let customAudioElement = document.getElementById('bgMusic');
 
-    // MENGGESER SLIDER PERPINDAHAN HALAMAN
+    // Navigasi Slide antar Halaman (Menggeser Layar)
     function goToPage(pageNumber) {
       const track = document.getElementById('sliderTrack');
       if (pageNumber === 2) {
