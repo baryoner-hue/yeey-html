@@ -49,6 +49,7 @@
       display: block;
       opacity: 1;
       visibility: visible;
+      z-index: 1;
     }
 
     .page-nav {
@@ -90,11 +91,13 @@
       opacity: 0;
       visibility: hidden;
       transition: opacity 0.3s ease, visibility 0.3s ease;
-      z-index: 1;
+      z-index: 5;
     }
 
     .page.is-active {
-      display: block;
+      display: flex;
+      align-items: center;
+      justify-content: center;
       opacity: 1;
       visibility: visible;
     }
@@ -116,6 +119,7 @@
     }
 
     .login-gate.hidden {
+      display: none !important;
       opacity: 0;
       visibility: hidden;
       pointer-events: none;
@@ -678,7 +682,10 @@
       const main = document.getElementById('main-content');
 
       if (gate) gate.classList.add('hidden');
-      if (main) main.style.filter = 'none';
+      if (main) {
+        main.style.filter = 'none';
+        main.style.zIndex = '10';
+      }
       showPage('page-1');
       clearLoginError();
     }
