@@ -47,10 +47,8 @@
       width: 100%;
       height: 100%;
       display: block;
-    }
-
-    .main-content.hidden {
-      display: none;
+      opacity: 1;
+      visibility: visible;
     }
 
     .login-gate {
@@ -61,12 +59,18 @@
       align-items: center;
       justify-content: center;
       padding: 24px;
-      background: linear-gradient(135deg, rgba(32, 8, 25, 0.92), rgba(65, 20, 61, 0.9));
-      transition: opacity 0.4s ease, visibility 0.4s ease;
+      background: rgba(22, 7, 17, 0.28);
+      backdrop-filter: blur(4px);
+      -webkit-backdrop-filter: blur(4px);
+      transition: opacity 0.35s ease, visibility 0.35s ease;
+      opacity: 1;
+      visibility: visible;
     }
 
     .login-gate.hidden {
-      display: none;
+      opacity: 0;
+      visibility: hidden;
+      pointer-events: none;
     }
 
     .login-card {
@@ -489,7 +493,7 @@
     </form>
   </div>
 
-  <main id="main-content" class="main-content hidden" aria-live="polite">
+  <main id="main-content" class="main-content" aria-live="polite">
     <div class="decor" id="decor" aria-hidden="true"></div>
 
     <div class="carousel" aria-label="Slide ucapan ulang tahun">
@@ -565,17 +569,19 @@
       const main = document.getElementById('main-content');
 
       if (gate) gate.classList.add('hidden');
-      if (main) main.classList.remove('hidden');
+      if (main) main.style.filter = 'none';
       clearLoginError();
     }
 
     function handleLoginSubmit(event) {
       event.preventDefault();
 
-      const username = document.getElementById('login-username').value.trim();
-      const password = document.getElementById('login-password').value;
+      const username = (document.getElementById('login-username').value || '').trim().toLowerCase();
+      const password = (document.getElementById('login-password').value || '').trim();
 
-      if (username === VALID_USERNAME && password === VALID_PASSWORD) {
+      const isValid = username === VALID_USERNAME && password === VALID_PASSWORD;
+
+      if (isValid) {
         unlockPage();
         return;
       }
@@ -648,12 +654,12 @@
       if (event.key === 'ArrowLeft') showSlide(index - 1);
     });
 
-    document.addEventListener('DOMContentLoaded', () => {
-      const form = document.getElementById('login-form');
-      if (form) {
-        form.addEventListener('submit', handleLoginSubmit);
-      }
+    const form = document.getElementById('login-form');
+    if (form) {
+      form.addEventListener('submit', handleLoginSubmit);
+    }
 
+    document.addEventListener('DOMContentLoaded', () => {
       buatDekor();
       if (track && slides.length) {
         showSlide(0);
