@@ -1,30 +1,26 @@
 export default async function run(page, ui) {
-  const result = {};
+  const r = {};
 
-  // 1. On load: gate visible, main content hidden
-  result.gateVisibleOnLoad = await page.locator('#login-gate').isVisible();
-  result.mainContentHiddenOnLoad = !(await page.locator('#main-content').isVisible());
+  r.gateVisibleOnLoad = await page.locator('#login-gate').isVisible();
+  r.mainHiddenOnLoad = !(await page.locator('#main-content').isVisible());
 
-  // 2. Wrong credentials -> rejected, gate stays
+  // Wrong credentials must be rejected
   await page.fill('#login-username', 'salah');
   await page.fill('#login-password', '000');
   await page.click('#login-form button[type=submit]');
   await page.waitForTimeout(300);
-  result.errorShownOnWrong = await page.locator('#login-error').isVisible();
-  result.errorText = await page.locator('#login-error').innerText();
-  result.gateStillVisibleAfterWrong = await page.locator('#login-gate').isVisible();
+  r.errorShownOnWrong = await page.locator('#login-error').isVisible();
+  r.gateStillVisibleAfterWrong = await page.locator('#login-gate').isVisible();
 
-  // 3. Correct credentials -> unlocked
+  // Correct credentials must unlock
   await page.fill('#login-username', 'liaa');
   await page.fill('#login-password', '071008');
   await page.click('#login-form button[type=submit]');
   await page.waitForTimeout(600);
-  result.gateHiddenAfterCorrect = !(await page.locator('#login-gate').isVisible());
-  result.mainContentVisibleAfterCorrect = await page.locator('#main-content').isVisible();
-  result.h1 = await page.locator('h1').innerText();
+  r.gateHiddenAfterCorrect = !(await page.locator('#login-gate').isVisible());
+  r.mainVisibleAfterCorrect = await page.locator('#main-content').isVisible();
+  r.page1Active = await page.locator('#page-1').evaluate((el) => el.classList.contains('is-active'));
+  r.h1 = (await page.locator('h1').innerText()).trim();
 
-  // 4. Password is not left in memory on the page
-  result.countdownOk = await page.evaluate(() => !!document.getElementById('main-photo'));
-
-  return result;
+  return r;
 }
