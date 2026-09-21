@@ -51,6 +51,52 @@
       visibility: visible;
     }
 
+    .page-nav {
+      position: absolute;
+      left: 50%;
+      bottom: 28px;
+      z-index: 30;
+      transform: translateX(-50%);
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+
+    .page-nav-btn {
+      border: 1px solid rgba(255,255,255,0.28);
+      background: rgba(255,255,255,0.08);
+      color: var(--cream);
+      border-radius: 999px;
+      padding: 8px 16px;
+      font-size: 0.72rem;
+      font-weight: 600;
+      letter-spacing: 0.12rem;
+      text-transform: uppercase;
+      cursor: pointer;
+    }
+
+    .page-nav-btn.is-active {
+      background: linear-gradient(135deg, var(--gold-2), var(--pink-2));
+      color: var(--dark);
+      border-color: transparent;
+    }
+
+    .page {
+      position: absolute;
+      inset: 0;
+      display: none;
+      opacity: 0;
+      visibility: hidden;
+      transition: opacity 0.3s ease, visibility 0.3s ease;
+    }
+
+    .page.is-active {
+      display: block;
+      opacity: 1;
+      visibility: visible;
+    }
+
     .login-gate {
       position: absolute;
       inset: 0;
@@ -494,58 +540,100 @@
   </div>
 
   <main id="main-content" class="main-content" aria-live="polite">
-    <div class="decor" id="decor" aria-hidden="true"></div>
+    <nav class="page-nav" aria-label="Navigasi halaman">
+      <button class="page-nav-btn is-active" type="button" data-page="page-1">Page 1</button>
+      <button class="page-nav-btn" type="button" data-page="page-2">Page 2</button>
+      <button class="page-nav-btn" type="button" data-page="page-3">Page 3</button>
+    </nav>
 
-    <div class="carousel" aria-label="Slide ucapan ulang tahun">
-      <div class="slides-track" id="slidesTrack" style="transform: translateX(0%);">
-        <section class="slide slide-intro" aria-label="Slide 1, halaman intro">
-          <div class="slide-inner">
-            <div class="badge">Birthday Celebration</div>
-            <h1>Happy Birthday</h1>
-            <div class="name">Alya</div>
-            <div class="cake-emoji" aria-hidden="true">🎂</div>
-            <button class="cta" type="button" data-next>Open Surprise</button>
-          </div>
-        </section>
+    <section id="page-1" class="page is-active" aria-hidden="false">
+      <div class="decor" id="decor" aria-hidden="true"></div>
 
-        <section class="slide slide-message" aria-label="Slide 2, ucapan utama">
-          <div class="card">
-            <div class="sparkle">✦ ✦ ✦</div>
-            <h2>Selamat Ulang Tahun</h2>
-            <div class="recipient">Alya</div>
-            <p class="message">
-              Semoga hari ini penuh dengan senyum, kebahagiaan, dan <span class="highlight">momen indah</span> yang akan selalu kamu ingat.
-            </p>
-            <p class="message">
-              Semoga <span class="highlight">impian, harapan, dan doa-doa baikmu</span> terwujud di tahun yang baru ini.
-              Tetap menjadi pribadi yang kuat, bahagia, dan selalu bersinar.
-            </p>
-            <div class="gift" aria-hidden="true">🎁</div>
-            <div class="nav-row">
-              <button class="nav-btn" type="button" data-prev>Prev</button>
-              <button class="nav-btn primary" type="button" data-next>Next</button>
+      <div class="carousel" aria-label="Slide ucapan ulang tahun">
+        <div class="slides-track" id="slidesTrack" style="transform: translateX(0%);">
+          <section class="slide slide-intro" aria-label="Slide 1, halaman intro">
+            <div class="slide-inner">
+              <div class="badge">Birthday Celebration</div>
+              <h1>Happy Birthday</h1>
+              <div class="name">Alya</div>
+              <div class="cake-emoji" aria-hidden="true">🎂</div>
+              <button class="cta" type="button" data-next>Open Surprise</button>
             </div>
-          </div>
-        </section>
+          </section>
 
-        <section class="slide slide-final" aria-label="Slide 3, penutup">
-          <div class="final-card">
-            <div class="sparkle">🎉</div>
-            <h2>Forever Young</h2>
-            <p class="message">
-              Semoga tahun ini membawa lebih banyak tawa, lebih banyak kebahagiaan, dan lebih banyak alasan untuk terus tersenyum.
-            </p>
-            <p class="message">
-              Tetaplah bahagia, tetaplah menjadi dirimu sendiri, dan jadikan setiap langkahmu sebagai <span class="highlight">langkah yang penuh makna</span>.
-            </p>
-            <div class="gift large" aria-hidden="true">💖</div>
-            <div class="nav-row">
-              <button class="nav-btn" type="button" data-prev>Back</button>
+          <section class="slide slide-message" aria-label="Slide 2, ucapan utama">
+            <div class="card">
+              <div class="sparkle">✦ ✦ ✦</div>
+              <h2>Selamat Ulang Tahun</h2>
+              <div class="recipient">Alya</div>
+              <p class="message">
+                Semoga hari ini penuh dengan senyum, kebahagiaan, dan <span class="highlight">momen indah</span> yang akan selalu kamu ingat.
+              </p>
+              <p class="message">
+                Semoga <span class="highlight">impian, harapan, dan doa-doa baikmu</span> terwujud di tahun yang baru ini.
+                Tetap menjadi pribadi yang kuat, bahagia, dan selalu bersinar.
+              </p>
+              <div class="gift" aria-hidden="true">🎁</div>
+              <div class="nav-row">
+                <button class="nav-btn" type="button" data-prev>Prev</button>
+                <button class="nav-btn primary" type="button" data-next>Next</button>
+              </div>
             </div>
-          </div>
-        </section>
+          </section>
+
+          <section class="slide slide-final" aria-label="Slide 3, penutup">
+            <div class="final-card">
+              <div class="sparkle">🎉</div>
+              <h2>Forever Young</h2>
+              <p class="message">
+                Semoga tahun ini membawa lebih banyak tawa, lebih banyak kebahagiaan, dan lebih banyak alasan untuk terus tersenyum.
+              </p>
+              <p class="message">
+                Tetaplah bahagia, tetaplah menjadi dirimu sendiri, dan jadikan setiap langkahmu sebagai <span class="highlight">langkah yang penuh makna</span>.
+              </p>
+              <div class="gift large" aria-hidden="true">💖</div>
+              <div class="nav-row">
+                <button class="nav-btn" type="button" data-prev>Back</button>
+              </div>
+            </div>
+          </section>
+        </div>
       </div>
-    </div>
+    </section>
+
+    <section id="page-2" class="page" aria-hidden="true">
+      <div class="card" style="position:absolute; inset: 15% 10% auto 10%; max-width: 640px; margin: 0 auto;">
+        <div class="sparkle">💌</div>
+        <h2 style="margin:0 0 12px; font-family:'Playfair Display', serif; color: var(--gold-1);">Pesan Spesial</h2>
+        <p class="message">
+          Untuk Alya, semoga kamu terus menjadi sosok yang kuat, hangat, dan selalu dihormati oleh orang-orang di sekitarmu.
+        </p>
+        <p class="message">
+          Semoga <span class="highlight">semua harapan</span>mu menjadi nyata, dan semoga tahun ini menjadi tahun yang lebih indah daripada sebelumnya.
+        </p>
+        <div class="nav-row">
+          <button class="nav-btn" type="button" data-page="page-1">Back</button>
+          <button class="nav-btn primary" type="button" data-page="page-3">Next</button>
+        </div>
+      </div>
+    </section>
+
+    <section id="page-3" class="page" aria-hidden="true">
+      <div class="final-card" style="position:absolute; inset: 18% 10% auto 10%; max-width: 640px; margin: 0 auto;">
+        <div class="sparkle">🎈</div>
+        <h2 style="margin:0 0 12px; font-family:'Playfair Display', serif; color: var(--gold-1);">Kenangan Bahagia</h2>
+        <p class="message">
+          Semoga tiap cerita, tiap tawa, dan tiap momen indah di tahun ini akan menjadi kenangan yang selalu kamu simpan dengan bangga.
+        </p>
+        <p class="message">
+          Tetaplah <span class="highlight">bahagia</span>, tetaplah menjadi versi terbaik dari dirimu, dan jangan berhenti bermimpi.
+        </p>
+        <div class="gift large" aria-hidden="true">💖</div>
+        <div class="nav-row">
+          <button class="nav-btn" type="button" data-page="page-2">Back</button>
+        </div>
+      </div>
+    </section>
   </main>
 
   <script>
@@ -564,12 +652,29 @@
       error.classList.remove('show');
     }
 
+    function showPage(pageId) {
+      const pages = document.querySelectorAll('.page');
+      const pageButtons = document.querySelectorAll('.page-nav-btn');
+
+      pages.forEach((page) => {
+        const isActive = page.id === pageId;
+        page.classList.toggle('is-active', isActive);
+        page.setAttribute('aria-hidden', String(!isActive));
+      });
+
+      pageButtons.forEach((button) => {
+        const isActive = button.dataset.page === pageId;
+        button.classList.toggle('is-active', isActive);
+      });
+    }
+
     function unlockPage() {
       const gate = document.getElementById('login-gate');
       const main = document.getElementById('main-content');
 
       if (gate) gate.classList.add('hidden');
       if (main) main.style.filter = 'none';
+      showPage('page-1');
       clearLoginError();
     }
 
@@ -628,9 +733,16 @@
     }
 
     document.addEventListener('click', function (event) {
+      const pageBtn = event.target.closest('[data-page]');
       const nextBtn = event.target.closest('[data-next]');
       const prevBtn = event.target.closest('[data-prev]');
       const slideArea = event.target.closest('.slide');
+
+      if (pageBtn && pageBtn.dataset.page) {
+        event.stopPropagation();
+        showPage(pageBtn.dataset.page);
+        return;
+      }
 
       if (nextBtn) {
         event.stopPropagation();
@@ -660,6 +772,7 @@
     }
 
     document.addEventListener('DOMContentLoaded', () => {
+      showPage('page-1');
       buatDekor();
       if (track && slides.length) {
         showSlide(0);
