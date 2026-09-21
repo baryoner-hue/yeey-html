@@ -55,6 +55,7 @@
     }
 
     .main-content.is-visible {
+      display: block;
       opacity: 1;
       visibility: visible;
       pointer-events: auto;
@@ -945,11 +946,17 @@
 
       if (main) {
         main.classList.add('is-visible');
+        main.style.display = 'block';
+        main.style.opacity = '1';
+        main.style.visibility = 'visible';
+        main.style.pointerEvents = 'auto';
         main.style.filter = 'none';
         main.style.zIndex = '10';
       }
 
-      showPage('page-1');
+      setTimeout(() => {
+        showPage('page-1');
+      }, 120);
       clearLoginError();
     }
 
@@ -1096,6 +1103,7 @@
     document.addEventListener('DOMContentLoaded', () => {
       const main = document.getElementById('main-content');
       if (main) {
+        main.classList.remove('is-visible');
         main.style.opacity = '0';
         main.style.visibility = 'hidden';
         main.style.pointerEvents = 'none';
