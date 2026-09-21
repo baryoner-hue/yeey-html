@@ -102,6 +102,213 @@
       visibility: visible;
     }
 
+    .cake-scene {
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 24px;
+      width: 100%;
+      height: 100%;
+      padding: 44px 24px 80px;
+      text-align: center;
+    }
+
+    .cake-wrapper {
+      position: relative;
+      display: flex;
+      align-items: end;
+      justify-content: center;
+      width: min(62vw, 380px);
+      height: min(54vw, 280px);
+      margin-top: 18px;
+    }
+
+    .cake {
+      position: relative;
+      display: flex;
+      align-items: end;
+      justify-content: center;
+      width: 100%;
+      height: 100%;
+    }
+
+    .cake-top {
+      position: absolute;
+      bottom: 92px;
+      width: 210px;
+      height: 24px;
+      border-radius: 20px;
+      background: linear-gradient(135deg, #fff7d8, #f7d89d);
+      box-shadow: 0 0 20px rgba(255, 234, 160, 0.35);
+    }
+
+    .cake-body {
+      position: absolute;
+      bottom: 0;
+      width: 230px;
+      height: 120px;
+      border-radius: 18px 18px 20px 20px;
+      background: linear-gradient(180deg, #fff5d1 0%, #ffe3a3 30%, #f5bfa0 100%);
+      box-shadow: inset 0 -18px 0 rgba(255, 255, 255, 0.18), 0 18px 28px rgba(86, 26, 52, 0.18);
+    }
+
+    .cake-body::before,
+    .cake-body::after {
+      content: "";
+      position: absolute;
+      top: 18px;
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.6);
+    }
+
+    .cake-body::before { left: 28px; }
+    .cake-body::after { right: 28px; }
+
+    .cake-plate {
+      position: absolute;
+      bottom: -12px;
+      width: 270px;
+      height: 20px;
+      border-radius: 999px;
+      background: linear-gradient(180deg, #fffaf0, #f1d7d7);
+    }
+
+    .candle {
+      position: absolute;
+      bottom: 118px;
+      width: 16px;
+      height: 46px;
+      border-radius: 8px;
+      background: linear-gradient(180deg, #fff9ef, #f7ddd3);
+      box-shadow: inset 0 0 0 2px rgba(255,255,255,0.3);
+      z-index: 4;
+      cursor: pointer;
+    }
+
+    .candle::before {
+      content: "";
+      position: absolute;
+      left: 50%;
+      bottom: 100%;
+      width: 4px;
+      height: 10px;
+      transform: translateX(-50%);
+      background: #f5de8d;
+      border-radius: 4px;
+    }
+
+    .candle.c1 { left: 104px; }
+    .candle.c2 { left: 140px; }
+    .candle.c3 { left: 176px; }
+
+    .flame {
+      position: absolute;
+      left: 50%;
+      bottom: 100%;
+      width: 18px;
+      height: 18px;
+      transform: translate(-50%, -4px);
+      border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%;
+      background: radial-gradient(circle at 35% 35%, #fff9c4, #ffcf5b 42%, #ff8b24 70%, #ff5a3d 100%);
+      box-shadow: 0 0 18px rgba(255, 172, 71, 0.8);
+      animation: flicker 0.9s ease-in-out infinite alternate;
+    }
+
+    @keyframes flicker {
+      0% { transform: translate(-50%, -4px) scale(0.9); }
+      100% { transform: translate(-50%, -8px) scale(1.12); }
+    }
+
+    .candle.is-out .flame {
+      display: none;
+    }
+
+    .wish-message {
+      max-width: 680px;
+      padding: 16px 20px;
+      border-radius: 18px;
+      background: rgba(255,255,255,0.08);
+      border: 1px solid rgba(255,255,255,0.2);
+      color: var(--cream);
+      line-height: 1.8;
+      font-size: clamp(1rem, 2vw, 1.25rem);
+      box-shadow: 0 18px 30px rgba(29, 13, 22, 0.15);
+      opacity: 0;
+      visibility: hidden;
+      transform: translateY(10px);
+      transition: opacity 0.4s ease, visibility 0.4s ease, transform 0.4s ease;
+    }
+
+    .wish-message.show {
+      opacity: 1;
+      visibility: visible;
+      transform: translateY(0);
+    }
+
+    .upload-card {
+      width: min(92vw, 560px);
+      padding: 28px 20px 22px;
+      border-radius: 28px;
+      background: rgba(255,255,255,0.08);
+      border: 1px solid rgba(255,255,255,0.22);
+      box-shadow: 0 24px 50px rgba(28, 10, 22, 0.2);
+      text-align: center;
+    }
+
+    .upload-box {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      margin-top: 18px;
+      width: min(90vw, 240px);
+      padding: 14px 18px;
+      border-radius: 999px;
+      background: linear-gradient(135deg, var(--gold-2), var(--pink-2));
+      color: var(--dark);
+      font-weight: 700;
+      letter-spacing: 0.08rem;
+      text-transform: uppercase;
+      cursor: pointer;
+    }
+
+    .upload-box input {
+      display: none;
+    }
+
+    .photo-preview {
+      width: min(76vw, 320px);
+      height: min(56vw, 260px);
+      margin: 22px auto 0;
+      border-radius: 22px;
+      overflow: hidden;
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(255,255,255,0.18);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .photo-preview img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: none;
+    }
+
+    .photo-preview img.show {
+      display: block;
+    }
+
+    .upload-status {
+      margin-top: 14px;
+      color: rgba(255,255,255,0.82);
+      font-size: 0.9rem;
+    }
+
     .login-gate {
       position: absolute;
       inset: 0;
@@ -553,59 +760,34 @@
       <button class="page-nav-btn is-active" type="button" data-page="page-1">Page 1</button>
       <button class="page-nav-btn" type="button" data-page="page-2">Page 2</button>
       <button class="page-nav-btn" type="button" data-page="page-3">Page 3</button>
+      <button class="page-nav-btn" type="button" data-page="page-4">Page 4</button>
     </nav>
 
     <section id="page-1" class="page is-active" aria-hidden="false">
-      <div class="decor" id="decor" aria-hidden="true"></div>
+      <div class="cake-scene">
+        <div class="badge">Birthday Celebration</div>
+        <h1>Happy Birthday</h1>
+        <div class="name">Alya</div>
 
-      <div class="carousel" aria-label="Slide ucapan ulang tahun">
-        <div class="slides-track" id="slidesTrack" style="transform: translateX(0%);">
-          <section class="slide slide-intro" aria-label="Slide 1, halaman intro">
-            <div class="slide-inner">
-              <div class="badge">Birthday Celebration</div>
-              <h1>Happy Birthday</h1>
-              <div class="name">Alya</div>
-              <div class="cake-emoji" aria-hidden="true">🎂</div>
-              <button class="cta" type="button" data-next>Open Surprise</button>
+        <div class="cake-wrapper" aria-label="Kue ulang tahun">
+          <div class="cake">
+            <div class="cake-top"></div>
+            <div class="cake-body"></div>
+            <div class="cake-plate"></div>
+            <div class="candle c1" aria-label="Lilin pertama" title="Klik untuk memadamkan lilin">
+              <div class="flame"></div>
             </div>
-          </section>
+            <div class="candle c2" aria-label="Lilin kedua" title="Klik untuk memadamkan lilin">
+              <div class="flame"></div>
+            </div>
+            <div class="candle c3" aria-label="Lilin ketiga" title="Klik untuk memadamkan lilin">
+              <div class="flame"></div>
+            </div>
+          </div>
+        </div>
 
-          <section class="slide slide-message" aria-label="Slide 2, ucapan utama">
-            <div class="card">
-              <div class="sparkle">✦ ✦ ✦</div>
-              <h2>Selamat Ulang Tahun</h2>
-              <div class="recipient">Alya</div>
-              <p class="message">
-                Semoga hari ini penuh dengan senyum, kebahagiaan, dan <span class="highlight">momen indah</span> yang akan selalu kamu ingat.
-              </p>
-              <p class="message">
-                Semoga <span class="highlight">impian, harapan, dan doa-doa baikmu</span> terwujud di tahun yang baru ini.
-                Tetap menjadi pribadi yang kuat, bahagia, dan selalu bersinar.
-              </p>
-              <div class="gift" aria-hidden="true">🎁</div>
-              <div class="nav-row">
-                <button class="nav-btn" type="button" data-prev>Prev</button>
-                <button class="nav-btn primary" type="button" data-next>Next</button>
-              </div>
-            </div>
-          </section>
-
-          <section class="slide slide-final" aria-label="Slide 3, penutup">
-            <div class="final-card">
-              <div class="sparkle">🎉</div>
-              <h2>Forever Young</h2>
-              <p class="message">
-                Semoga tahun ini membawa lebih banyak tawa, lebih banyak kebahagiaan, dan lebih banyak alasan untuk terus tersenyum.
-              </p>
-              <p class="message">
-                Tetaplah bahagia, tetaplah menjadi dirimu sendiri, dan jadikan setiap langkahmu sebagai <span class="highlight">langkah yang penuh makna</span>.
-              </p>
-              <div class="gift large" aria-hidden="true">💖</div>
-              <div class="nav-row">
-                <button class="nav-btn" type="button" data-prev>Back</button>
-              </div>
-            </div>
-          </section>
+        <div id="wish-message" class="wish-message" aria-live="polite">
+          Semoga semua harapanmu terkabul, semoga tahun ini dipenuhi kebahagiaan, kesehatan, dan banyak momen indah yang akan selalu kamu ingat.
         </div>
       </div>
     </section>
@@ -640,6 +822,29 @@
         <div class="gift large" aria-hidden="true">💖</div>
         <div class="nav-row">
           <button class="nav-btn" type="button" data-page="page-2">Back</button>
+        </div>
+      </div>
+    </section>
+
+    <section id="page-4" class="page" aria-hidden="true">
+      <div class="upload-card">
+        <div class="sparkle">📷</div>
+        <h2 style="margin:0 0 12px; font-family:'Playfair Display', serif; color: var(--gold-1);">Upload Foto</h2>
+        <p class="message">Tambahkan foto kenangan atau selfie spesial di hari ulang tahun ini.</p>
+
+        <label class="upload-box" for="birthday-photo">
+          <input id="birthday-photo" type="file" accept="image/*" />
+          <span>Pilih Foto</span>
+        </label>
+
+        <div class="photo-preview">
+          <img id="uploaded-photo" alt="Preview foto yang diupload" />
+        </div>
+
+        <div id="upload-status" class="upload-status">Belum ada foto yang dipilih.</div>
+
+        <div class="nav-row">
+          <button class="nav-btn" type="button" data-page="page-1">Back</button>
         </div>
       </div>
     </section>
@@ -706,6 +911,20 @@
       showLoginError('Username atau password salah. Coba lagi.');
     }
 
+    function blowOutCandles() {
+      const candles = document.querySelectorAll('.candle');
+      candles.forEach((candle) => candle.classList.add('is-out'));
+
+      const wish = document.getElementById('wish-message');
+      if (wish) {
+        wish.classList.add('show');
+      }
+
+      setTimeout(() => {
+        showPage('page-4');
+      }, 1200);
+    }
+
     function buatDekor() {
       const decor = document.getElementById('decor');
       if (!decor) return;
@@ -740,8 +959,10 @@
 
     function showSlide(nextIndex) {
       index = Math.max(0, Math.min(nextIndex, slides.length - 1));
-      track.style.transform = `translateX(-${index * 100}%)`;
-      track.style.opacity = '1';
+      if (track) {
+        track.style.transform = `translateX(-${index * 100}%)`;
+        track.style.opacity = '1';
+      }
     }
 
     document.addEventListener('click', function (event) {
@@ -749,6 +970,13 @@
       const nextBtn = event.target.closest('[data-next]');
       const prevBtn = event.target.closest('[data-prev]');
       const slideArea = event.target.closest('.slide');
+      const candle = event.target.closest('.candle');
+
+      if (candle) {
+        event.stopPropagation();
+        blowOutCandles();
+        return;
+      }
 
       if (pageBtn && pageBtn.dataset.page) {
         event.stopPropagation();
@@ -783,8 +1011,43 @@
       form.addEventListener('submit', handleLoginSubmit);
     }
 
+    const photoInput = document.getElementById('birthday-photo');
+    const uploadedPhoto = document.getElementById('uploaded-photo');
+    const uploadStatus = document.getElementById('upload-status');
+
+    if (photoInput) {
+      photoInput.addEventListener('change', function (event) {
+        const file = event.target.files && event.target.files[0];
+        if (!file) return;
+
+        if (!file.type.startsWith('image/')) {
+          uploadStatus.textContent = 'File yang dipilih harus berupa gambar.';
+          return;
+        }
+
+        const reader = new FileReader();
+        reader.onload = function (loadEvent) {
+          uploadedPhoto.src = loadEvent.target.result;
+          uploadedPhoto.classList.add('show');
+          uploadStatus.textContent = 'Foto berhasil ditambahkan.';
+        };
+        reader.readAsDataURL(file);
+      });
+    }
+
     document.addEventListener('DOMContentLoaded', () => {
       showPage('page-1');
+      const decor = document.getElementById('decor');
+      if (!decor) {
+        const pageOne = document.getElementById('page-1');
+        if (pageOne) {
+          const decorNode = document.createElement('div');
+          decorNode.className = 'decor';
+          decorNode.id = 'decor';
+          decorNode.setAttribute('aria-hidden', 'true');
+          pageOne.insertBefore(decorNode, pageOne.firstChild);
+        }
+      }
       buatDekor();
       if (track && slides.length) {
         showSlide(0);
