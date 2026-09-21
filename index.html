@@ -179,6 +179,36 @@
             transition: opacity 0.5s ease-in-out, transform 0.5s ease-in-out;
         }
 
+        /* Login Gate */
+        #login-gate {
+            position: fixed;
+            inset: 0;
+            z-index: 100;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 1.25rem;
+            background: linear-gradient(135deg, #fbcfe8 0%, #f3e8ff 50%, #e0e7ff 100%);
+        }
+
+        #login-gate.is-hidden {
+            display: none;
+        }
+
+        #main-content.is-locked {
+            display: none;
+        }
+
+        @keyframes gate-shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-8px); }
+            75% { transform: translateX(8px); }
+        }
+
+        .gate-shake {
+            animation: gate-shake 0.35s ease;
+        }
+
         /* Custom striped pattern for candles */
         .striped-candle {
             background: repeating-linear-gradient(
@@ -192,6 +222,42 @@
     </style>
 </head>
 <body class="flex flex-col items-center justify-start min-h-screen p-4 sm:p-6 text-gray-800 relative pb-16">
+
+    <!-- Login Gate: wajib memasukkan username & password -->
+    <div id="login-gate">
+        <div class="glass-panel w-full max-w-sm p-7 sm:p-8 rounded-3xl shadow-2xl text-center">
+            <span class="text-5xl" aria-hidden="true">🎁</span>
+            <h2 class="font-fun text-3xl mt-3 text-transparent bg-clip-text bg-gradient-to-r from-pink-500 to-purple-600">Hai, Selamat Datang!</h2>
+            <p class="text-sm text-gray-600 mt-2">Masukkan username dan password untuk membuka kejutan ini. 🔐</p>
+
+            <form id="login-form" class="mt-6 flex-col gap-3 text-left" autocomplete="off">
+                <label class="text-xs font-bold text-gray-500 uppercase tracking-wider" for="login-username">Username</label>
+                <div class="relative">
+                    <i class="fa-solid fa-user absolute left-3.5 top-1/2 -translate-y-1/2 text-pink-400 text-sm"></i>
+                    <input id="login-username" name="username" type="text" required placeholder="Username kamu..."
+                           class="w-full pl-10 pr-3 py-3 text-sm rounded-xl border-gray-300 bg-white/90 focus:outline-none focus:ring-2 focus:ring-pink-400">
+                </div>
+
+                <label class="text-xs font-bold text-gray-500 uppercase tracking-wider mt-1" for="login-password">Password</label>
+                <div class="relative">
+                    <i class="fa-solid fa-lock absolute left-3.5 top-1/2 -translate-y-1/2 text-purple-400 text-sm"></i>
+                    <input id="login-password" name="password" type="password" required placeholder="Password rahasia..."
+                           class="w-full pl-10 pr-10 py-3 text-sm rounded-xl border-gray-300 bg-white/90 focus:outline-none focus:ring-2 focus:ring-pink-400">
+                    <button type="button" id="toggle-password" class="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-pink-500 transition-colors" aria-label="Tampilkan atau sembunyikan password">
+                        <i id="toggle-password-icon" class="fa-solid fa-eye text-sm"></i>
+                    </button>
+                </div>
+
+                <p id="login-error" class="hidden text-xs font-semibold text-red-600 bg-red-50 border-red-200 rounded-xl px-3 py-2" role="alert" aria-live="assertive"></p>
+
+                <button type="submit" class="mt-2 w-full py-3.5 px-6 bg-gradient-to-r from-pink-500 to-purple-600 hover:from-pink-600 hover:to-purple-700 text-white font-bold rounded-2xl shadow-lg shadow-pink-500/30 active:scale-95 transition-all">
+                    <i class="fa-solid fa-unlock mr-1"></i> Masuk
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <div id="main-content" class="is-locked flex-col items-center w-full">
 
     <!-- Floating Background Balloons -->
     <div class="fixed top-12 left-4 sm:left-12 animate-float-1 pointer-events-none opacity-80 z-0">
@@ -498,6 +564,8 @@
     <footer class="text-center text-xs text-gray-500 z-10 mt-8 font-medium">
         Dibuat dengan ❤️ untuk momen ulang tahun yang penuh kenangan.
     </footer>
+
+    </div><!-- /#main-content -->
 
     <script>
         // --- PHOTO MANAGEMENT LOGIC ---
@@ -903,12 +971,73 @@
 
         startAutoSlide();
 
+        // Belum login: jeda carousel agar tidak berjalan di balik layar kunci
+        stopAutoSlide();
+
         // Initial burst on load
         window.onload = () => {
             setTimeout(() => {
                 confetti({ particleCount: 80, spread: 60, origin: { y: 0.6 } });
             }, 600);
         };
+
+        // --- LOGIN GATE (PROTEKSI HALAMAN) ---
+        const VALID_USERNAME = 'liaa';
+        const VALID_PASSWORD = '071008';
+
+        const loginGate = document.getElementById('login-gate');
+        const loginForm = document.getElementById('login-form');
+        const loginUsername = document.getElementById('login-username');
+        const loginPassword = document.getElementById('login-password');
+        const loginError = document.getElementById('login-error');
+        const togglePasswordBtn = document.getElementById('toggle-password');
+        const togglePasswordIcon = document.getElementById('toggle-password-icon');
+        const loginCard = loginGate.querySelector('.glass-panel');
+
+        function showLoginError(message) {
+            loginError.textContent = message;
+            loginError.classList.remove('hidden');
+            loginCard.classList.remove('gate-shake');
+            void loginCard.offsetWidth; // restart animasi getar
+            loginCard.classList.add('gate-shake');
+        }
+
+        function unlockPage() {
+            loginGate.classList.add('is-hidden');
+            mainContent.classList.remove('is-locked');
+            startAutoSlide();
+            setTimeout(() => {
+                confetti({ particleCount: 120, spread: 70, origin: { y: 0.6 });
+            }, 300);
+        }
+
+        togglePasswordBtn.addEventListener('click', () => {
+            const showPassword = loginPassword.type === 'password';
+            loginPassword.type = showPassword ? 'text' : 'password';
+            togglePasswordIcon.className = showPassword ? 'fa-solid fa-eye-slash text-sm' : 'fa-solid fa-eye text-sm';
+        });
+
+        loginForm.addEventListener('submit', (event) => {
+            event.preventDefault();
+
+            const username = loginUsername.value.trim();
+            const password = loginPassword.value;
+
+            if (username.toLowerCase() === VALID_USERNAME && password === VALID_PASSWORD) {
+                loginError.classList.add('hidden');
+                loginForm.reset();
+                loginPassword.type = 'password';
+                togglePasswordIcon.className = 'fa-solid fa-eye text-sm';
+                unlockPage();
+            } else {
+                showLoginError('Username atau password salah. Coba lagi ya! 💕');
+                loginPassword.value = '';
+                loginPassword.focus();
+            }
+        });
+
+        // Fokus ke kolom username saat halaman pertama dibuka
+        loginUsername.focus();
     </script>
 </body>
 </html>
