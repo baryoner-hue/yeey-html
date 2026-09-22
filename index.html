@@ -9,17 +9,22 @@
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700;800&family=Montserrat:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
   <style>
     :root {
-      --bg-1: #3a0b2d;
-      --bg-2: #6d1d5f;
-      --bg-3: #f48fb1;
-      --pink-1: #ffbfd4;
-      --pink-2: #ff7aa2;
-      --gold-1: #ffe7a3;
-      --gold-2: #f7c96d;
-      --cream: #fffdf7;
-      --purple: #7a4dff;
-      --dark: #2a0e1f;
-      --shadow: rgba(58, 11, 45, 0.35);
+      --bg-1: #dff5ff;
+      --bg-2: #c7e7ff;
+      --bg-3: #ffe5f1;
+      --bg-4: #fff7db;
+      --pink-1: #ffbfd8;
+      --pink-2: #ff8db8;
+      --pink-3: #ffc8d9;
+      --blue-1: #bfe6ff;
+      --blue-2: #8ac7ff;
+      --gold-1: #fff1c5;
+      --gold-2: #f7d88d;
+      --cream: #fffdf8;
+      --lavender: #f2e7ff;
+      --purple: #8d7bf5;
+      --dark: #3a2c4a;
+      --shadow: rgba(96, 110, 170, 0.22);
     }
 
     * {
@@ -32,8 +37,8 @@
       height: 100%;
       overflow: hidden;
       font-family: 'Montserrat', sans-serif;
-      background: linear-gradient(135deg, var(--bg-1) 0%, var(--bg-2) 30%, #ff9bb9 100%);
-      color: var(--cream);
+      background: linear-gradient(180deg, var(--bg-1) 0%, var(--bg-2) 35%, var(--bg-3) 100%);
+      color: var(--dark);
     }
 
     body {
@@ -116,7 +121,22 @@
       transform: translateX(42px) scale(0.98);
       transition: opacity 0.45s ease, visibility 0.45s ease, transform 0.45s ease;
       z-index: 5;
+      background:
+        radial-gradient(circle at 15% 20%, rgba(255,255,255,0.9) 0, rgba(255,255,255,0.2) 14%, transparent 22%),
+        radial-gradient(circle at 78% 18%, rgba(255, 214, 235, 0.7) 0, rgba(255, 214, 235, 0.18) 18%, transparent 28%),
+        linear-gradient(180deg, rgba(255,255,255,0.38), rgba(255,255,255,0.12)),
+        linear-gradient(180deg, #e1f5ff 0%, #d5ebff 25%, #ffdce8 100%);
       will-change: transform, opacity;
+    }
+
+    .page::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background:
+        radial-gradient(circle at 12% 82%, rgba(152, 204, 255, 0.20), transparent 20%),
+        radial-gradient(circle at 88% 80%, rgba(255, 184, 215, 0.18), transparent 22%);
+      pointer-events: none;
     }
 
     .page.is-active {
@@ -355,7 +375,10 @@
       align-items: center;
       justify-content: center;
       padding: 24px;
-      background: rgba(22, 7, 17, 0.28);
+      background:
+        radial-gradient(circle at 20% 15%, rgba(255,255,255,0.9), transparent 18%),
+        radial-gradient(circle at 78% 22%, rgba(255, 202, 225, 0.8), transparent 20%),
+        linear-gradient(180deg, rgba(196, 232, 255, 0.86), rgba(255, 220, 233, 0.78));
       backdrop-filter: blur(4px);
       -webkit-backdrop-filter: blur(4px);
       transition: opacity 0.35s ease, visibility 0.35s ease;
@@ -385,14 +408,190 @@
       }
     }
 
+    .login-scene {
+      position: relative;
+      width: min(80vw, 260px);
+      height: 180px;
+      margin: 0 auto 18px;
+      display: flex;
+      align-items: flex-end;
+      justify-content: center;
+      pointer-events: none;
+    }
+
+    .login-scene .cloud {
+      position: absolute;
+      width: 90px;
+      height: 34px;
+      border-radius: 999px;
+      background: rgba(255,255,255,0.72);
+      box-shadow: 30px 10px 0 8px rgba(255,255,255,0.7), -28px 8px 0 10px rgba(255,255,255,0.62);
+    }
+
+    .login-scene .cloud.one {
+      left: 4%;
+      top: 30px;
+      transform: scale(0.9);
+    }
+
+    .login-scene .cloud.two {
+      right: 4%;
+      top: 24px;
+      transform: scale(1.05);
+    }
+
+    .cinnamoroll {
+      position: relative;
+      width: 170px;
+      height: 150px;
+      z-index: 2;
+      filter: drop-shadow(0 18px 24px rgba(115, 117, 168, 0.18));
+    }
+
+    .cinnamoroll .ear {
+      position: absolute;
+      width: 36px;
+      height: 48px;
+      top: 0;
+      background: linear-gradient(180deg, #f8fbff, #e4f0ff);
+      border-radius: 60% 60% 38% 38%;
+      border: 2px solid rgba(146, 170, 220, 0.4);
+      z-index: 1;
+    }
+
+    .cinnamoroll .ear::before {
+      content: "";
+      position: absolute;
+      inset: 8px 8px 10px;
+      border-radius: 60% 60% 40% 40%;
+      background: linear-gradient(180deg, #ffd9ea, #ffc5d9);
+    }
+
+    .cinnamoroll .ear.left {
+      left: 22px;
+      transform: rotate(-18deg);
+    }
+
+    .cinnamoroll .ear.right {
+      right: 22px;
+      transform: rotate(18deg);
+    }
+
+    .cinnamoroll .head {
+      position: absolute;
+      left: 50%;
+      bottom: 18px;
+      width: 130px;
+      height: 118px;
+      transform: translateX(-50%);
+      border-radius: 47% 47% 44% 44%;
+      background: linear-gradient(180deg, #fffdfd 0%, #f3f8ff 100%);
+      border: 2px solid rgba(148, 171, 220, 0.38);
+      z-index: 2;
+    }
+
+    .cinnamoroll .head::before,
+    .cinnamoroll .head::after {
+      content: "";
+      position: absolute;
+      width: 18px;
+      height: 18px;
+      top: 43px;
+      border-radius: 50%;
+      background: #1f2438;
+      box-shadow: 0 0 0 2px rgba(255,255,255,0.5);
+    }
+
+    .cinnamoroll .head::before { left: 28px; }
+    .cinnamoroll .head::after { right: 28px; }
+
+    .cinnamoroll .face {
+      position: absolute;
+      inset: 0;
+    }
+
+    .cinnamoroll .nose {
+      position: absolute;
+      left: 50%;
+      top: 62px;
+      width: 16px;
+      height: 12px;
+      transform: translateX(-50%);
+      background: #f59cb8;
+      border-radius: 45% 45% 60% 60%;
+      box-shadow: 0 0 0 2px rgba(255,255,255,0.7);
+    }
+
+    .cinnamoroll .mouth {
+      position: absolute;
+      left: 50%;
+      top: 71px;
+      width: 28px;
+      height: 18px;
+      transform: translateX(-50%);
+      border-bottom: 3px solid #eb8bac;
+      border-radius: 0 0 16px 16px;
+    }
+
+    .cinnamoroll .blush {
+      position: absolute;
+      width: 24px;
+      height: 14px;
+      top: 78px;
+      border-radius: 50%;
+      background: rgba(255, 173, 197, 0.85);
+      filter: blur(1px);
+    }
+
+    .cinnamoroll .blush.left { left: 18px; }
+    .cinnamoroll .blush.right { right: 18px; }
+
+    .cinnamoroll .body {
+      position: absolute;
+      left: 50%;
+      bottom: 0;
+      width: 98px;
+      height: 70px;
+      transform: translateX(-50%);
+      background: linear-gradient(180deg, #fefefe, #e7f1ff);
+      border-radius: 42% 42% 45% 45%;
+      border: 2px solid rgba(148, 171, 220, 0.35);
+    }
+
+    .cinnamoroll .paw {
+      position: absolute;
+      bottom: -6px;
+      width: 24px;
+      height: 26px;
+      background: #fff;
+      border-radius: 50%;
+      border: 2px solid rgba(148, 171, 220, 0.35);
+    }
+
+    .cinnamoroll .paw.left { left: 42px; }
+    .cinnamoroll .paw.right { right: 42px; }
+
+    .cinnamoroll .tail {
+      position: absolute;
+      right: 6px;
+      bottom: 28px;
+      width: 58px;
+      height: 24px;
+      background: linear-gradient(180deg, #fdfdff, #eaf2ff);
+      border: 2px solid rgba(148, 171, 220, 0.3);
+      border-radius: 50% 60% 70% 40%;
+      transform: rotate(24deg);
+    }
+
     .login-card {
+      position: relative;
       width: min(92vw, 420px);
-      padding: 28px 24px 22px;
-      border-radius: 24px;
-      background: rgba(255, 255, 255, 0.08);
-      border: 1px solid rgba(255, 255, 255, 0.22);
-      box-shadow: 0 30px 60px rgba(11, 6, 15, 0.35);
-      backdrop-filter: blur(8px);
+      padding: 18px 24px 22px;
+      border-radius: 28px;
+      background: rgba(255, 255, 255, 0.32);
+      border: 1px solid rgba(255, 255, 255, 0.55);
+      box-shadow: 0 30px 60px rgba(88, 98, 156, 0.18);
+      backdrop-filter: blur(10px);
       text-align: center;
     }
 
@@ -400,7 +599,7 @@
       margin: 0 0 10px;
       font-family: 'Playfair Display', serif;
       font-size: clamp(2rem, 4vw, 2.8rem);
-      color: var(--gold-1);
+      color: var(--pink-2);
     }
 
     .login-card p {
@@ -799,6 +998,26 @@
 <body>
   <div id="login-gate" class="login-gate" aria-live="polite">
     <form id="login-form" class="login-card" novalidate>
+      <div class="login-scene" aria-hidden="true">
+        <div class="cloud one"></div>
+        <div class="cloud two"></div>
+        <div class="cinnamoroll">
+          <div class="ear left"></div>
+          <div class="ear right"></div>
+          <div class="head">
+            <div class="face">
+              <span class="blush left"></span>
+              <span class="blush right"></span>
+              <span class="nose"></span>
+              <span class="mouth"></span>
+            </div>
+          </div>
+          <div class="body"></div>
+          <div class="paw left"></div>
+          <div class="paw right"></div>
+          <div class="tail"></div>
+        </div>
+      </div>
       <h2>Login</h2>
       <p>Masukkan username dan password untuk membuka halaman surprise.</p>
       <input id="login-username" class="login-field" type="text" name="username" placeholder="Username" autocomplete="username" />
