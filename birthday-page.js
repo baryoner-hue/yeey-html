@@ -1,18 +1,27 @@
-/* Birthday page logic — extracted from index.html so it can be unit-tested.
-   The DOM wiring runs inside init() (called on DOMContentLoaded in the browser,
-   and explicitly from tests after the fixture is in place). Pure helpers are
-   exported so they can be tested in isolation. */
+/**
+ * Unit-testable extraction of the logic embedded in index.html's inline script.
+ *
+ * index.html itself is left untouched: it still contains its own inline copy of
+ * this same logic. This module mirrors that logic so it can be exercised under
+ * Jest + jsdom. Pure helpers are exported for isolated testing; each feature is
+ * exposed as a "create...Controller" factory that takes a document/window, so
+ * tests can inject a jsdom DOM and fake timers/audio without touching globals.
+ */
 
-// --- Constants ---
+// ---------------------------------------------------------------------------
+// Constants
+// ---------------------------------------------------------------------------
+
 export const DEFAULT_PHOTO =
   'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=800&q=80';
 
 export const MAX_FILE_SIZE = 5 * 1024 * 1024; // 5MB
 
-export const IMAGE_URL_PATTERN = /^https?:\/\//i;
-export const DATA_URL_PATTERN = /^data:image\//i;
+// Happens to also guard against protocol-relative URLs ("//host").
+const HTTP_URL_PATTERN = /^https?:\/\//i;
+const DATA_URL_PATTERN = /^data:image\//i;
 
-// Happy Birthday notes & frequencies (in Hz)
+// Happy Birthday melody: note names + durations (ms).
 export const notes = [
   { note: 'C4', duration: 350 }, { note: 'C4', duration: 150 },
   { note: 'D4', duration: 500 }, { note: 'C4', duration: 500 },
@@ -37,20 +46,25 @@ export const noteFrequencies = {
   G4: 392.0, A4: 440.0, 'A#4': 466.16, C5: 523.25
 };
 
-// --- Pure helpers (no DOM) ---
+// ---------------------------------------------------------------------------
+// Pure helpers
+// ---------------------------------------------------------------------------
 
-/** True when a value is a non-empty string after trimming whitespace. */
+/** True when a value is a string containing at least one non-whitespace char. */
 export function isNonEmptyString(value) {
   return typeof value === 'string' && value.trim().length > 0;
 }
 
-/** Validates an image URL: empty, valid, or invalid. */
+/**
+ * Validates an image URL value.
+ * @returns {{valid: boolean, reason: 'empty'|'invalid'|'ok', message: string}}
+ */
 export function validateImageUrl(url) {
   if (!isNonEmptyString(url)) {
     return { valid: false, reason: 'empty', message: 'Kolom URL masih kosong.' };
   }
   const trimmed = url.trim();
-  const valid = IMAGE_URL_PATTERN.test(trimmed) || DATA_URL_PATTERN.test(trimmed);
+  const valid = HTTP_URL_PATTERN.test(trimmed) || DATA_URL_PATTERN.test(trimmed);
   return {
     valid,
     reason: valid ? 'ok' : 'invalid',
@@ -60,7 +74,10 @@ export function validateImageUrl(url) {
   };
 }
 
-/** Validates an uploaded file for the single-photo slot. */
+/**
+ * Validates a single uploaded photo file.
+ * @returns {{valid: boolean, reason: 'no-file'|'not-image'|'too-large'|'ok', message: string|null}}
+ */
 export function validateImageFile(file) {
   if (!file) {
     return { valid: false, reason: 'no-file', message: null };
@@ -82,32 +99,39 @@ export function validateImageFile(file) {
   return { valid: true, reason: 'ok', message: null };
 }
 
-/** Filters a list of files down to those eligible for the memory grid. */
+/** Filters a list of files to those usable for the memory grid. */
 export function filterMemoryFiles(files) {
   const list = Array.from(files || []);
   return list.filter(
-    (file) => file.type && file.type.startsWith('image/') && file.size <= MAX_FILE_SIZE
+    (file) =>
+      file.type && file.type.startsWith('image/') && file.size <= MAX_FILE_SIZE
   );
 }
 
 /**
- * Returns the next slide index for a carousel, wrapping in both directions.
- * Leftover: negative results wrap to the end.
+ * Computes the next carousel index, wrapping in both directions.
+ * Handles negative deltas and empty carousels safely.
  */
 export function getSlideIndex(current, delta, total) {
-  if (total <= 0) return 0;
-  return ((current + delta) % total + total) % total;
+  if (!Number.isFinite(total) || total <= 0) return 0;
+  const result = ((current + delta) % total + total) % total;
+  return Number.isFinite(result) ? result : 0;
 }
 
-/** Pick a random tilt for memory cards, always 2deg or -2deg. */
+/** Random tilt for memory cards, always "2deg" or "-2deg". */
 export function randomTilt(random = Math.random) {
   return `${random() > 0.5 ? 2 : -2}deg`;
 }
 
-// --- DOM-bound controllers (instantiated by init) ---
+// ---------------------------------------------------------------------------
+// DOM controllers
+// ---------------------------------------------------------------------------
 
-export function createPhotoController(doc, deps = {}) {
-  const confetti = deps.confetti || (() => { });
+/**
+ * Photo management: upload, URL apply, reset, presets, status messaging.
+ * @returns {{setPhotoStatus: Function, activatePreset: Function, updatePhoto: Function}}
+ */
+export function createPhotoController(doc, imageFactory = () => new Image()) {
   const mainPhoto = doc.getElementById('main-photo');
   const fileInput = doc.getElementById('file-input');
   const toggleUrlBtn = doc.getElementById('toggle-url-btn');
@@ -135,7 +159,7 @@ export function createPhotoController(doc, deps = {}) {
       return;
     }
 
-    const image = new Image();
+    const image = imageFactory();
     image.onload = () => {
       mainPhoto.src = src;
       activatePreset(src);
@@ -208,18 +232,16 @@ export function createPhotoController(doc, deps = {}) {
     setPhotoStatus('Gambar tidak tersedia, menggunakan foto default.', 'error');
   };
 
-  return {
-    setPhotoStatus,
-    activatePreset,
-    updatePhoto,
-    confetti
-  };
+  return { setPhotoStatus, activatePreset, updatePhoto };
 }
 
-export function createPageNavController(doc, win, deps = {}) {
-  const scrollTo = deps.scrollTo || ((opts) => win.scrollTo(opts));
+/**
+ * Page navigation between #page-1/2/3, toggling active classes and aria state.
+ */
+export function createPageNavController(doc, scrollTo) {
   const pages = doc.querySelectorAll('.page');
   const pageNavButtons = doc.querySelectorAll('.page-nav-btn');
+  const safeScrollTo = scrollTo || (() => {});
 
   function showPage(pageId) {
     pages.forEach((page) => {
@@ -234,7 +256,7 @@ export function createPageNavController(doc, win, deps = {}) {
       button.setAttribute('aria-current', isActive ? 'page' : 'false');
     });
 
-    scrollTo({ top: 0, behavior: 'smooth' });
+    safeScrollTo({ top: 0, behavior: 'smooth' });
   }
 
   doc.querySelectorAll('[data-page]').forEach((button) => {
@@ -244,8 +266,8 @@ export function createPageNavController(doc, win, deps = {}) {
   return { showPage };
 }
 
-export function createSecretController(doc, deps = {}) {
-  const launchConfetti = deps.launchConfetti || (() => { });
+/** Secret-message reveal toggle. */
+export function createSecretController(doc, launchConfetti = () => {}) {
   const revealSecretBtn = doc.getElementById('reveal-secret-btn');
   const secretMessage = doc.getElementById('secret-message');
 
@@ -263,7 +285,8 @@ export function createSecretController(doc, deps = {}) {
   return { revealSecretBtn, secretMessage };
 }
 
-export function createMemoryController(doc) {
+/** Memory-grid multi-upload. */
+export function createMemoryController(doc, random = Math.random) {
   const memoryGrid = doc.getElementById('memory-grid');
   const memoryUpload = doc.getElementById('memory-upload');
   const memoryStatus = doc.getElementById('memory-status');
@@ -284,7 +307,7 @@ export function createMemoryController(doc) {
       reader.onload = (readerEvent) => {
         const figure = doc.createElement('figure');
         figure.className = 'memory-card bg-white p-2.5 pb-3 rounded-xl shadow-lg';
-        figure.style.setProperty('--tilt', randomTilt());
+        figure.style.setProperty('--tilt', randomTilt(random));
         figure.innerHTML = `
           <img src="${readerEvent.target.result}" alt="Foto kenangan yang ditambahkan" class="w-full aspect-square object-cover rounded-lg">
           <figcaption class="text-center text-xs font-semibold text-gray-600 mt-2">Kenangan baru 💖</figcaption>
@@ -302,9 +325,13 @@ export function createMemoryController(doc) {
   return { memoryGrid, memoryUpload, memoryStatus };
 }
 
+/**
+ * Web Audio "Happy Birthday" synthesizer.
+ * @param {object} deps - {setTimeout, clearTimeout, audioContext} for testing.
+ */
 export function createAudioController(doc, win, deps = {}) {
-  const setTimeoutFn = deps.setTimeout || win.setTimeout.bind(win);
-  const clearTimeoutFn = deps.clearTimeout || win.clearTimeout.bind(win);
+  const setTimeoutFn = deps.setTimeout;
+  const clearTimeoutFn = deps.clearTimeout;
   let audioCtx = deps.audioContext || null;
   let isPlaying = false;
   let currentNoteTimeout = null;
@@ -312,14 +339,6 @@ export function createAudioController(doc, win, deps = {}) {
   const musicBtn = doc.getElementById('music-btn');
   const musicIcon = doc.getElementById('music-icon');
   const musicText = doc.getElementById('music-text');
-
-  function getAudioCtx() {
-    if (!audioCtx) {
-      const AudioContextClass = win.AudioContext || win.webkitAudioContext;
-      audioCtx = new AudioContextClass();
-    }
-    return audioCtx;
-  }
 
   function playTone(freq, duration) {
     if (!audioCtx) return;
@@ -368,7 +387,8 @@ export function createAudioController(doc, win, deps = {}) {
 
   function toggleMusic() {
     if (!audioCtx) {
-      getAudioCtx();
+      const AudioContextClass = win.AudioContext || win.webkitAudioContext;
+      audioCtx = new AudioContextClass();
     }
 
     if (audioCtx.state === 'suspended') {
@@ -399,9 +419,10 @@ export function createAudioController(doc, win, deps = {}) {
   };
 }
 
+/** Wish carousel slides + dots + autoplay. */
 export function createCarouselController(doc, win, deps = {}) {
-  const setIntervalFn = deps.setInterval || win.setInterval.bind(win);
-  const clearIntervalFn = deps.clearInterval || win.clearInterval.bind(win);
+  const setIntervalFn = deps.setInterval;
+  const clearIntervalFn = deps.clearInterval;
   const intervalMs = deps.intervalMs || 5000;
 
   const slides = doc.querySelectorAll('.slide-item');
@@ -477,10 +498,11 @@ export function createCarouselController(doc, win, deps = {}) {
   };
 }
 
+/** Cake candle blowout. */
 export function createCakeController(doc, deps = {}) {
-  const setTimeoutFn = deps.setTimeout || doc.defaultView.setTimeout.bind(doc.defaultView);
-  const launchConfetti = deps.launchConfetti || (() => { });
-  const toggleMusic = deps.toggleMusic || (() => { });
+  const setTimeoutFn = deps.setTimeout;
+  const launchConfetti = deps.launchConfetti || (() => {});
+  const toggleMusic = deps.toggleMusic || (() => {});
   const isMusicPlaying = deps.isMusicPlaying || (() => false);
 
   const flame = doc.getElementById('flame');
@@ -511,10 +533,11 @@ export function createCakeController(doc, deps = {}) {
   return { flame, smoke, cakeInstruction, isCandleOut: () => isCandleOut };
 }
 
+/** Confetti launcher that runs for `duration` ms via requestAnimationFrame. */
 export function createConfettiLauncher(win, deps = {}) {
-  const confettiFn = deps.confetti || win.confetti;
+  const confettiFn = deps.confetti || (win && win.confetti) || (() => {});
   const requestAnimationFrameFn =
-    deps.requestAnimationFrame || win.requestAnimationFrame.bind(win);
+    deps.requestAnimationFrame || ((cb) => win.requestAnimationFrame(cb));
   const dateNow = deps.dateNow || Date.now;
   const duration = deps.duration || 3000;
 
@@ -544,44 +567,4 @@ export function createConfettiLauncher(win, deps = {}) {
   }
 
   return { launchConfetti };
-}
-
-/**
- * Wires every controller together against a document. Safe to call once the
- * relevant markup exists; returns the controllers for testing/inspection.
- */
-export function init(doc = document, win = window) {
-  const confetti = win.confetti || (() => { });
-  const confettiLauncher = createConfettiLauncher(win, { confetti });
-
-  const photo = createPhotoController(doc);
-  const pageNav = createPageNavController(doc, win);
-  const carousel = createCarouselController(doc, win);
-
-  const audio = createAudioController(doc, win);
-
-  const cake = createCakeController(doc, {
-    launchConfetti: confettiLauncher.launchConfetti,
-    toggleMusic: audio.toggleMusic,
-    isMusicPlaying: () => audio.isPlaying()
-  });
-
-  const secret = createSecretController(doc, {
-    launchConfetti: confettiLauncher.launchConfetti
-  });
-  const memory = createMemoryController(doc);
-
-  doc.getElementById('celebrate-btn').addEventListener('click', confettiLauncher.launchConfetti);
-
-  carousel.startAutoSlide();
-
-  return { photo, pageNav, secret, memory, audio, carousel, cake, confettiLauncher };
-}
-
-if (typeof document !== 'undefined' && typeof window !== 'undefined') {
-  if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', () => init(document, window));
-  } else {
-    init(document, window);
-  }
 }

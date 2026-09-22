@@ -472,9 +472,9 @@
                 </div>
             </div>
 
-            <h2 class="font-fun text-3xl mt-3 text-[#3d5b8c]">Hai, Selamat Datang! ☁️</h2>ðŸŽ</span>
+            <h2 class="font-fun text-3xl mt-3 text-[#3d5b8c]">Hai, Selamat Datang! ☁️</h2>
             <h2 class="font-fun text-3xl mt-3 text-transparent bg-clip-text bg-gradient-to-r from-pink-500 to-purple-600">Hai, Selamat Datang!</h2>
-            <p class="text-sm text-[#5b7aa8] mt-2">Masukkan username dan password untuk membuka kejutan ini. ðŸ”</p>
+            <p class="text-sm text-[#5b7aa8] mt-2">Masukkan username dan password untuk membuka kejutan ini. 💙</p>
 
             <form id="login-form" class="mt-6 flex-col gap-3 text-left" autocomplete="off">
                 <label class="text-xs font-bold text-[#6b8bb8] uppercase tracking-wider" for="login-username">Username</label>
@@ -987,9 +987,9 @@
 
         revealSecretBtn.addEventListener('click', () => {
             const isRevealed = secretMessage.classList.toggle('is-revealed');
-            revealSecretBtn.textContent = isRevealed ? 'ðŸ’– Pesan Sudah Terbuka' : 'ðŸ” Buka Pesan Rahasia';
             revealSecretBtn.textContent = isRevealed ? '💙 Pesan Sudah Terbuka' : '🔒 Buka Pesan Rahasia';
             revealSecretBtn.setAttribute('aria-expanded', String(isRevealed));
+
             if (isRevealed) {
                 launchConfetti();
             }
@@ -1279,7 +1279,7 @@
             mainContent.classList.remove('is-locked');
             startAutoSlide();
             setTimeout(() => {
-                confetti({ particleCount: 120, spread: 70, origin: { y: 0.6 });
+                confetti({ particleCount: 120, spread: 70, origin: { y: 0.6 } });
             }, 300);
         }
 
