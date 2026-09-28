@@ -62,10 +62,24 @@
         /* Polaroid Hover & Transition */
         .polaroid-frame {
             transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            overflow: hidden;
         }
         .polaroid-frame:hover {
             transform: scale(1.03) rotate(0deg) translateY(-5px);
             box-shadow: 0 25px 30px -5px rgba(0, 0, 0, 0.15), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+        }
+
+        #caption-input {
+            width: 100%;
+            max-width: 100%;
+            min-height: 2.5rem;
+            box-sizing: border-box;
+            padding: 0 0.25rem;
+            line-height: 1.2;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            font-size: clamp(1.5rem, 3.2vw, 2rem);
         }
 
         /* Glassmorphism Panels */
@@ -294,13 +308,24 @@
             transform: scale(1.1);
         }
 
+        #main-content {
+            width: min(100%, 780px);
+            margin: 0 auto;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
         .page {
-            width: 100%;
+            width: min(100%, 448px);
+            margin: 0 auto;
             display: none;
         }
 
         .page.is-active {
             display: flex;
+            justify-content: center;
+            align-items: center;
             animation: page-slide-in 0.55s ease both;
         }
 
@@ -344,14 +369,107 @@
             transform: scale(1);
         }
 
+        #page-5 {
+            width: min(100%, 520px);
+            display: none;
+        }
+
+        #page-5.is-active {
+            display: flex;
+            animation: page-slide-in 0.55s ease both;
+        }
+
+        .flower-scene {
+            max-height: 0;
+            overflow: hidden;
+            opacity: 0;
+            transform: translateY(18px);
+            transition: max-height 0.7s ease, opacity 0.5s ease, transform 0.5s ease;
+        }
+
+        .flower-scene.is-visible {
+            max-height: 500px;
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        @keyframes wish-float {
+            0%, 100% {
+                transform: translateY(0) rotate(var(--rotation, 0deg)) scale(1);
+            }
+            25% {
+                transform: translateY(-14px) rotate(calc(var(--rotation, 0deg) - 7deg)) scale(1.06);
+            }
+            50% {
+                transform: translateY(-24px) rotate(calc(var(--rotation, 0deg) + 10deg)) scale(1.12);
+            }
+            75% {
+                transform: translateY(-10px) rotate(calc(var(--rotation, 0deg) - 4deg)) scale(1.04);
+            }
+        }
+
+        .wish-object {
+            display: inline-block;
+            font-size: var(--size, clamp(2rem, 5vw, 3.25rem));
+            filter: drop-shadow(0 10px 14px rgba(255, 184, 214, 0.35));
+            animation: wish-float var(--float-duration, 4.5s) ease-in-out infinite;
+            animation-delay: var(--float-delay, 0s);
+            transform-origin: center;
+            user-select: none;
+            opacity: 0.96;
+        }
+
+        @keyframes memory-float {
+            0%, 100% {
+                transform: translateY(0px) rotate(var(--tilt));
+            }
+            25% {
+                transform: translateY(-12px) rotate(calc(var(--tilt) + 1deg));
+            }
+            50% {
+                transform: translateY(-18px) rotate(var(--tilt));
+            }
+            75% {
+                transform: translateY(-8px) rotate(calc(var(--tilt) - 1deg));
+            }
+        }
+
         .memory-card {
             transform: rotate(var(--tilt));
+            animation: memory-float 5.5s ease-in-out infinite;
+            animation-delay: var(--float-delay, 0s);
+            will-change: transform;
+            filter: drop-shadow(0 12px 12px rgba(77, 110, 160, 0.12));
             transition: transform 0.35s ease, box-shadow 0.35s ease;
+        }
+
+        .memory-card:nth-child(odd) {
+            margin-top: 0.75rem;
+        }
+
+        .memory-card:nth-child(even) {
+            margin-top: -0.25rem;
         }
 
         .memory-card:hover {
             transform: rotate(0deg) translateY(-6px) scale(1.02);
             box-shadow: 0 20px 30px rgba(107, 33, 168, 0.16);
+        }
+
+        .memory-illustration {
+            position: relative;
+            width: 100%;
+            aspect-ratio: 1;
+            border-radius: 0.75rem;
+            overflow: hidden;
+            border: 2px solid rgba(140, 179, 235, 0.6);
+            background: linear-gradient(180deg, #dfefff 0%, #cfe5ff 100%);
+        }
+
+        .memory-illustration svg {
+            display: block;
+            width: 100%;
+            height: 100%;
         }
 
         @media (prefers-reduced-motion: reduce) {
@@ -495,6 +613,10 @@
 
                 <p id="login-error" class="hidden text-xs font-semibold text-red-600 bg-red-50 border-2 border-red-200 rounded-xl px-3 py-2" role="alert" aria-live="assertive"></p>
 
+                <p id="countdown-password-hint" class="mt-3 text-[11px] font-semibold text-[#6b8bb8] bg-[#edf5ff] border border-[#d7e9ff] rounded-xl px-3 py-2">
+                    Password countdown: --
+                </p>
+
                 <button type="submit" class="mt-2 w-full py-3.5 px-6 toon-btn font-bold rounded-2xl active:scale-95">
                     <i class="fa-solid fa-unlock mr-1"></i> Masuk
                 </button>
@@ -523,12 +645,6 @@
             <path d="M30 70L30 85" stroke="#9ca3af" stroke-width="2" stroke-dasharray="3 3"/>
         </svg>
     </div>
-
-    <!-- Sound Synthesizer Controller Button -->
-    <button id="music-btn" class="fixed top-4 right-4 z-50 bg-white/95 backdrop-blur-md hover:bg-white text-[#3d5b8c] px-4 py-2.5 rounded-full shadow-lg border-2 border-[#4a6389] transition-all transform hover:scale-105 flex items-center gap-2 font-semibold text-xs sm:text-sm">
-        <i id="music-icon" class="fa-solid fa-music text-[#6fb6f5]"></i>
-        <span id="music-text">Putar Lagu 🎵</span>
-    </button>
 
     <!-- Main Header -->
     <header class="text-center mt-6 sm:mt-10 z-10 max-w-xl w-full flex flex-col items-center">
@@ -559,7 +675,7 @@
             Selamat Ulang Tahun!
         </h1>
         <p class="text-[#4f7099] mt-2 text-sm sm:text-base font-medium px-4">
-            Semoga harimu semanis Cinnamoroll: penuh awan lembut, kebahagiaan, dan keberkahan tak terhingga! ☁️✨
+            Semoga harimu semanis senyumanmu, kebahagiaan, dan keberkahan tak terhingga! ☁️✨
         </p>
     </header>
 
@@ -578,7 +694,6 @@
                 <span class="text-xs font-bold text-[#6b8bb8] uppercase tracking-wider flex items-center gap-1.5">
                     <i class="fa-solid fa-camera text-[#6fb6f5]"></i> Foto Spesial
                 </span>
-                <span class="text-xs text-[#6b8bb8] font-medium">Bisa Diganti 📸</span>
             </div>
 
             <!-- Polaroid Container -->
@@ -594,15 +709,15 @@
 
                     <div class="absolute inset-0 bg-black/20 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center pointer-events-none">
                         <span class="text-white text-xs bg-black/60 px-3 py-1.5 rounded-full font-medium backdrop-blur-sm">
-                            Ganti foto di bawah ðŸ‘‡
+                            
                         </span>
                     </div>
                 </div>
 
                 <!-- Editable Polaroid Caption -->
                 <div class="mt-3 text-center">
-                    <input type="text" id="caption-input" value="Bintang Hari Ini ✨"
-                           class="font-cursive text-2xl text-[#3d5b8c] text-center w-full bg-transparent focus:outline-none focus:border-b border-[#9dcfff] font-semibold"
+                    <input type="text" id="caption-input" value="Bintang Hari Ini ✨" maxlength="22"
+                           class="font-cursive text-[#3d5b8c] text-center w-full bg-transparent focus:outline-none focus:border-b border-[#9dcfff] font-semibold"
                            title="Klik untuk mengubah nama/caption">
                 </div>
                 <!-- Stiker wajah Cinnamoroll di sudut polaroid -->
@@ -611,33 +726,8 @@
                 </div>
             </div>
 
-            <!-- Photo Upload & URL Input Controls -->
+            <!-- Foto preset hanya -->
             <div class="w-full mt-5 pt-4 border-t border-gray-200/60 flex flex-col gap-2.5">
-                <div class="flex gap-2">
-                    <!-- File Upload Button -->
-                    <label class="flex-1 bg-white/85 hover:bg-white text-[#5b7aa8] text-xs font-semibold py-2 px-3 rounded-xl cursor-pointer border-2 border-[#c7ddf7] flex items-center justify-center gap-1.5 transition-all active:scale-95">
-                        <i class="fa-solid fa-upload"></i> Unggah Foto
-                        <input type="file" id="file-input" accept="image/*" class="hidden" aria-label="Unggah foto dari perangkat">
-                    </label>
-
-                    <!-- URL Input Toggle Button -->
-                    <button id="toggle-url-btn" type="button" class="bg-white/85 hover:bg-white text-[#5b7aa8] text-xs font-semibold py-2 px-3 rounded-xl border-2 border-[#c7ddf7] flex items-center justify-center gap-1.5 transition-all" aria-label="Buka input URL foto">
-                        <i class="fa-solid fa-link"></i> Gunakan URL
-                    </button>
-
-                    <button id="reset-photo-btn" type="button" class="bg-white/85 hover:bg-white text-[#5b7aa8] text-xs font-semibold py-2 px-3 rounded-xl border-2 border-[#c7ddf7] flex items-center justify-center gap-1.5 transition-all" aria-label="Kembalikan foto default">
-                        <i class="fa-solid fa-rotate-left"></i> Reset
-                    </button>
-                </div>
-
-                <!-- Hidden Input Box for Image URL -->
-                <div id="url-input-container" class="hidden flex gap-2">
-                    <input type="url" id="url-input" placeholder="Tempel URL foto di sini..." class="flex-1 text-xs p-2.5 rounded-xl border-2 border-[#c7ddf7] text-[#3d5b8c] focus:outline-none focus:ring-2 focus:ring-[#9dcfff]" aria-label="URL foto">
-                    <button id="apply-url-btn" type="button" class="toon-btn text-xs font-bold px-3 py-2.5 rounded-xl">
-                        Pasang
-                    </button>
-                </div>
-
                 <div id="photo-status" class="photo-status" role="status" aria-live="polite"></div>
 
                 <!-- Quick Preset Selector -->
@@ -720,7 +810,7 @@
                 <div class="slide-item absolute inset-0 opacity-100 transform translate-x-0 flex flex-col items-center justify-center px-2">
                     <span class="text-2xl mb-2">☁️</span>
                     <p class="text-[#4f7099] text-sm sm:text-base font-medium leading-relaxed italic">
-                        "Selamat ulang tahun! Semoga tahun ini membawakanmu kebahagiaan tanpa batas, kesehatan yang melimpah, dan pencapaian impian terbesarmu."
+                        "Selamat ulang tahun liaa! Semoga tahun ini membawakanmu kebahagiaan tanpa batas, kesehatan yang melimpah, dan pencapaian impian terbesarmu."
                     </p>
                 </div>
 
@@ -742,7 +832,7 @@
 
                 <!-- Slide 4 -->
                 <div class="slide-item absolute inset-0 opacity-0 transform translate-x-8 pointer-events-none flex flex-col items-center justify-center px-2">
-                    <span class="text-2xl mb-2">ðŸŽ</span>
+                    <span class="text-2xl mb-2">✨</span>
                     <p class="text-[#4f7099] text-sm sm:text-base font-medium leading-relaxed italic">
                         "Semua senyuman dan kebaikan yang kamu bagikan semoga kembali padamu berkali-kali lipat. Nikmati momen hari istimewamu ini!"
                     </p>
@@ -782,10 +872,10 @@
 
             <div id="secret-message" class="secret-message" aria-live="polite">
                 <div class="mt-6 p-5 rounded-2xl bg-white/80 border-2 border-[#c7ddf7]">
-                    <p class="font-cursive text-3xl text-[#6fb6f5]">Untuk kamu yang spesial ✨</p>
+                    <p class="font-cursive text-3xl text-[#6fb6f5]">Buat kamu yang spesial ✨</p>
                     <p class="mt-3 text-sm text-[#4f7099] leading-relaxed">
-                        Terima kasih sudah hadir dan membuat hari-hari menjadi lebih berwarna.
-                        Semoga semua harapanmu satu per satu menjadi nyata. Jangan lupa,
+                        Terima kasih sudah hadir dan membuat hari-hari ku menjadi lebih berwarna.
+                        Semoga semua harapanmu satu per satu menjadi nyata. dan Jangan lupa,
                         kamu selalu punya alasan untuk tersenyum dan dicintai. 💖
                     </p>
                 </div>
@@ -796,42 +886,129 @@
 
     <section id="page-3" class="page mt-8 z-10 max-w-md flex-col items-center gap-6" aria-labelledby="memory-title" aria-hidden="true">
         <div class="glass-panel w-full p-6 rounded-3xl shadow-xl">
-            <div class="text-center">
-                <span class="text-5xl" aria-hidden="true">📸</span>
-                <h2 id="memory-title" class="font-fun text-3xl text-[#3d5b8c] mt-4">Foto-Foto Kenangan</h2>
-                <p class="text-sm text-[#5b7aa8] mt-2">Momen kecil yang selalu terasa besar di hati.</p>
+            <div id="memory-grid" class="grid grid-cols-2 gap-4 mt-2">
+                <figure class="memory-card bg-white p-2.5 pb-3 rounded-xl shadow-lg" style="--tilt: -2deg; --float-delay: 0s;">
+                    <div class="memory-illustration">
+                        <svg viewBox="0 0 200 200" aria-label="Karakter Cinnamoroll dengan papan happy birthday :>">
+                            <rect width="200" height="200" fill="#dfeeff"/>
+                            <circle cx="160" cy="34" r="18" fill="#f9e7a8" stroke="#4a6389" stroke-width="3"/>
+                            <g transform="translate(12,8)">
+                                <path d="M28 56 C12 28, 12 8, 38 4 C52 16, 58 32, 42 58Z" fill="#fff" stroke="#4a6389" stroke-width="4"/>
+                                <path d="M172 56 C188 28, 188 8, 162 4 C148 16, 142 32, 158 58Z" fill="#fff" stroke="#4a6389" stroke-width="4"/>
+                                <ellipse cx="100" cy="90" rx="58" ry="52" fill="#fff" stroke="#4a6389" stroke-width="5"/>
+                                <circle cx="82" cy="90" r="8" fill="#4a6389"/>
+                                <circle cx="118" cy="90" r="8" fill="#4a6389"/>
+                                <circle cx="78" cy="86" r="2.5" fill="#fff"/>
+                                <circle cx="122" cy="86" r="2.5" fill="#fff"/>
+                                <ellipse cx="70" cy="112" rx="12" ry="9" fill="#ffc7d8"/>
+                                <ellipse cx="130" cy="112" rx="12" ry="9" fill="#ffc7d8"/>
+                                <path d="M90 108 Q100 118 110 108" fill="none" stroke="#4a6389" stroke-width="4" stroke-linecap="round"/>
+                                <rect x="28" y="130" width="144" height="40" rx="12" fill="#fff" stroke="#4a6389" stroke-width="4"/>
+                                <text x="100" y="154" text-anchor="middle" font-family="Poppins, Arial" font-weight="700" font-size="13" fill="#4a6389">HAPPY</text>
+                                <text x="100" y="168" text-anchor="middle" font-family="Poppins, Arial" font-weight="700" font-size="11" fill="#4a6389">BIRTHDAY :&gt;</text>
+                            </g>
+                        </svg>
+                    </div>
+                    <figcaption class="text-center text-xs font-semibold text-gray-600 mt-2">Hari hari dipenuhi dengan warna 🎉</figcaption>
+                </figure>
+
+                <figure class="memory-card bg-white p-2.5 pb-3 rounded-xl shadow-lg" style="--tilt: 2deg; --float-delay: 0.7s;">
+                    <div class="memory-illustration" style="background: linear-gradient(180deg, #edfaff 0%, #dff1ff 100%);">
+                        <svg viewBox="0 0 200 200" aria-label="Cinnamoroll karakter dengan papan ulang tahun">
+                            <rect width="200" height="200" fill="#e9f9ff"/>
+                            <circle cx="160" cy="32" r="18" fill="#f7e4a3" stroke="#4a6389" stroke-width="3"/>
+                            <g transform="translate(12,8)">
+                                <path d="M30 54 C12 28, 10 8, 38 4 C52 16, 56 32, 42 56Z" fill="#fff" stroke="#4a6389" stroke-width="4"/>
+                                <path d="M170 54 C188 28, 188 8, 162 4 C148 16, 142 32, 158 56Z" fill="#fff" stroke="#4a6389" stroke-width="4"/>
+                                <ellipse cx="100" cy="90" rx="58" ry="52" fill="#fff" stroke="#4a6389" stroke-width="5"/>
+                                <circle cx="82" cy="90" r="8" fill="#4a6389"/>
+                                <circle cx="118" cy="90" r="8" fill="#4a6389"/>
+                                <circle cx="76" cy="86" r="2.5" fill="#fff"/>
+                                <circle cx="124" cy="86" r="2.5" fill="#fff"/>
+                                <ellipse cx="68" cy="112" rx="12" ry="9" fill="#ffc7d8"/>
+                                <ellipse cx="132" cy="112" rx="12" ry="9" fill="#ffc7d8"/>
+                                <path d="M90 108 Q100 118 110 108" fill="none" stroke="#4a6389" stroke-width="4" stroke-linecap="round"/>
+                                <rect x="34" y="128" width="132" height="46" rx="12" fill="#fff" stroke="#4a6389" stroke-width="4"/>
+                                <text x="100" y="156" text-anchor="middle" font-family="Poppins, Arial" font-weight="700" font-size="12" fill="#4a6389">HAPPY BDAY :&gt;</text>
+                            </g>
+                        </svg>
+                    </div>
+                    <figcaption class="text-center text-xs font-semibold text-gray-600 mt-2">Manis seperti senyuman mu 🍰</figcaption>
+                </figure>
+
+                <figure class="memory-card bg-white p-2.5 pb-3 rounded-xl shadow-lg" style="--tilt: 2deg; --float-delay: 1.3s;">
+                    <div class="memory-illustration" style="background: linear-gradient(180deg, #effbff 0%, #dfeeff 100%);">
+                        <svg viewBox="0 0 200 200" aria-label="Cinnamoroll dengan papan greeting birthday">
+                            <rect width="200" height="200" fill="#effbff"/>
+                            <circle cx="30" cy="30" r="16" fill="#f7e4a3" stroke="#4a6389" stroke-width="3"/>
+                            <g transform="translate(12,8)">
+                                <path d="M30 56 C12 30, 10 8, 40 4 C54 16, 58 32, 42 58Z" fill="#fff" stroke="#4a6389" stroke-width="4"/>
+                                <path d="M170 56 C188 30, 188 8, 162 4 C148 16, 142 32, 158 58Z" fill="#fff" stroke="#4a6389" stroke-width="4"/>
+                                <ellipse cx="100" cy="90" rx="58" ry="52" fill="#fff" stroke="#4a6389" stroke-width="5"/>
+                                <circle cx="82" cy="90" r="8" fill="#4a6389"/>
+                                <circle cx="118" cy="90" r="8" fill="#4a6389"/>
+                                <ellipse cx="72" cy="112" rx="12" ry="9" fill="#ffc7d8"/>
+                                <ellipse cx="128" cy="112" rx="12" ry="9" fill="#ffc7d8"/>
+                                <path d="M90 108 Q100 118 110 108" fill="none" stroke="#4a6389" stroke-width="4" stroke-linecap="round"/>
+                                <rect x="42" y="128" width="116" height="46" rx="12" fill="#fff" stroke="#4a6389" stroke-width="4"/>
+                                <text x="100" y="156" text-anchor="middle" font-family="Poppins, Arial" font-weight="700" font-size="12" fill="#4a6389">: &gt; BDAY</text>
+                            </g>
+                        </svg>
+                    </div>
+                    <figcaption class="text-center text-xs font-semibold text-gray-600 mt-2">Tawa yang dirindukan 😄</figcaption>
+                </figure>
+
+                <figure class="memory-card bg-white p-2.5 pb-3 rounded-xl shadow-lg" style="--tilt: -2deg; --float-delay: 1.9s;">
+                    <div class="memory-illustration" style="background: linear-gradient(180deg, #fff5fb 0%, #ffe5f2 100%);">
+                        <svg viewBox="0 0 200 200" aria-label="Cinnamoroll dengan papan happy birthday :>">
+                            <rect width="200" height="200" fill="#fff0f8"/>
+                            <circle cx="160" cy="30" r="18" fill="#fbe7a3" stroke="#4a6389" stroke-width="3"/>
+                            <g transform="translate(14,8)">
+                                <path d="M28 58 C12 30, 10 10, 38 6 C54 18, 58 34, 42 60Z" fill="#fff" stroke="#4a6389" stroke-width="4"/>
+                                <path d="M172 58 C188 30, 188 10, 160 6 C144 18, 140 34, 156 60Z" fill="#fff" stroke="#4a6389" stroke-width="4"/>
+                                <ellipse cx="100" cy="90" rx="58" ry="52" fill="#fff" stroke="#4a6389" stroke-width="5"/>
+                                <circle cx="82" cy="90" r="8" fill="#4a6389"/>
+                                <circle cx="118" cy="90" r="8" fill="#4a6389"/>
+                                <ellipse cx="72" cy="112" rx="12" ry="9" fill="#ffc7d8"/>
+                                <ellipse cx="128" cy="112" rx="12" ry="9" fill="#ffc7d8"/>
+                                <path d="M90 108 Q100 118 110 108" fill="none" stroke="#4a6389" stroke-width="4" stroke-linecap="round"/>
+                                <rect x="36" y="128" width="128" height="46" rx="12" fill="#fff" stroke="#4a6389" stroke-width="4"/>
+                                <text x="100" y="156" text-anchor="middle" font-family="Poppins, Arial" font-weight="700" font-size="11.5" fill="#4a6389">HAPPY BDAY</text>
+                            </g>
+                        </svg>
+                    </div>
+                    <figcaption class="text-center text-xs font-semibold text-gray-600 mt-2">Kejar mimpi yang ingin dicapai 🎈</figcaption>
+                </figure>
             </div>
 
-            <div id="memory-grid" class="grid grid-cols-2 gap-4 mt-6">
-                <figure class="memory-card bg-white p-2.5 pb-3 rounded-xl shadow-lg" style="--tilt: -2deg">
-                    <img src="https://images.unsplash.com/photo-1513151233558-d860c5398176?auto=format&fit=crop&w=600&q=80" alt="Dekorasi ulang tahun penuh warna" class="w-full aspect-square object-cover rounded-lg">
-                    <figcaption class="text-center text-xs font-semibold text-gray-600 mt-2">Hari penuh warna ðŸŽˆ</figcaption>
-                </figure>
-                <figure class="memory-card bg-white p-2.5 pb-3 rounded-xl shadow-lg" style="--tilt: 2deg">
-                    <img src="https://images.unsplash.com/photo-1464349153735-7db50ed83c84?auto=format&fit=crop&w=600&q=80" alt="Kue ulang tahun" class="w-full aspect-square object-cover rounded-lg">
-                    <figcaption class="text-center text-xs font-semibold text-gray-600 mt-2">Manis seperti senyummu ðŸ°</figcaption>
-                </figure>
-                <figure class="memory-card bg-white p-2.5 pb-3 rounded-xl shadow-lg" style="--tilt: 2deg">
-                    <img src="https://images.unsplash.com/photo-1511632765486-a01980e01a18?auto=format&fit=crop&w=600&q=80" alt="Teman-teman merayakan bersama" class="w-full aspect-square object-cover rounded-lg">
-                    <figcaption class="text-center text-xs font-semibold text-gray-600 mt-2">Tawa yang dirindukan ðŸ˜Š</figcaption>
-                </figure>
-                <figure class="memory-card bg-white p-2.5 pb-3 rounded-xl shadow-lg" style="--tilt: -2deg">
-                    <img src="https://images.unsplash.com/photo-1530103862676-de8c9debad1d?auto=format&fit=crop&w=600&q=80" alt="Balon pesta warna-warni" class="w-full aspect-square object-cover rounded-lg">
-                    <figcaption class="text-center text-xs font-semibold text-gray-600 mt-2">Mimpi setinggi balon ðŸŽ</figcaption>
-                </figure>
-            </div>
-
-            <label class="mt-6 w-full py-3 px-4 rounded-2xl border-2 border-dashed border-[#9dcfff] bg-white/85 text-[#5b7aa8] text-xs font-bold flex items-center justify-center gap-2 cursor-pointer hover:bg-white transition-all">
-                <i class="fa-solid fa-images"></i> Tambahkan foto kenangan
-                <input id="memory-upload" type="file" accept="image/*" multiple class="hidden">
-            </label>
-            <p id="memory-status" class="text-center text-[11px] text-[#7d9cc4] mt-2" aria-live="polite">Kamu bisa menambahkan beberapa foto dari perangkat.</p>
+            <p id="memory-status" class="text-center text-[11px] text-[#7d9cc4] mt-2" aria-live="polite">Galeri ini menampilkan kenangan yang sudah dipilih.</p>
         </div>
         <button type="button" class="next-page-btn text-xs font-bold text-[#5b7aa8] hover:text-[#6fb6f5] transition-colors" data-page="page-1">← Kembali ke perayaan</button>
     </section>
 
+    <section id="page-5" class="page mt-8 z-10 max-w-md flex-col items-center gap-6" aria-hidden="true">
+        <div class="glass-panel w-full p-6 rounded-3xl shadow-xl text-center">
+            <span class="text-4xl" aria-hidden="true">🎀</span>
+            <h2 class="font-fun text-3xl text-[#3d5b8c] mt-3">Permintaan terakhir</h2>
+            <p class="text-sm text-[#5b7aa8] mt-2 leading-relaxed">Ceritakan satu harapan yang paling kamu inginkan, lalu biarkan semesta mendengarnya.</p>
+
+            <form id="wish-form" class="mt-6 flex flex-col gap-4 text-left">
+                <label for="wish-input" class="text-xs font-bold text-[#6b8bb8] uppercase tracking-wider">Permintaanmu</label>
+                <textarea id="wish-input" rows="4" maxlength="120" required placeholder="Aku ingin ..." class="w-full rounded-2xl border-2 border-[#c7ddf7] bg-white/90 p-3 text-sm text-[#3d5b8c] focus:outline-none focus:ring-2 focus:ring-[#9dcfff] resize-none"></textarea>
+                <button type="submit" class="w-full py-3.5 px-6 toon-btn font-bold rounded-2xl active:scale-95">
+                    <i class="fa-solid fa-paper-plane mr-1"></i> Kirim Permintaan
+                </button>
+            </form>
+
+            <div id="wish-reveal" class="flower-scene mt-6 text-center">
+                <div id="wish-reveal-items" class="flex items-center justify-center gap-3 sm:gap-5 flex-wrap"></div>
+                <p class="mt-5 text-2xl sm:text-3xl font-fun text-[#3d5b8c]">semoga keinginan mu tercapai</p>
+            </div>
+        </div>
+    </section>
+
     <footer class="text-center text-xs text-[#6b8bb8] z-10 mt-8 font-medium">
-        Dibuat dengan ❤️ dan awan lembut ala Cinnamoroll untuk momen ulang tahun yang penuh kenangan.
+        Dibuat dengan ❤️  untuk momen ulang tahun yang penuh kenangan.
     </footer>
 
     </div><!-- /#main-content -->
@@ -839,12 +1016,6 @@
     <script>
         // --- PHOTO MANAGEMENT LOGIC ---
         const mainPhoto = document.getElementById('main-photo');
-        const fileInput = document.getElementById('file-input');
-        const toggleUrlBtn = document.getElementById('toggle-url-btn');
-        const urlInputContainer = document.getElementById('url-input-container');
-        const urlInput = document.getElementById('url-input');
-        const applyUrlBtn = document.getElementById('apply-url-btn');
-        const resetPhotoBtn = document.getElementById('reset-photo-btn');
         const photoStatus = document.getElementById('photo-status');
         const presetBtns = document.querySelectorAll('.preset-btn');
         const DEFAULT_PHOTO = 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=800&q=80';
@@ -862,7 +1033,7 @@
 
         function updatePhoto(src, sourceLabel = 'Foto') {
             if (!src || !src.trim()) {
-                setPhotoStatus('URL foto tidak boleh kosong.', 'error');
+                setPhotoStatus('Foto tidak boleh kosong.', 'error');
                 return;
             }
 
@@ -879,67 +1050,6 @@
             };
             image.src = src;
         }
-
-        // Handle File Upload from device
-        fileInput.addEventListener('change', (e) => {
-            const file = e.target.files[0];
-            if (!file) return;
-
-            if (!file.type.startsWith('image/')) {
-                setPhotoStatus('File yang dipilih harus berupa gambar.', 'error');
-                return;
-            }
-
-            if (file.size > 5 * 1024 * 1024) {
-                setPhotoStatus('Ukuran foto terlalu besar. Maksimal 5MB.', 'error');
-                return;
-            }
-
-            const reader = new FileReader();
-            reader.onload = (event) => {
-                updatePhoto(event.target.result, 'Upload foto');
-            };
-            reader.onerror = () => {
-                setPhotoStatus('Tidak dapat membaca file foto.', 'error');
-            };
-            reader.readAsDataURL(file);
-        });
-
-        // Toggle URL Input Box
-        toggleUrlBtn.addEventListener('click', () => {
-            const isHidden = urlInputContainer.classList.toggle('hidden');
-            toggleUrlBtn.innerHTML = isHidden
-                ? '<i class="fa-solid fa-link"></i> Gunakan URL'
-                : '<i class="fa-solid fa-eye-slash"></i> Tutup URL';
-            if (!isHidden) {
-                urlInput.focus();
-            }
-        });
-
-        // Apply Image URL
-        applyUrlBtn.addEventListener('click', () => {
-            const url = urlInput.value.trim();
-            const isValidUrl = /^https?:\/\//i.test(url) || /^data:image\//i.test(url);
-
-            if (!url) {
-                setPhotoStatus('Kolom URL masih kosong.', 'error');
-                return;
-            }
-
-            if (!isValidUrl) {
-                setPhotoStatus('Masukkan URL foto yang valid (http/https atau data URL).', 'error');
-                return;
-            }
-
-            updatePhoto(url, 'URL foto');
-        });
-
-        resetPhotoBtn.addEventListener('click', () => {
-            urlInput.value = '';
-            urlInputContainer.classList.add('hidden');
-            toggleUrlBtn.innerHTML = '<i class="fa-solid fa-link"></i> Gunakan URL';
-            updatePhoto(DEFAULT_PHOTO, 'Foto default');
-        });
 
         // Preset Thumbnails Selector
         presetBtns.forEach(btn => {
@@ -994,141 +1104,14 @@
             }
         });
 
-        // --- MEMORY PHOTO UPLOAD ---
+        // --- MEMORY GALLERY (Static preset collection only) ---
         const memoryGrid = document.getElementById('memory-grid');
-        const memoryUpload = document.getElementById('memory-upload');
         const memoryStatus = document.getElementById('memory-status');
 
-        memoryUpload.addEventListener('change', (event) => {
-            const files = Array.from(event.target.files || []);
-            const imageFiles = files.filter((file) => file.type.startsWith('image/') && file.size <= 5 * 1024 * 1024);
-
-            if (!files.length) return;
-            if (!imageFiles.length) {
-                memoryStatus.textContent = 'Pilih file gambar dengan ukuran maksimal 5MB.';
-                memoryStatus.className = 'text-center text-[11px] text-red-600 mt-2';
-                return;
-            }
-
-            imageFiles.forEach((file) => {
-                const reader = new FileReader();
-                reader.onload = (readerEvent) => {
-                    const figure = document.createElement('figure');
-                    figure.className = 'memory-card bg-white p-2.5 pb-3 rounded-xl shadow-lg';
-                    figure.style.setProperty('--tilt', `${Math.random() > 0.5 ? 2 : -2}deg`);
-                    figure.innerHTML = `
-                        <img src="${readerEvent.target.result}" alt="Foto kenangan yang ditambahkan" class="w-full aspect-square object-cover rounded-lg">
-                        <figcaption class="text-center text-xs font-semibold text-[#5b7aa8] mt-2">Kenangan baru 💖</figcaption>
-                    `;
-                    memoryGrid.appendChild(figure);
-                };
-                reader.readAsDataURL(file);
-            });
-
-            memoryStatus.textContent = `${imageFiles.length} foto berhasil ditambahkan ke galeri.`;
-            memoryStatus.className = 'text-center text-[11px] text-green-700 mt-2';
-            memoryUpload.value = '';
-        });
-
-        // --- WEB AUDIO SYNTHESIZER (NO EXTERNAL AUDIO DEPENDENCY) ---
-        let audioCtx = null;
-        let isPlaying = false;
-        let currentNoteTimeout = null;
-
-        const musicBtn = document.getElementById('music-btn');
-        const musicIcon = document.getElementById('music-icon');
-        const musicText = document.getElementById('music-text');
-
-        // Happy Birthday Notes & Frequencies (in Hz)
-        const notes = [
-            { note: 'C4', duration: 350 }, { note: 'C4', duration: 150 },
-            { note: 'D4', duration: 500 }, { note: 'C4', duration: 500 },
-            { note: 'F4', duration: 500 }, { note: 'E4', duration: 1000 },
-
-            { note: 'C4', duration: 350 }, { note: 'C4', duration: 150 },
-            { note: 'D4', duration: 500 }, { note: 'C4', duration: 500 },
-            { note: 'G4', duration: 500 }, { note: 'F4', duration: 1000 },
-
-            { note: 'C4', duration: 350 }, { note: 'C4', duration: 150 },
-            { note: 'C5', duration: 500 }, { note: 'A4', duration: 500 },
-            { note: 'F4', duration: 500 }, { note: 'E4', duration: 500 },
-            { note: 'D4', duration: 800 },
-
-            { note: 'A#4', duration: 350 }, { note: 'A#4', duration: 150 },
-            { note: 'A4', duration: 500 }, { note: 'F4', duration: 500 },
-            { note: 'G4', duration: 500 }, { note: 'F4', duration: 1200 }
-        ];
-
-        const noteFrequencies = {
-            'C4': 261.63, 'D4': 293.66, 'E4': 329.63, 'F4': 349.23,
-            'G4': 392.00, 'A4': 440.00, 'A#4': 466.16, 'C5': 523.25
-        };
-
-        function playTone(freq, duration) {
-            if (!audioCtx) return;
-            try {
-                const osc = audioCtx.createOscillator();
-                const gain = audioCtx.createGain();
-
-                osc.type = 'sine';
-                osc.frequency.setValueAtTime(freq, audioCtx.currentTime);
-
-                gain.gain.setValueAtTime(0.2, audioCtx.currentTime);
-                gain.gain.exponentialRampToValueAtTime(0.0001, audioCtx.currentTime + (duration / 1000));
-
-                osc.connect(gain);
-                gain.connect(audioCtx.destination);
-
-                osc.start();
-                osc.stop(audioCtx.currentTime + (duration / 1000));
-            } catch(e) { console.log(e); }
+        if (memoryStatus) {
+            memoryStatus.textContent = 'Galeri ini menampilkan kenangan yang sudah dipilih.';
+            memoryStatus.className = 'text-center text-[11px] text-[#7d9cc4] mt-2';
         }
-
-        function playBirthdayMelody(index = 0) {
-            if (!isPlaying) return;
-
-            if (index >= notes.length) {
-                // Loop melody after completion
-                currentNoteTimeout = setTimeout(() => playBirthdayMelody(0), 1000);
-                return;
-            }
-
-            const current = notes[index];
-            const freq = noteFrequencies[current.note];
-
-            if (freq) {
-                playTone(freq, current.duration);
-            }
-
-            currentNoteTimeout = setTimeout(() => {
-                playBirthdayMelody(index + 1);
-            }, current.duration + 40);
-        }
-
-        function toggleMusic() {
-            if (!audioCtx) {
-                const AudioContext = window.AudioContext || window.webkitAudioContext;
-                audioCtx = new AudioContext();
-            }
-
-            if (audioCtx.state === 'suspended') {
-                audioCtx.resume();
-            }
-
-            if (isPlaying) {
-                isPlaying = false;
-                clearTimeout(currentNoteTimeout);
-                musicText.textContent = 'Putar Lagu 🎵';
-                musicIcon.className = 'fa-solid fa-music text-[#6fb6f5]';
-            } else {
-                isPlaying = true;
-                musicText.textContent = 'Matikan Musik 🔊';
-                musicIcon.className = 'fa-solid fa-volume-high text-[#6fb6f5]';
-                playBirthdayMelody(0);
-            }
-        }
-
-        musicBtn.addEventListener('click', toggleMusic);
 
         // --- CONFETTI LAUNCHER ---
         function launchConfetti() {
@@ -1163,6 +1146,9 @@
         const flame = document.getElementById('flame');
         const smoke = document.getElementById('smoke');
         const cakeInstruction = document.getElementById('cake-instruction');
+        const wishForm = document.getElementById('wish-form');
+        const wishInput = document.getElementById('wish-input');
+        const wishReveal = document.getElementById('wish-reveal');
         let isCandleOut = false;
 
         flame.addEventListener('click', () => {
@@ -1173,14 +1159,62 @@
 
                 cakeInstruction.innerHTML = '✨ <span class="text-[#6fb6f5] font-bold">Lilin telah ditiup! Make a wish!</span> ✨';
                 isCandleOut = true;
-
+                showPage('page-5');
                 launchConfetti();
-
-                if (!isPlaying) {
-                    toggleMusic();
-                }
+                setTimeout(() => {
+                    if (wishInput) wishInput.focus();
+                }, 350);
             }
         });
+
+        const wishItems = ['🌼', '🌸', '✨', '🔥', '☁️', '🐾', '🎀', '💫', '🌷', '⭐', '💖', '🎈', '🦄', '🌻', '🐰', '🫧', '🍓', '🌟'];
+
+        function shuffleItems(array) {
+            const clone = [...array];
+            for (let i = clone.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [clone[i], clone[j]] = [clone[j], clone[i]];
+            }
+            return clone;
+        }
+
+        function renderWishObjects() {
+            const container = document.getElementById('wish-reveal-items');
+            if (!container) return;
+
+            const randomItems = shuffleItems(wishItems).slice(0, 8);
+            container.innerHTML = randomItems.map((item, index) => {
+                const size = (1.6 + Math.random() * 1.8).toFixed(2) + 'rem';
+                const rotation = (Math.random() * 24 - 12).toFixed(1) + 'deg';
+                const duration = (3.2 + Math.random() * 4.2).toFixed(2) + 's';
+                const delay = (index * 0.2).toFixed(2) + 's';
+
+                return `
+                    <span class="wish-object" aria-hidden="true"
+                        style="--size:${size}; --rotation:${rotation}; --float-duration:${duration}; --float-delay:${delay};">
+                        ${item}
+                    </span>
+                `;
+            }).join('');
+        }
+
+        if (wishForm) {
+            wishForm.addEventListener('submit', (event) => {
+                event.preventDefault();
+
+                const value = wishInput.value.trim();
+                if (!value) {
+                    wishInput.focus();
+                    wishInput.placeholder = 'Tulis permintaanmu dulu ya...';
+                    return;
+                }
+
+                wishForm.classList.add('hidden');
+                renderWishObjects();
+                wishReveal.classList.add('is-visible');
+                confetti({ particleCount: 140, spread: 90, origin: { y: 0.65 } });
+            });
+        }
 
         // --- WISH CAROUSEL SLIDER ---
         const slides = document.querySelectorAll('.slide-item');
@@ -1253,7 +1287,33 @@
 
         // --- LOGIN GATE (PROTEKSI HALAMAN) ---
         const VALID_USERNAME = 'liaa';
-        const VALID_PASSWORD = '071008';
+        const COUNTDOWN_DURATION_MS = 8 * 24 * 60 * 60 * 1000;
+        const COUNTDOWN_START_MS = Date.now();
+
+        function getCountdownPartsFromMs(remainingMs) {
+            const totalSeconds = Math.max(0, Math.floor(remainingMs / 1000));
+            const days = Math.floor(totalSeconds / 86400);
+            const hours = Math.floor((totalSeconds % 86400) / 3600);
+            const minutes = Math.floor((totalSeconds % 3600) / 60);
+            const seconds = totalSeconds % 60;
+            return { days, hours, minutes, seconds };
+        }
+
+        function getLiveCountdownPassword() {
+            const remainingMs = Math.max(0, COUNTDOWN_DURATION_MS - (Date.now() - COUNTDOWN_START_MS));
+            const { days, hours, minutes, seconds } = getCountdownPartsFromMs(remainingMs);
+            return [days, hours, minutes, seconds]
+                .map((value) => String(value).padStart(2, '0'))
+                .join('');
+        }
+
+        function formatLiveCountdown() {
+            const remainingMs = Math.max(0, COUNTDOWN_DURATION_MS - (Date.now() - COUNTDOWN_START_MS));
+            const { days, hours, minutes, seconds } = getCountdownPartsFromMs(remainingMs);
+            return `${days}d ${String(hours).padStart(2, '0')}h ${String(minutes).padStart(2, '0')}m ${String(seconds).padStart(2, '0')}s`;
+        }
+
+        let VALID_PASSWORD = getLiveCountdownPassword();
 
         const loginGate = document.getElementById('login-gate');
         const mainContent = document.getElementById('main-content');
@@ -1263,7 +1323,15 @@
         const loginError = document.getElementById('login-error');
         const togglePasswordBtn = document.getElementById('toggle-password');
         const togglePasswordIcon = document.getElementById('toggle-password-icon');
+        const countdownPasswordHint = document.getElementById('countdown-password-hint');
         const loginCard = loginGate.querySelector('.glass-panel');
+
+        function refreshCountdownState() {
+            VALID_PASSWORD = getLiveCountdownPassword();
+            if (countdownPasswordHint) {
+                countdownPasswordHint.textContent = `Password countdown: ${formatLiveCountdown()}`;
+            }
+        }
 
         function showLoginError(message) {
             loginError.textContent = message;
@@ -1290,6 +1358,7 @@
 
         loginForm.addEventListener('submit', (event) => {
             event.preventDefault();
+            refreshCountdownState();
 
             const username = loginUsername.value.trim();
             const password = loginPassword.value;
@@ -1306,6 +1375,9 @@
                 loginPassword.focus();
             }
         });
+
+        refreshCountdownState();
+        setInterval(refreshCountdownState, 1000);
 
         // Fokus ke kolom username saat halaman pertama dibuka
         loginUsername.focus();
