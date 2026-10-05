@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="id">
 <head>
     <meta charset="UTF-8">
@@ -59,27 +59,284 @@
             transform-origin: center bottom;
         }
 
-        /* Polaroid Hover & Transition */
-        .polaroid-frame {
-            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        .bear-stage {
+            position: relative;
+            display: flex;
+            align-items: flex-end;
+            justify-content: center;
+            width: 100%;
+            max-width: 280px;
+            height: 270px;
             overflow: hidden;
-        }
-        .polaroid-frame:hover {
-            transform: scale(1.03) rotate(0deg) translateY(-5px);
-            box-shadow: 0 25px 30px -5px rgba(0, 0, 0, 0.15), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+            border: 2px solid #c7ddf7;
+            border-radius: 1rem;
+            background: radial-gradient(circle at 50% 40%, #ffffff 0 12%, transparent 52%), linear-gradient(180deg, #eff9ff, #d7ebff);
         }
 
-        #caption-input {
-            width: 100%;
-            max-width: 100%;
-            min-height: 2.5rem;
-            box-sizing: border-box;
-            padding: 0 0.25rem;
-            line-height: 1.2;
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-            font-size: clamp(1.5rem, 3.2vw, 2rem);
+        .bear-shadow {
+            position: absolute;
+            bottom: 22px;
+            width: 132px;
+            height: 14px;
+            border-radius: 50%;
+            background: rgba(61, 91, 140, 0.2);
+            animation: bear-shadow-step 0.48s ease-in-out infinite;
+        }
+
+        .teddy-bear {
+            position: relative;
+            width: 174px;
+            height: 226px;
+            margin-bottom: 22px;
+            animation: bear-bounce 0.48s ease-in-out infinite;
+        }
+
+        .bear-leg {
+            position: absolute;
+            bottom: 0;
+            z-index: 1;
+            width: 48px;
+            height: 66px;
+            border: 3px solid #75452f;
+            border-radius: 48% 48% 42% 42%;
+            background: linear-gradient(110deg, #bd8054, #965b39);
+            transform-origin: 50% 12%;
+        }
+
+        .bear-leg::after {
+            position: absolute;
+            right: -5px;
+            bottom: -2px;
+            left: -5px;
+            height: 28px;
+            border: 3px solid #75452f;
+            border-radius: 50%;
+            background: #a76a45;
+            content: '';
+        }
+
+        .bear-leg.left { left: 38px; animation: bear-step-left 0.48s ease-in-out infinite; }
+        .bear-leg.right { right: 38px; animation: bear-step-right 0.48s ease-in-out infinite; }
+
+        .bear-body {
+            position: absolute;
+            bottom: 28px;
+            left: 50%;
+            z-index: 2;
+            width: 120px;
+            height: 126px;
+            transform: translateX(-50%);
+            border: 3px solid #75452f;
+            border-radius: 48% 48% 42% 42%;
+            background: linear-gradient(110deg, #c1875e, #995e3c);
+        }
+
+        .bear-belly {
+            position: absolute;
+            right: 17px;
+            bottom: 9px;
+            left: 17px;
+            height: 83px;
+            border-radius: 50%;
+            background: #e7bd91;
+        }
+
+        .bear-arm {
+            position: absolute;
+            top: 103px;
+            z-index: 4;
+            width: 40px;
+            height: 76px;
+            border: 3px solid #75452f;
+            border-radius: 50%;
+            background: linear-gradient(110deg, #c1875e, #995e3c);
+            transform-origin: 50% 16%;
+        }
+
+        .bear-arm.left { left: 19px; animation: bear-arm-left 0.48s ease-in-out infinite; }
+        .bear-arm.right { right: 19px; animation: bear-arm-right 0.48s ease-in-out infinite; }
+
+        .bear-head {
+            position: absolute;
+            top: 8px;
+            left: 50%;
+            z-index: 3;
+            width: 126px;
+            height: 104px;
+            transform: translateX(-50%);
+            border: 3px solid #75452f;
+            border-radius: 48% 48% 46% 46%;
+            background: linear-gradient(130deg, #c58a61, #a36843);
+        }
+
+        .bear-ear {
+            position: absolute;
+            top: -10px;
+            width: 46px;
+            height: 46px;
+            border: 3px solid #75452f;
+            border-radius: 50%;
+            background: #a66a45;
+        }
+
+        .bear-ear::after {
+            position: absolute;
+            inset: 8px;
+            border-radius: 50%;
+            background: #e3a77c;
+            content: '';
+        }
+
+        .bear-ear.left { left: -9px; }
+        .bear-ear.right { right: -9px; }
+
+        .bear-eye {
+            position: absolute;
+            top: 46px;
+            width: 8px;
+            height: 10px;
+            border-radius: 50%;
+            background: #39251f;
+        }
+
+        .bear-eye.left { left: 35px; }
+        .bear-eye.right { right: 35px; }
+
+        .bear-muzzle {
+            position: absolute;
+            bottom: 11px;
+            left: 50%;
+            width: 58px;
+            height: 38px;
+            transform: translateX(-50%);
+            border-radius: 50%;
+            background: #efd0aa;
+        }
+
+        .bear-nose {
+            position: absolute;
+            top: 8px;
+            left: 50%;
+            width: 17px;
+            height: 12px;
+            transform: translateX(-50%);
+            border-radius: 50% 50% 55% 55%;
+            background: #39251f;
+        }
+
+        .bear-nose::after {
+            position: absolute;
+            top: 9px;
+            left: 50%;
+            width: 10px;
+            height: 7px;
+            transform: translateX(-50%);
+            border-bottom: 2px solid #75452f;
+            border-radius: 0 0 50% 50%;
+            content: '';
+        }
+
+        .bear-cake {
+            position: absolute;
+            top: 116px;
+            left: 50%;
+            z-index: 5;
+            width: 78px;
+            height: 53px;
+            transform: translateX(-50%);
+            animation: cake-carry 0.48s ease-in-out infinite;
+        }
+
+        .bear-cake-tier {
+            position: absolute;
+            right: 3px;
+            bottom: 4px;
+            left: 3px;
+            height: 34px;
+            border: 2px solid #a94d72;
+            border-radius: 8px 8px 5px 5px;
+            background: linear-gradient(#ffc1d7 0 35%, #f08caf 36% 100%);
+            box-shadow: inset 0 -5px 0 rgba(176, 67, 112, 0.12);
+        }
+
+        .bear-cake-tier::before {
+            position: absolute;
+            top: -7px;
+            right: -2px;
+            left: -2px;
+            height: 11px;
+            border-radius: 50%;
+            background: #fff2cc;
+            content: '';
+        }
+
+        .bear-cake-plate {
+            position: absolute;
+            right: 0;
+            bottom: 0;
+            left: 0;
+            height: 8px;
+            border-radius: 50%;
+            background: #fff;
+            box-shadow: 0 2px 0 #b7d4ef;
+        }
+
+        .bear-cake-candle {
+            position: absolute;
+            top: 0;
+            left: 50%;
+            width: 7px;
+            height: 15px;
+            transform: translateX(-50%);
+            border-radius: 3px 3px 0 0;
+            background: repeating-linear-gradient(45deg, #fff 0 3px, #77b9f3 3px 6px);
+        }
+
+        .bear-cake-candle::before {
+            position: absolute;
+            top: -10px;
+            left: 1px;
+            width: 6px;
+            height: 9px;
+            border-radius: 50% 50% 50% 0;
+            background: #ffb739;
+            content: '';
+            transform: rotate(-35deg);
+        }
+
+        @keyframes bear-bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-5px); }
+        }
+
+        @keyframes bear-shadow-step {
+            0%, 100% { transform: scaleX(1); opacity: 0.22; }
+            50% { transform: scaleX(0.82); opacity: 0.14; }
+        }
+
+        @keyframes bear-step-left {
+            0%, 100% { transform: rotate(11deg); }
+            50% { transform: rotate(-11deg) translateY(-3px); }
+        }
+
+        @keyframes bear-step-right {
+            0%, 100% { transform: rotate(-11deg); }
+            50% { transform: rotate(11deg) translateY(-3px); }
+        }
+
+        @keyframes bear-arm-left {
+            0%, 100% { transform: rotate(-5deg); }
+            50% { transform: rotate(5deg); }
+        }
+
+        @keyframes bear-arm-right {
+            0%, 100% { transform: rotate(5deg); }
+            50% { transform: rotate(-5deg); }
+        }
+
+        @keyframes cake-carry {
+            0%, 100% { transform: translateX(-50%) rotate(-2deg) translateY(0); }
+            50% { transform: translateX(-50%) rotate(2deg) translateY(-2px); }
         }
 
         /* Glassmorphism Panels */
@@ -276,38 +533,6 @@
             box-shadow: 26px 8px 0 6px #ffffff, -24px 6px 0 7px #ffffff;
         }
 
-        .photo-status {
-            display: none;
-            align-items: center;
-            gap: 0.5rem;
-            padding: 0.5rem 0.75rem;
-            border-radius: 0.75rem;
-            font-size: 0.7rem;
-            margin-top: 0.5rem;
-            border: 1px solid transparent;
-        }
-
-        .photo-status.show {
-            display: flex;
-        }
-
-        .photo-status.success {
-            background: rgba(236, 253, 245, 0.9);
-            border-color: rgba(34, 197, 94, 0.3);
-            color: #166534;
-        }
-
-        .photo-status.error {
-            background: rgba(254, 242, 242, 0.95);
-            border-color: rgba(239, 68, 68, 0.3);
-            color: #991b1b;
-        }
-
-        .preset-btn.is-active {
-            outline: 2px solid rgba(236, 72, 153, 0.8);
-            transform: scale(1.1);
-        }
-
         #main-content {
             width: min(100%, 780px);
             margin: 0 auto;
@@ -369,17 +594,17 @@
             transform: scale(1);
         }
 
-        #page-5 {
+        #page-4 {
             width: min(100%, 520px);
             display: none;
         }
 
-        #page-5.is-active {
+        #page-4.is-active {
             display: flex;
             animation: page-slide-in 0.55s ease both;
         }
 
-        .flower-scene {
+        .wish-reveal-scene {
             max-height: 0;
             overflow: hidden;
             opacity: 0;
@@ -387,36 +612,154 @@
             transition: max-height 0.7s ease, opacity 0.5s ease, transform 0.5s ease;
         }
 
-        .flower-scene.is-visible {
-            max-height: 500px;
+        .wish-reveal-scene.is-visible {
+            max-height: 360px;
             opacity: 1;
             transform: translateY(0);
         }
 
-        @keyframes wish-float {
-            0%, 100% {
-                transform: translateY(0) rotate(var(--rotation, 0deg)) scale(1);
-            }
-            25% {
-                transform: translateY(-14px) rotate(calc(var(--rotation, 0deg) - 7deg)) scale(1.06);
-            }
-            50% {
-                transform: translateY(-24px) rotate(calc(var(--rotation, 0deg) + 10deg)) scale(1.12);
-            }
-            75% {
-                transform: translateY(-10px) rotate(calc(var(--rotation, 0deg) - 4deg)) scale(1.04);
-            }
+        .wish-reveal-stage {
+            position: relative;
+            height: 260px;
+            overflow: hidden;
+            border: 2px solid rgba(199, 221, 247, 0.9);
+            border-radius: 1rem;
+            background: linear-gradient(180deg, #edf8ff, #d8ecff);
         }
 
-        .wish-object {
-            display: inline-block;
-            font-size: var(--size, clamp(2rem, 5vw, 3.25rem));
-            filter: drop-shadow(0 10px 14px rgba(255, 184, 214, 0.35));
-            animation: wish-float var(--float-duration, 4.5s) ease-in-out infinite;
-            animation-delay: var(--float-delay, 0s);
-            transform-origin: center;
-            user-select: none;
-            opacity: 0.96;
+        .wish-reveal-message {
+            position: absolute;
+            inset: 0;
+            z-index: 1;
+            display: grid;
+            place-items: center;
+            margin: 0;
+            padding: 1rem;
+            color: #3d5b8c;
+            font-family: 'Fredoka', sans-serif;
+            font-size: 1.8rem;
+            line-height: 1.15;
+            text-align: center;
+            text-shadow: 0 2px 0 rgba(255, 255, 255, 0.9);
+        }
+
+        .wish-breeze {
+            position: absolute;
+            z-index: 0;
+            width: 70px;
+            height: 14px;
+            border-top: 2px solid rgba(111, 182, 245, 0.58);
+            border-radius: 50%;
+            animation: breeze-drift 2.4s ease-in-out infinite;
+        }
+
+        .wish-breeze::after {
+            position: absolute;
+            top: 8px;
+            left: 16px;
+            width: 44px;
+            height: 9px;
+            border-top: 2px solid rgba(111, 182, 245, 0.4);
+            border-radius: 50%;
+            content: '';
+        }
+
+        .wish-breeze.one { top: 22%; left: 8%; }
+        .wish-breeze.two { top: 62%; right: 7%; animation-delay: -1.1s; }
+
+        .wish-cake-fall {
+            position: absolute;
+            top: -112px;
+            left: 50%;
+            z-index: 2;
+            width: 108px;
+            height: 108px;
+            animation: wish-cake-fall 3.8s linear infinite;
+        }
+
+        .wish-cake {
+            position: absolute;
+            inset: 0;
+            filter: drop-shadow(0 8px 6px rgba(61, 91, 140, 0.2));
+        }
+
+        .wish-cake-lower {
+            position: absolute;
+            top: 46px;
+            left: 9px;
+            width: 90px;
+            height: 43px;
+            border: 2px solid #a94d72;
+            border-radius: 9px 9px 14px 14px;
+            background: linear-gradient(180deg, #ffd1df 0 25%, #f39ab6 26% 100%);
+        }
+
+        .wish-cake-lower::before {
+            position: absolute;
+            top: -8px;
+            right: -2px;
+            left: -2px;
+            height: 13px;
+            border-radius: 50%;
+            background: #fff3ce;
+            content: '';
+        }
+
+        .wish-cake-upper {
+            position: absolute;
+            top: 29px;
+            left: 26px;
+            width: 56px;
+            height: 24px;
+            border: 2px solid #a94d72;
+            border-radius: 8px 8px 5px 5px;
+            background: linear-gradient(180deg, #fff0c9 0 35%, #ffc1d7 36% 100%);
+        }
+
+        .wish-cake-plate {
+            position: absolute;
+            top: 87px;
+            left: 3px;
+            width: 102px;
+            height: 12px;
+            border-radius: 50%;
+            background: #fff;
+            box-shadow: 0 3px 0 #b7d4ef;
+        }
+
+        .wish-cake-candle {
+            position: absolute;
+            top: 12px;
+            left: 50px;
+            width: 8px;
+            height: 19px;
+            border-radius: 3px 3px 0 0;
+            background: repeating-linear-gradient(45deg, #fff 0 4px, #77b9f3 4px 8px);
+        }
+
+        .wish-cake-candle::before {
+            position: absolute;
+            top: -11px;
+            left: 1px;
+            width: 7px;
+            height: 10px;
+            border-radius: 50% 50% 50% 0;
+            background: #ffb739;
+            content: '';
+            transform: rotate(-35deg);
+        }
+
+        @keyframes wish-cake-fall {
+            0% { top: -112px; transform: translateX(calc(-50% - 18px)) rotate(-10deg); }
+            25% { top: 20%; transform: translateX(calc(-50% + 15px)) rotate(8deg); }
+            50% { top: 48%; transform: translateX(calc(-50% - 12px)) rotate(-8deg); }
+            75% { top: 76%; transform: translateX(calc(-50% + 18px)) rotate(10deg); }
+            100% { top: 100%; transform: translateX(calc(-50% + 4px)) rotate(13deg); }
+        }
+
+        @keyframes breeze-drift {
+            0%, 100% { transform: translateX(-8px); opacity: 0.45; }
+            50% { transform: translateX(14px); opacity: 0.9; }
         }
 
         @keyframes memory-float {
@@ -485,8 +828,8 @@
             transition: opacity 0.5s ease-in-out, transform 0.5s ease-in-out;
         }
 
-        /* Login Gate */
-        #login-gate {
+        /* Countdown Gate */
+        #countdown-gate {
             position: fixed;
             inset: 0;
             z-index: 100;
@@ -499,20 +842,20 @@
             background: linear-gradient(180deg, #a9cdfa 0%, #c9e2ff 55%, #e8f3ff 100%);
         }
 
-        #login-gate .cloud-shape.one {
+        #countdown-gate .cloud-shape.one {
             top: 12%;
             left: 6%;
             animation: cloud-drift 9s ease-in-out infinite;
         }
 
-        #login-gate .cloud-shape.two {
+        #countdown-gate .cloud-shape.two {
             top: 20%;
             right: 8%;
             transform: scale(0.8);
             animation: cloud-drift 11s ease-in-out infinite reverse;
         }
 
-        #login-gate .cloud-shape.three {
+        #countdown-gate .cloud-shape.three {
             bottom: 10%;
             left: 16%;
             transform: scale(0.65);
@@ -525,22 +868,79 @@
             50% { transform: translateX(22px) scale(1.04); }
         }
 
-        #login-gate.is-hidden {
+        #countdown-gate.is-hidden {
             display: none;
+        }
+
+        #countdown-gate.is-opening {
+            pointer-events: none;
+            animation: countdown-open 0.85s cubic-bezier(0.2, 0.75, 0.25, 1) forwards;
         }
 
         #main-content.is-locked {
             display: none;
         }
 
-        @keyframes gate-shake {
-            0%, 100% { transform: translateX(0); }
-            25% { transform: translateX(-8px); }
-            75% { transform: translateX(8px); }
+        #main-content.is-unlocking {
+            transform-origin: top center;
+            animation: celebration-arrive 0.9s cubic-bezier(0.16, 1, 0.3, 1) both;
         }
 
-        .gate-shake {
-            animation: gate-shake 0.35s ease;
+        @keyframes countdown-open {
+            to { opacity: 0; transform: scale(1.08); filter: blur(8px); }
+        }
+
+        @keyframes celebration-arrive {
+            from { opacity: 0; transform: scale(0.94) translateY(22px); }
+            to { opacity: 1; transform: scale(1) translateY(0); }
+        }
+
+        .countdown-gift {
+            position: relative;
+            display: grid;
+            place-items: center;
+            width: 124px;
+            height: 124px;
+            margin: 1.5rem auto;
+            font-size: 5rem;
+            filter: drop-shadow(0 12px 12px rgba(74, 112, 170, 0.25));
+            animation: gift-hover 2.8s ease-in-out infinite;
+        }
+
+        .countdown-gift::after {
+            content: '✨';
+            position: absolute;
+            top: -8px;
+            right: -16px;
+            font-size: 1.8rem;
+            animation: gift-sparkle 1.6s ease-in-out infinite;
+        }
+
+        .floating-gift {
+            position: absolute;
+            z-index: 1;
+            font-size: 2.5rem;
+            pointer-events: none;
+            animation: gift-drift 6s ease-in-out infinite;
+        }
+
+        .floating-gift.one { top: 20%; left: 12%; --drift: -18px; }
+        .floating-gift.two { top: 28%; right: 12%; --drift: 16px; animation-delay: -2s; }
+        .floating-gift.three { bottom: 16%; left: 20%; --drift: 12px; animation-delay: -4s; }
+
+        @keyframes gift-hover {
+            0%, 100% { transform: translateY(0) rotate(-5deg); }
+            50% { transform: translateY(-16px) rotate(5deg); }
+        }
+
+        @keyframes gift-drift {
+            0%, 100% { transform: translateY(0) rotate(-8deg); }
+            50% { transform: translateY(var(--drift, -18px)) rotate(8deg); }
+        }
+
+        @keyframes gift-sparkle {
+            0%, 100% { opacity: 0.5; transform: scale(0.8) rotate(0); }
+            50% { opacity: 1; transform: scale(1.15) rotate(18deg); }
         }
 
         /* Custom striped pattern for candles */
@@ -553,6 +953,23 @@
                 #f43f5e 16px
             );
         }
+
+        /* ===== Cinnamoroll terbang membawa kue ===== */
+        .cinna-stage { position: relative; width: 100%; max-width: 280px; height: 270px; overflow: hidden; border: 2px solid #c7ddf7; border-radius: 1rem; background: radial-gradient(circle at 50% 38%, #ffffff 0 10%, transparent 50%), linear-gradient(180deg, #b5dbff, #eaf6ff); }
+        .cinna-stage .cloud-shape { opacity: 0.95; animation: cloud-drift 8s ease-in-out infinite; }
+        .cinna-fly { position: absolute; left: 50%; top: 62px; margin-left: -70px; animation: cinna-fly 3.6s ease-in-out infinite; }
+        @keyframes cinna-fly { 0%, 100% { transform: translate(-10px, 4px) rotate(-2deg); } 50% { transform: translate(10px, -10px) rotate(2deg); } }
+        .cinna-stage .cinnamoroll .ear.left { animation: ear-flap-l 0.5s ease-in-out infinite alternate; }
+        .cinna-stage .cinnamoroll .ear.right { animation: ear-flap-r 0.5s ease-in-out infinite alternate; }
+        @keyframes ear-flap-l { from { transform: rotate(-16deg); } to { transform: rotate(-40deg); } }
+        @keyframes ear-flap-r { from { transform: rotate(16deg); } to { transform: rotate(40deg); } }
+        .cinna-cake { position: absolute; left: 50%; bottom: -34px; z-index: 5; width: 74px; height: 42px; margin-left: -37px; border: 3px solid #4a6389; border-radius: 12px 12px 18px 18px; background: linear-gradient(180deg, #ffffff 0 34%, #ffb6d5 34%); }
+        .cinna-cake::before { content: ''; position: absolute; left: 50%; top: -17px; width: 6px; height: 14px; margin-left: -3px; border-radius: 3px; background: #9dcfff; border: 2px solid #4a6389; }
+        .cinna-cake::after { content: ''; position: absolute; left: 50%; top: -30px; width: 10px; height: 14px; margin-left: -5px; border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%; background: #fbbf24; animation: flame-flicker 0.6s infinite alternate ease-in-out; }
+        .cinna-bubble { position: absolute; top: 12px; left: 50%; z-index: 6; transform: translateX(-50%); padding: 5px 12px; border: 2.5px solid #4a6389; border-radius: 999px; background: #ffffff; color: #3d5b8c; font: 600 12px 'Fredoka', sans-serif; white-space: nowrap; box-shadow: 0 3px 0 #4a6389; }
+        .cinna-sparkle { position: absolute; color: #ffffff; text-shadow: 0 0 6px #6fb6f5, 0 0 2px #9dcfff; animation: cinna-twinkle 1.8s ease-in-out infinite; }
+        @keyframes cinna-twinkle { 0%, 100% { transform: scale(0.5) rotate(0); opacity: 0.4; } 50% { transform: scale(1.2) rotate(25deg); opacity: 1; } }
+        @media (prefers-reduced-motion: reduce) { .cinna-fly, .cinna-sparkle, .cinna-cake::after, .cinna-stage .cloud-shape, .cinna-stage .cinnamoroll, .cinna-stage .cinnamoroll .ear { animation: none !important; } }
     </style>
 </head>
 <body class="flex flex-col items-center justify-start min-h-screen p-4 sm:p-6 text-gray-800 relative pb-16">
@@ -564,13 +981,15 @@
         <div class="cloud-shape" style="bottom: 12%; left: 10%; width: 140px; height: 52px; opacity: 0.5;"></div>
     </div>
 
-    <!-- Login Gate: wajib memasukkan username & password -->
-    <div id="login-gate">
+    <!-- Countdown Gate -->
+    <div id="countdown-gate">
         <div class="cloud-shape one"></div>
         <div class="cloud-shape two"></div>
         <div class="cloud-shape three"></div>
+        <span class="floating-gift one" aria-hidden="true">🎁</span>
+        <span class="floating-gift two" aria-hidden="true">🎀</span>
+        <span class="floating-gift three" aria-hidden="true">🎁</span>
         <div class="glass-panel w-full max-w-sm p-7 sm:p-8 rounded-3xl shadow-2xl text-center relative z-10">
-            <!-- Mascot Cinnamoroll versi CSS -->
             <div class="mascot-row" aria-hidden="true">
                 <div class="cloud-shape" style="opacity: 0.9;"></div>
                 <div class="cinnamoroll">
@@ -590,37 +1009,10 @@
                 </div>
             </div>
 
-            <h2 class="font-fun text-3xl mt-3 text-transparent bg-clip-text bg-gradient-to-r from-pink-500 to-purple-600">Hai, Selamat Datang! ☁️</h2>
-            <p class="text-sm text-[#5b7aa8] mt-2">Masukkan username dan password untuk membuka kejutan ini. 💙</p>
-
-            <form id="login-form" class="mt-6 flex-col gap-3 text-left" autocomplete="off">
-                <label class="text-xs font-bold text-[#6b8bb8] uppercase tracking-wider" for="login-username">Username</label>
-                <div class="relative">
-                    <i class="fa-solid fa-user absolute left-3.5 top-1/2 -translate-y-1/2 text-[#6fb6f5] text-sm"></i>
-                    <input id="login-username" name="username" type="text" required placeholder="Username kamu..."
-                           class="w-full pl-10 pr-3 py-3 text-sm rounded-xl border-2 border-[#c7ddf7] bg-white/90 text-[#3d5b8c] focus:outline-none focus:ring-2 focus:ring-[#9dcfff]">
-                </div>
-
-                <label class="text-xs font-bold text-[#6b8bb8] uppercase tracking-wider mt-1" for="login-password">Password</label>
-                <div class="relative">
-                    <i class="fa-solid fa-lock absolute left-3.5 top-1/2 -translate-y-1/2 text-[#6fb6f5] text-sm"></i>
-                    <input id="login-password" name="password" type="password" required placeholder="Password rahasia..."
-                           class="w-full pl-10 pr-10 py-3 text-sm rounded-xl border-2 border-[#c7ddf7] bg-white/90 text-[#3d5b8c] focus:outline-none focus:ring-2 focus:ring-[#9dcfff]">
-                    <button type="button" id="toggle-password" class="absolute right-3 top-1/2 -translate-y-1/2 text-[#8fb0d8] hover:text-[#6fb6f5] transition-colors" aria-label="Tampilkan atau sembunyikan password">
-                        <i id="toggle-password-icon" class="fa-solid fa-eye text-sm"></i>
-                    </button>
-                </div>
-
-                <p id="login-error" class="hidden text-xs font-semibold text-red-600 bg-red-50 border-2 border-red-200 rounded-xl px-3 py-2" role="alert" aria-live="assertive"></p>
-
-                <p id="countdown-password-hint" class="mt-3 text-[11px] font-semibold text-[#6b8bb8] bg-[#edf5ff] border border-[#d7e9ff] rounded-xl px-3 py-2">
-                    Password countdown: --
-                </p>
-
-                <button type="submit" class="mt-2 w-full py-3.5 px-6 toon-btn font-bold rounded-2xl active:scale-95">
-                    <i class="fa-solid fa-unlock mr-1"></i> Masuk
-                </button>
-            </form>
+            <div class="countdown-gift" aria-hidden="true">🎁</div>
+            <h2 class="font-fun text-3xl text-[#3d5b8c]">Kejutan untukmu segera tiba!</h2>
+            <p class="text-sm text-[#5b7aa8] mt-2">Hitung mundur menuju hari istimewamu ☁️</p>
+            <p id="countdown-display" class="mt-5 px-3 py-3 rounded-2xl bg-white/85 border-2 border-[#c7ddf7] text-lg sm:text-xl font-bold text-[#3d5b8c] tabular-nums" role="timer" aria-live="off">--d --h --m --s</p>
         </div>
     </div>
 
@@ -683,67 +1075,34 @@
         <button type="button" class="page-nav-btn is-active px-4 py-2 rounded-full border-2 border-[#c7ddf7] bg-white/85 text-[#5b7aa8] text-xs font-bold transition-all" data-page="page-1">🐾 Perayaan</button>
         <button type="button" class="page-nav-btn px-4 py-2 rounded-full border-2 border-[#c7ddf7] bg-white/85 text-[#5b7aa8] text-xs font-bold transition-all" data-page="page-2">🎀 Pesan Rahasia</button>
         <button type="button" class="page-nav-btn px-4 py-2 rounded-full border-2 border-[#c7ddf7] bg-white/85 text-[#5b7aa8] text-xs font-bold transition-all" data-page="page-3">📸 Kenangan</button>
+        <button type="button" class="page-nav-btn px-4 py-2 rounded-full border-2 border-[#c7ddf7] bg-white/85 text-[#5b7aa8] text-xs font-bold transition-all" data-page="page-4" hidden>🎁 Permintaan</button>
     </nav>
 
     <main id="page-1" class="page is-active mt-8 z-10 max-w-md flex-col items-center gap-6">
 
-        <!-- Feature 1: Polaroid Frame with Live Default Photo & Upload Options -->
+        <!-- Feature 1: Walking teddy bear carrying a birthday cake -->
         <div class="w-full glass-panel p-5 rounded-3xl shadow-xl flex flex-col items-center">
-            
             <div class="flex items-center justify-between w-full mb-3 px-1">
                 <span class="text-xs font-bold text-[#6b8bb8] uppercase tracking-wider flex items-center gap-1.5">
-                    <i class="fa-solid fa-camera text-[#6fb6f5]"></i> Foto Spesial
+                    <i class="fa-solid fa-paw text-[#6fb6f5]"></i> Cinnamoroll Pembawa Kue
                 </span>
             </div>
 
-            <!-- Polaroid Container -->
-            <div id="polaroid-wrapper" class="polaroid-frame bg-white p-3.5 pb-10 shadow-lg rounded-2xl border-2 border-[#c7ddf7] w-full max-w-[280px] relative">
-
-                <!-- Main Image Screen -->
-                <div class="w-full h-64 bg-gray-100 rounded-sm overflow-hidden relative border border-gray-100 shadow-inner group">
-                    <img id="main-photo"
-                         src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=800&q=80"
-                         alt="Foto Ulang Tahun"
-                         class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
-                         onerror="this.src='https://images.unsplash.com/photo-1513151233558-d860c5398176?auto=format&fit=crop&w=800&q=80'">
-
-                    <div class="absolute inset-0 bg-black/20 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center pointer-events-none">
-                        <span class="text-white text-xs bg-black/60 px-3 py-1.5 rounded-full font-medium backdrop-blur-sm">
-                            
-                        </span>
+            <div class="cinna-stage" role="img" aria-label="Cinnamoroll terbang sambil membawa kue ulang tahun">
+                <div class="cloud-shape" style="top: 150px; left: 18px; width: 60px; height: 22px;"></div>
+                <div class="cloud-shape" style="top: 205px; right: 14px; width: 74px; height: 26px; animation-delay: -3s;"></div>
+                <span class="cinna-sparkle" style="top: 52px; left: 22px; font-size: 16px;">✦</span>
+                <span class="cinna-sparkle" style="top: 98px; right: 24px; font-size: 20px; animation-delay: .6s;">✦</span>
+                <span class="cinna-sparkle" style="top: 190px; left: 40px; font-size: 14px; animation-delay: 1.1s;">✧</span>
+                <span class="cinna-sparkle" style="top: 168px; right: 50px; font-size: 12px; animation-delay: .3s;">✧</span>
+                <div class="cinna-bubble" aria-hidden="true">Selamat ulang tahun! ☁️</div>
+                <div class="cinna-fly" aria-hidden="true">
+                    <div class="cinnamoroll">
+                        <div class="ear left"></div><div class="ear right"></div>
+                        <div class="head"><span class="eye left"></span><span class="eye right"></span><span class="blush left"></span><span class="blush right"></span><span class="mouth"></span></div>
+                        <div class="body"></div><div class="paw left"></div><div class="paw right"></div><div class="tail"></div>
                     </div>
-                </div>
-
-                <!-- Editable Polaroid Caption -->
-                <div class="mt-3 text-center">
-                    <input type="text" id="caption-input" value="Bintang Hari Ini ✨" maxlength="22"
-                           class="font-cursive text-[#3d5b8c] text-center w-full bg-transparent focus:outline-none focus:border-b border-[#9dcfff] font-semibold"
-                           title="Klik untuk mengubah nama/caption">
-                </div>
-                <!-- Stiker wajah Cinnamoroll di sudut polaroid -->
-                <div class="absolute -bottom-3 -right-3 w-14 h-14 bg-white rounded-full border-2 border-[#4a6389] flex items-center justify-center shadow-md" aria-hidden="true">
-                    <span class="text-2xl">☁️</span>
-                </div>
-            </div>
-
-            <!-- Foto preset hanya -->
-            <div class="w-full mt-5 pt-4 border-t border-gray-200/60 flex flex-col gap-2.5">
-                <div id="photo-status" class="photo-status" role="status" aria-live="polite"></div>
-
-                <!-- Quick Preset Selector -->
-                <div class="flex items-center justify-between text-[11px] text-[#7d9cc4] pt-1">
-                    <span>Pilih Foto Contoh:</span>
-                    <div class="flex gap-1.5">
-                        <button type="button" class="preset-btn w-6 h-6 rounded-full overflow-hidden border-2 border-white shadow-sm hover:scale-110 transition-transform is-active" data-url="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=800&q=80" aria-label="Pilih foto preset 1">
-                            <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=100&q=80" class="w-full h-full object-cover" alt="Preset foto 1">
-                        </button>
-                        <button type="button" class="preset-btn w-6 h-6 rounded-full overflow-hidden border-2 border-white shadow-sm hover:scale-110 transition-transform" data-url="https://images.unsplash.com/photo-1517841905240-472988babdf9?auto=format&fit=crop&w=800&q=80" aria-label="Pilih foto preset 2">
-                            <img src="https://images.unsplash.com/photo-1517841905240-472988babdf9?auto=format&fit=crop&w=100&q=80" class="w-full h-full object-cover" alt="Preset foto 2">
-                        </button>
-                        <button type="button" class="preset-btn w-6 h-6 rounded-full overflow-hidden border-2 border-white shadow-sm hover:scale-110 transition-transform" data-url="https://images.unsplash.com/photo-1530103862676-de8c9debad1d?auto=format&fit=crop&w=800&q=80" aria-label="Pilih foto preset 3">
-                            <img src="https://images.unsplash.com/photo-1530103862676-de8c9debad1d?auto=format&fit=crop&w=100&q=80" class="w-full h-full object-cover" alt="Preset foto 3">
-                        </button>
-                    </div>
+                    <div class="cinna-cake"></div>
                 </div>
             </div>
         </div>
@@ -986,7 +1345,7 @@
         <button type="button" class="next-page-btn text-xs font-bold text-[#5b7aa8] hover:text-[#6fb6f5] transition-colors" data-page="page-1">← Kembali ke perayaan</button>
     </section>
 
-    <section id="page-5" class="page mt-8 z-10 max-w-md flex-col items-center gap-6" aria-hidden="true">
+    <section id="page-4" class="page mt-8 z-10 max-w-md flex-col items-center gap-6" aria-hidden="true">
         <div class="glass-panel w-full p-6 rounded-3xl shadow-xl text-center">
             <span class="text-4xl" aria-hidden="true">🎀</span>
             <h2 class="font-fun text-3xl text-[#3d5b8c] mt-3">Permintaan terakhir</h2>
@@ -1000,9 +1359,20 @@
                 </button>
             </form>
 
-            <div id="wish-reveal" class="flower-scene mt-6 text-center">
-                <div id="wish-reveal-items" class="flex items-center justify-center gap-3 sm:gap-5 flex-wrap"></div>
-                <p class="mt-5 text-2xl sm:text-3xl font-fun text-[#3d5b8c]">semoga keinginan mu tercapai</p>
+            <div id="wish-reveal" class="wish-reveal-scene mt-6">
+                <div class="wish-reveal-stage">
+                    <p class="wish-reveal-message">semoga keinginan mu tercapai</p>
+                    <span class="wish-breeze one" aria-hidden="true"></span>
+                    <span class="wish-breeze two" aria-hidden="true"></span>
+                    <div class="wish-cake-fall" aria-hidden="true">
+                        <div class="wish-cake">
+                            <div class="wish-cake-candle"></div>
+                            <div class="wish-cake-upper"></div>
+                            <div class="wish-cake-lower"></div>
+                            <div class="wish-cake-plate"></div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </section>
@@ -1014,58 +1384,6 @@
     </div><!-- /#main-content -->
 
     <script>
-        // --- PHOTO MANAGEMENT LOGIC ---
-        const mainPhoto = document.getElementById('main-photo');
-        const photoStatus = document.getElementById('photo-status');
-        const presetBtns = document.querySelectorAll('.preset-btn');
-        const DEFAULT_PHOTO = 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=800&q=80';
-
-        function setPhotoStatus(message, type = 'success') {
-            photoStatus.textContent = message;
-            photoStatus.className = `photo-status show ${type}`;
-        }
-
-        function activatePreset(url) {
-            presetBtns.forEach((btn) => {
-                btn.classList.toggle('is-active', btn.dataset.url === url);
-            });
-        }
-
-        function updatePhoto(src, sourceLabel = 'Foto') {
-            if (!src || !src.trim()) {
-                setPhotoStatus('Foto tidak boleh kosong.', 'error');
-                return;
-            }
-
-            const image = new Image();
-            image.onload = () => {
-                mainPhoto.src = src;
-                activatePreset(src);
-                setPhotoStatus(`${sourceLabel} berhasil diterapkan.`, 'success');
-            };
-            image.onerror = () => {
-                mainPhoto.src = DEFAULT_PHOTO;
-                activatePreset(DEFAULT_PHOTO);
-                setPhotoStatus('Foto gagal dimuat, kembali ke foto default.', 'error');
-            };
-            image.src = src;
-        }
-
-        // Preset Thumbnails Selector
-        presetBtns.forEach(btn => {
-            btn.addEventListener('click', () => {
-                const url = btn.dataset.url;
-                if (url) {
-                    updatePhoto(url, 'Foto preset');
-                }
-            });
-        });
-
-        mainPhoto.onerror = () => {
-            mainPhoto.src = DEFAULT_PHOTO;
-            setPhotoStatus('Gambar tidak tersedia, menggunakan foto default.', 'error');
-        };
-
         // --- PAGE NAVIGATION ---
         const pages = document.querySelectorAll('.page');
         const pageNavButtons = document.querySelectorAll('.page-nav-btn');
@@ -1124,14 +1442,14 @@
                     angle: 60,
                     spread: 55,
                     origin: { x: 0 },
-                    colors: ['#9dcfff', '#ffb6d5', '#ffffff', '#6fb6f5']
+                    shapes: ['star', 'circle'], colors: ['#9dcfff', '#ffb6d5', '#ffffff', '#6fb6f5']
                 });
                 confetti({
                     particleCount: 6,
                     angle: 120,
                     spread: 55,
                     origin: { x: 1 },
-                    colors: ['#9dcfff', '#ffb6d5', '#ffffff', '#6fb6f5']
+                    shapes: ['star', 'circle'], colors: ['#9dcfff', '#ffb6d5', '#ffffff', '#6fb6f5']
                 });
 
                 if (Date.now() < animationEnd) {
@@ -1149,6 +1467,7 @@
         const wishForm = document.getElementById('wish-form');
         const wishInput = document.getElementById('wish-input');
         const wishReveal = document.getElementById('wish-reveal');
+        const wishPageNavButton = document.querySelector('.page-nav-btn[data-page="page-4"]');
         let isCandleOut = false;
 
         flame.addEventListener('click', () => {
@@ -1159,44 +1478,14 @@
 
                 cakeInstruction.innerHTML = '✨ <span class="text-[#6fb6f5] font-bold">Lilin telah ditiup! Make a wish!</span> ✨';
                 isCandleOut = true;
-                showPage('page-5');
+                wishPageNavButton.removeAttribute('hidden');
+                showPage('page-4');
                 launchConfetti();
                 setTimeout(() => {
                     if (wishInput) wishInput.focus();
                 }, 350);
             }
         });
-
-        const wishItems = ['🌼', '🌸', '✨', '🔥', '☁️', '🐾', '🎀', '💫', '🌷', '⭐', '💖', '🎈', '🦄', '🌻', '🐰', '🫧', '🍓', '🌟'];
-
-        function shuffleItems(array) {
-            const clone = [...array];
-            for (let i = clone.length - 1; i > 0; i--) {
-                const j = Math.floor(Math.random() * (i + 1));
-                [clone[i], clone[j]] = [clone[j], clone[i]];
-            }
-            return clone;
-        }
-
-        function renderWishObjects() {
-            const container = document.getElementById('wish-reveal-items');
-            if (!container) return;
-
-            const randomItems = shuffleItems(wishItems).slice(0, 8);
-            container.innerHTML = randomItems.map((item, index) => {
-                const size = (1.6 + Math.random() * 1.8).toFixed(2) + 'rem';
-                const rotation = (Math.random() * 24 - 12).toFixed(1) + 'deg';
-                const duration = (3.2 + Math.random() * 4.2).toFixed(2) + 's';
-                const delay = (index * 0.2).toFixed(2) + 's';
-
-                return `
-                    <span class="wish-object" aria-hidden="true"
-                        style="--size:${size}; --rotation:${rotation}; --float-duration:${duration}; --float-delay:${delay};">
-                        ${item}
-                    </span>
-                `;
-            }).join('');
-        }
 
         if (wishForm) {
             wishForm.addEventListener('submit', (event) => {
@@ -1210,9 +1499,7 @@
                 }
 
                 wishForm.classList.add('hidden');
-                renderWishObjects();
                 wishReveal.classList.add('is-visible');
-                confetti({ particleCount: 140, spread: 90, origin: { y: 0.65 } });
             });
         }
 
@@ -1275,20 +1562,11 @@
 
         startAutoSlide();
 
-        // Belum login: jeda carousel agar tidak berjalan di balik layar kunci
+        // Jeda carousel sampai countdown membuka halaman.
         stopAutoSlide();
 
-        // Initial burst on load
-        window.onload = () => {
-            setTimeout(() => {
-                confetti({ particleCount: 80, spread: 60, origin: { y: 0.6 } });
-            }, 600);
-        };
-
-        // --- LOGIN GATE (PROTEKSI HALAMAN) ---
-        const VALID_USERNAME = 'liaa';
-        const COUNTDOWN_DURATION_MS = 8 * 24 * 60 * 60 * 1000;
-        const COUNTDOWN_START_MS = Date.now();
+        // --- COUNTDOWN GATE ---
+        const COUNTDOWN_TARGET_MS = new Date(2026, 9, 7, 0, 0, 0).getTime();
 
         function getCountdownPartsFromMs(remainingMs) {
             const totalSeconds = Math.max(0, Math.floor(remainingMs / 1000));
@@ -1299,88 +1577,50 @@
             return { days, hours, minutes, seconds };
         }
 
-        function getLiveCountdownPassword() {
-            const remainingMs = Math.max(0, COUNTDOWN_DURATION_MS - (Date.now() - COUNTDOWN_START_MS));
+        function formatCountdown(remainingMs) {
             const { days, hours, minutes, seconds } = getCountdownPartsFromMs(remainingMs);
-            return [days, hours, minutes, seconds]
-                .map((value) => String(value).padStart(2, '0'))
-                .join('');
+            return `${String(days).padStart(2, '0')}d ${String(hours).padStart(2, '0')}h ${String(minutes).padStart(2, '0')}m ${String(seconds).padStart(2, '0')}s`;
         }
 
-        function formatLiveCountdown() {
-            const remainingMs = Math.max(0, COUNTDOWN_DURATION_MS - (Date.now() - COUNTDOWN_START_MS));
-            const { days, hours, minutes, seconds } = getCountdownPartsFromMs(remainingMs);
-            return `${days}d ${String(hours).padStart(2, '0')}h ${String(minutes).padStart(2, '0')}m ${String(seconds).padStart(2, '0')}s`;
-        }
-
-        let VALID_PASSWORD = getLiveCountdownPassword();
-
-        const loginGate = document.getElementById('login-gate');
+        const countdownGate = document.getElementById('countdown-gate');
+        const countdownDisplay = document.getElementById('countdown-display');
         const mainContent = document.getElementById('main-content');
-        const loginForm = document.getElementById('login-form');
-        const loginUsername = document.getElementById('login-username');
-        const loginPassword = document.getElementById('login-password');
-        const loginError = document.getElementById('login-error');
-        const togglePasswordBtn = document.getElementById('toggle-password');
-        const togglePasswordIcon = document.getElementById('toggle-password-icon');
-        const countdownPasswordHint = document.getElementById('countdown-password-hint');
-        const loginCard = loginGate.querySelector('.glass-panel');
-
-        function refreshCountdownState() {
-            VALID_PASSWORD = getLiveCountdownPassword();
-            if (countdownPasswordHint) {
-                countdownPasswordHint.textContent = `Password countdown: ${formatLiveCountdown()}`;
-            }
-        }
-
-        function showLoginError(message) {
-            loginError.textContent = message;
-            loginError.classList.remove('hidden');
-            loginCard.classList.remove('gate-shake');
-            void loginCard.offsetWidth; // restart animasi getar
-            loginCard.classList.add('gate-shake');
-        }
+        let countdownInterval;
+        let isPageUnlocked = false;
 
         function unlockPage() {
-            loginGate.classList.add('is-hidden');
+            if (isPageUnlocked) return;
+
+            isPageUnlocked = true;
+            countdownGate.classList.add('is-opening');
             mainContent.classList.remove('is-locked');
+            mainContent.classList.add('is-unlocking');
             startAutoSlide();
+            launchConfetti();
             setTimeout(() => {
-                confetti({ particleCount: 120, spread: 70, origin: { y: 0.6 } });
-            }, 300);
+                confetti({
+                    particleCount: 220,
+                    spread: 115,
+                    startVelocity: 48,
+                    origin: { y: 0.62 },
+                    shapes: ['star', 'circle'], colors: ['#9dcfff', '#ffb6d5', '#ffffff', '#6fb6f5', '#fef08a']
+                });
+            }, 180);
+            window.setTimeout(() => countdownGate.classList.add('is-hidden'), 850);
         }
 
-        togglePasswordBtn.addEventListener('click', () => {
-            const showPassword = loginPassword.type === 'password';
-            loginPassword.type = showPassword ? 'text' : 'password';
-            togglePasswordIcon.className = showPassword ? 'fa-solid fa-eye-slash text-sm' : 'fa-solid fa-eye text-sm';
-        });
+        function refreshCountdownState() {
+            const remainingMs = Math.max(0, COUNTDOWN_TARGET_MS - Date.now());
+            countdownDisplay.textContent = formatCountdown(remainingMs);
 
-        loginForm.addEventListener('submit', (event) => {
-            event.preventDefault();
-            refreshCountdownState();
-
-            const username = loginUsername.value.trim();
-            const password = loginPassword.value;
-
-            if (username.toLowerCase() === VALID_USERNAME && password === VALID_PASSWORD) {
-                loginError.classList.add('hidden');
-                loginForm.reset();
-                loginPassword.type = 'password';
-                togglePasswordIcon.className = 'fa-solid fa-eye text-sm';
+            if (remainingMs === 0) {
+                window.clearInterval(countdownInterval);
                 unlockPage();
-            } else {
-                showLoginError('Username atau password salah. Coba lagi ya! 💙');
-                loginPassword.value = '';
-                loginPassword.focus();
             }
-        });
+        }
 
+        countdownInterval = window.setInterval(refreshCountdownState, 1000);
         refreshCountdownState();
-        setInterval(refreshCountdownState, 1000);
-
-        // Fokus ke kolom username saat halaman pertama dibuka
-        loginUsername.focus();
     </script>
 </body>
 </html>
