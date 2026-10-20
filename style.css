@@ -11,33 +11,47 @@ body{margin:0;font-family:'Nunito',sans-serif;background:var(--bg);color:var(--i
   background-image:radial-gradient(var(--line) 2px,transparent 2px);background-size:26px 26px;padding:20px 14px 50px}
 h1,h2,h3,.big{font-family:'Baloo 2',cursive}
 .wrap{max-width:980px;margin:auto}
-header{text-align:center;margin-bottom:18px}
+header{text-align:center;margin-bottom:18px;animation:softArrive .8s cubic-bezier(.2,.8,.2,1) both}
 header h1{font-size:2.3rem;margin:0;font-weight:800}
 header p{margin:0;color:var(--muted)}
 .mochi{font-size:3.2rem;display:inline-block;animation:bob 2.4s ease-in-out infinite}
 @keyframes bob{50%{transform:translateY(-8px) rotate(4deg)}}
 @media (prefers-reduced-motion:reduce){.mochi{animation:none}}
 .summary{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:18px}
-.stat{background:var(--card);border:3px solid var(--ink);border-radius:22px;padding:12px 14px;box-shadow:5px 5px 0 var(--ink)}
+.stat{background:var(--card);border:3px solid var(--ink);border-radius:22px;padding:12px 14px;box-shadow:5px 5px 0 var(--ink);animation:softArrive .65s cubic-bezier(.2,.8,.2,1) both;transition:transform .25s ease,box-shadow .25s ease}
+.stat:nth-child(2){animation-delay:.08s}.stat:nth-child(3){animation-delay:.16s}
+.stat:hover{transform:translateY(-5px) rotate(-1deg);box-shadow:7px 9px 0 var(--ink)}
 .stat small{color:var(--muted);font-weight:700}
 .stat .big{font-size:1.5rem;font-weight:800;line-height:1.2;word-break:break-word}
 .stat.in{background:var(--mint)} .stat.out{background:var(--pink)} .stat.left{background:var(--lemon)}
 .stat.in small,.stat.out small,.stat.left small,.stat.in .big,.stat.out .big,.stat.left .big{color:#4a3b52}
 .grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}
-.card{background:var(--card);border:3px solid var(--ink);border-radius:26px;padding:18px;box-shadow:5px 5px 0 var(--ink)}
+.card{background:var(--card);border:3px solid var(--ink);border-radius:26px;padding:18px;box-shadow:5px 5px 0 var(--ink);animation:softArrive .7s cubic-bezier(.2,.8,.2,1) both;transition:transform .3s cubic-bezier(.2,.8,.2,1),box-shadow .3s ease}
+.grid>.card:nth-child(2){animation-delay:.12s}
+.card:hover{transform:translateY(-3px);box-shadow:7px 9px 0 var(--ink)}
 .card h2{margin:0 0 10px;font-size:1.3rem}
 label{display:block;font-weight:700;font-size:.9rem;margin:10px 0 4px}
-input,select{width:100%;padding:10px 12px;border:2.5px solid var(--ink);border-radius:14px;font:inherit;background:var(--bg);color:var(--ink)}
+input,select{width:100%;padding:10px 12px;border:2.5px solid var(--ink);border-radius:14px;font:inherit;background:var(--bg);color:var(--ink);transition:border-color .2s,box-shadow .2s,transform .2s}
+input:hover,select:hover{border-color:var(--lilac)}
+input:focus,select:focus{transform:translateY(-1px);box-shadow:0 5px 14px #b9a4ff35}
 input:focus,select:focus,button:focus-visible{outline:3px solid var(--lilac);outline-offset:2px}
 button{font-family:'Baloo 2',cursive;font-weight:700;font-size:1rem;border:3px solid var(--ink);border-radius:16px;padding:10px 16px;cursor:pointer;color:#4a3b52;box-shadow:3px 3px 0 var(--ink);transition:transform .1s,box-shadow .1s}
 button:active{transform:translate(3px,3px);box-shadow:0 0 0 var(--ink)}
 .btn-in{background:var(--mint);width:100%;margin-top:14px}
 .btn-out{background:var(--pink);width:100%;margin-top:14px}
-.btn-xl{background:var(--lilac)} .btn-clear{background:var(--card);color:var(--ink)}
+.btn-xl{background:linear-gradient(135deg,#d0c3ff,#b9a4ff 55%,#a98cff);position:relative;isolation:isolate;overflow:hidden}
+.btn-xl::before{content:"";position:absolute;inset:-60% auto -60% -45%;width:36%;background:linear-gradient(90deg,transparent,#ffffffa8,transparent);transform:rotate(22deg);z-index:-1}
+.btn-xl:hover::before{animation:buttonShine .75s ease}
+.btn-xl.downloading::after,.btn-xl.downloaded::after{position:absolute;right:13px;top:50%;transform:translateY(-50%);font-size:.9rem}
+.btn-xl.downloading::after{content:"";width:13px;height:13px;border:2px solid #4a3b5255;border-top-color:#4a3b52;border-radius:50%;animation:spin .7s linear infinite}
+.btn-xl.downloaded::after{content:"✓";animation:checkPop .45s cubic-bezier(.2,1.6,.4,1) both}
+.btn-xl.downloaded{animation:downloadGlow .8s ease}
+.btn-clear{background:var(--card);color:var(--ink)}
 .hint{font-size:.85rem;color:var(--muted);margin-top:6px}
 .list{margin-top:18px}
 .toolbar{display:flex;gap:10px;flex-wrap:wrap;justify-content:space-between;align-items:center;margin-bottom:10px}
-.item{display:flex;gap:10px;align-items:center;padding:10px;border:2px dashed var(--line);border-radius:16px;margin-bottom:8px}
+.item{display:flex;gap:10px;align-items:center;padding:10px;border:2px dashed var(--line);border-radius:16px;margin-bottom:8px;transition:transform .2s ease,border-color .2s ease,background-color .2s ease}
+.item:hover{transform:translateX(4px);border-color:var(--lilac);background:var(--bg)}
 .item .ic{font-size:1.6rem}
 .item .tx{flex:1;min-width:0}
 .item .tx b{display:block;overflow-wrap:anywhere}
@@ -47,7 +61,8 @@ button:active{transform:translate(3px,3px);box-shadow:0 0 0 var(--ink)}
 .del{background:none;border:none;box-shadow:none;font-size:1.1rem;padding:4px 8px;cursor:pointer}
 .empty{text-align:center;color:var(--muted);padding:22px}
 .wallets{display:flex;flex-wrap:wrap;gap:8px;margin-top:6px}
-.chip{background:var(--bg);border:2px solid var(--ink);border-radius:999px;padding:4px 12px;font-weight:700;font-size:.85rem}
+.chip{background:var(--bg);border:2px solid var(--ink);border-radius:999px;padding:4px 12px;font-weight:700;font-size:.85rem;animation:chipArrive .45s cubic-bezier(.2,1.5,.4,1) both}
+.chip:nth-child(2){animation-delay:.05s}.chip:nth-child(3){animation-delay:.1s}.chip:nth-child(4){animation-delay:.15s}
 .chip.neg{background:#ffd6d6;color:#8a1f1f}
 .toast{position:fixed;bottom:18px;left:50%;transform:translateX(-50%);background:var(--ink);color:var(--bg);padding:10px 18px;border-radius:999px;font-weight:700;opacity:0;pointer-events:none;transition:opacity .25s}
 .toast.show{opacity:1}
@@ -64,6 +79,18 @@ button:active{transform:translate(3px,3px);box-shadow:0 0 0 var(--ink)}
 @keyframes hop{30%{transform:translateY(-22px) scale(.9,1.15)}60%{transform:translateY(0) scale(1.2,.8)}100%{transform:none}}
 .pop{position:fixed;z-index:50;font-size:1.6rem;pointer-events:none;transform:translate(-50%,-50%);animation:floatUp 1s ease-out forwards}
 @keyframes floatUp{to{opacity:0;transform:translate(calc(-50% + var(--dx)),calc(-50% + var(--dy))) rotate(var(--rot)) scale(.6)}}
+@keyframes softArrive{from{opacity:0;transform:translateY(16px) scale(.98)}to{opacity:1;transform:translateY(0) scale(1)}}
+@keyframes chipArrive{from{opacity:0;transform:translateY(8px) scale(.8)}to{opacity:1;transform:translateY(0) scale(1)}}
+@keyframes buttonShine{to{left:125%}}
+@keyframes spin{to{transform:translateY(-50%) rotate(360deg)}}
+@keyframes checkPop{from{opacity:0;scale:.4}to{opacity:1;scale:1}}
+@keyframes downloadGlow{35%{box-shadow:0 0 0 7px #b9a4ff55,3px 3px 0 var(--ink)}}
+@media (prefers-reduced-motion:reduce){
+  header,.stat,.card,.chip{animation:none}
+  .stat,.card,input,select,.item{transition:none}
+  .stat:hover,.card:hover,.item:hover{transform:none}
+  .btn-xl:hover::before,.btn-xl.downloading::after,.btn-xl.downloaded,.btn-xl.downloaded::after{animation:none}
+}
 .toast{transition:opacity .25s,transform .35s cubic-bezier(.34,1.56,.64,1);transform:translateX(-50%) translateY(20px)}
 .toast.show{transform:translateX(-50%) translateY(0)}
 button:hover{transform:translateY(-2px) rotate(-1deg)}
