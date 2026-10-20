@@ -1,6 +1,7 @@
 const $ = id => document.getElementById(id);
 const KEY = 'dompet-mochi-v1';
 let data = [];
+let lastId = null;
 try { data = JSON.parse(localStorage.getItem(KEY)) || []; } catch(e) { data = []; }
 
 const rp = n => (n < 0 ? '-Rp' : 'Rp') + Math.abs(n).toLocaleString('id-ID');
@@ -8,6 +9,27 @@ const today = () => new Date().toISOString().slice(0,10);
 const save = () => { try { localStorage.setItem(KEY, JSON.stringify(data)); } catch(e) {} };
 const esc = s => String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 function toast(msg){ const t=$('toast'); t.textContent=msg; t.classList.add('show'); setTimeout(()=>t.classList.remove('show'),1800); }
+
+function burst(emojis, el){
+  const r = el ? el.getBoundingClientRect() : {left:innerWidth/2,top:innerHeight/2,width:0,height:0};
+  const x = r.left + r.width/2, y = r.top + r.height/2;
+  if(matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+  for(let i=0;i<10;i++){
+    const s = document.createElement('span');
+    s.className = 'pop';
+    s.textContent = emojis[i % emojis.length];
+    s.style.left = x + 'px'; s.style.top = y + 'px';
+    s.style.setProperty('--dx', (Math.random()*220-110) + 'px');
+    s.style.setProperty('--dy', (-60-Math.random()*140) + 'px');
+    s.style.setProperty('--rot', (Math.random()*60-30) + 'deg');
+    document.body.appendChild(s);
+    setTimeout(()=>s.remove(), 1100);
+  }
+}
+function bump(){
+  document.querySelectorAll('.stat').forEach(s=>{ s.classList.remove('bump'); void s.offsetWidth; s.classList.add('bump'); });
+  const m = document.querySelector('.mochi'); m.classList.remove('hop'); void m.offsetWidth; m.classList.add('hop');
+}
 
 function balances(){
   const b = {};
@@ -34,13 +56,14 @@ function render(){
 
   const sorted = [...data].sort((a,b)=> b.date.localeCompare(a.date) || b.id-a.id);
   $('history').innerHTML = sorted.length ? sorted.map(t => `
-    <div class="item">
+    <div class="item${t.id===lastId?' new':''}">
       <div class="ic">${t.type==='in' ? '🐷' : (t.cat||'🐙').split(' ')[0]}</div>
       <div class="tx"><b>${esc(t.type==='in' ? (t.note || 'Pemasukan') : t.use)}</b>
         <span>${esc(t.date)} · ${esc(t.wallet)}${t.type==='out' ? ' · '+esc(t.cat.replace(/^\S+\s/,'')) : ''}</span></div>
       <div class="amt ${t.type==='in'?'plus':'minus'}">${t.type==='in'?'+':'-'}${rp(t.amount)}</div>
       <button class="del" data-id="${t.id}" aria-label="Hapus transaksi" title="Hapus">✖️</button>
     </div>`).join('') : '<div class="empty">Belum ada transaksi. Dompetmu masih tidur 😴</div>';
+  lastId = null;
 }
 
 function updateHint(){
@@ -51,8 +74,9 @@ $('outSrc').addEventListener('change', updateHint);
 
 $('formIn').addEventListener('submit', e => {
   e.preventDefault();
-  data.push({id:Date.now(), type:'in', wallet:$('inSrc').value, amount:+$('inAmt').value, note:$('inNote').value.trim(), date:$('inDate').value});
-  save(); render(); e.target.reset(); $('inDate').value = today(); toast('Pemasukan tersimpan! 🎉');
+  const id = Date.now(); lastId = id;
+  data.push({id, type:'in', wallet:$('inSrc').value, amount:+$('inAmt').value, note:$('inNote').value.trim(), date:$('inDate').value});
+  save(); render(); e.target.reset(); $('inDate').value = today(); toast('Pemasukan tersimpan! 🎉'); bump(); burst(['💰','🪙','✨','🍡','🐷'], e.submitter);
 });
 
 $('formOut').addEventListener('submit', e => {
@@ -60,8 +84,9 @@ $('formOut').addEventListener('submit', e => {
   const w = $('outSrc').value, amt = +$('outAmt').value;
   if(!w){ toast('Tambah pemasukan dulu ya'); return; }
   if(amt > (balances()[w]||0) && !confirm('Uang di ' + w + ' tidak cukup. Tetap simpan?')) return;
-  data.push({id:Date.now(), type:'out', wallet:w, amount:amt, use:$('outUse').value.trim(), cat:$('outCat').value, date:$('outDate').value});
-  save(); render(); $('outAmt').value=''; $('outUse').value=''; $('outDate').value = today(); toast('Pengeluaran tercatat 💸');
+  const id = Date.now(); lastId = id;
+  data.push({id, type:'out', wallet:w, amount:amt, use:$('outUse').value.trim(), cat:$('outCat').value, date:$('outDate').value});
+  save(); render(); $('outAmt').value=''; $('outUse').value=''; $('outDate').value = today(); toast('Pengeluaran tercatat 💸'); bump(); burst(['💸','🐙','✨','🍡','💨'], e.submitter);
 });
 
 $('history').addEventListener('click', e => {
